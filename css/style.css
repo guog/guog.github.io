@@ -1,0 +1,154 @@
+/*@import '_base/variable'*/
+/*@import '_base/utils'*/
+/*@import '_base/layout'*/
+/*@import '_partial/header'*/
+/*@import '_partial/article'*/
+/*@import '_partial/comment'*/
+/*@import '_partial/index'*/
+/*@import '_partial/archive'*/
+/*@import '_partial/sidebar'*/
+/*@import '_partial/footer'*/
+.entry .gist {
+  background: #3f3f3f;
+  border: none;
+  margin-top: 15px;
+  padding: 7px 15px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+/*text-shadow 0 0 1px #fff*/
+  line-height: 1.6;
+  overflow: auto;
+  color: #dcdcdc;
+}
+.entry .gist .gist-file {
+  border: none;
+  font-family: inherit;
+  margin: 0;
+  font-size: 0.9em;
+}
+.entry .gist .gist-file .gist-data {
+  background: none;
+  border-bottom: none;
+}
+.entry .gist .gist-file .gist-data pre {
+  padding: 0 !important;
+  font-family: font-mono;
+}
+.entry .gist .gist-file .gist-meta {
+  background: none;
+  color: color-meta;
+  margin-top: 5px;
+  padding: 0;
+  text-shadow: 0 0 1px #fff;
+  font-size: 100%;
+}
+.entry .gist .gist-file .gist-meta a {
+  color: color-link;
+}
+.entry .gist .gist-file .gist-meta a:visited {
+  color: color-link;
+}
+figure.highlight {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #3f3f3f;
+  color: #dcdcdc;
+  -webkit-text-size-adjust: none;
+}
+figure.highlight figcaption a {
+  float: right;
+}
+figure.highlight pre {
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  font-family: 'TitilliumText25L400wt', 'envy_code_r', 'Helvetica', 'Tahoma', 'Arial', "Microsoft YaHei", "微软雅黑", 'STXihei', "华文细黑", 'SimSun', "宋体", 'Heiti', "黑体", 'sans-serif';
+  color: #dcdcdc;
+}
+figure.highlight table {
+  margin-top: 5px;
+  border-spacing: 0;
+}
+figure.highlight .gutter {
+  padding-right: 15px;
+  border-right: 1px solid #4e5d6c;
+  text-align: right;
+}
+figure.highlight .code {
+  padding-left: 15px;
+  border-left: 1px solid #4e5d6c;
+/*color #666*/
+}
+figure.highlight .line {
+  height: 20px;
+}
+pre .comment,
+pre .template_comment,
+pre .diff .header,
+pre .doctype,
+pre .pi,
+pre .lisp .string,
+pre .javadoc {
+  color: #7f9f7f;
+  font-style: italic;
+}
+pre .keyword,
+pre .winutils,
+pre .method,
+pre .addition,
+pre .css .tag,
+pre .request,
+pre .status,
+pre .nginx .title {
+  color: #e3ceab;
+}
+pre .number,
+pre .command,
+pre .string,
+pre .tag .value,
+pre .phpdoc,
+pre .tex .formula,
+pre .regexp,
+pre .hexcolor {
+  color: #8cd0d3;
+}
+pre .title,
+pre .localvars,
+pre .chunk,
+pre .decorator,
+pre .built_in,
+pre .identifier,
+pre .vhdl,
+pre .literal,
+pre .id {
+  color: #e3ceab;
+}
+pre .attribute,
+pre .variable,
+pre .lisp .body,
+pre .smalltalk .number,
+pre .constant,
+pre .class .title,
+pre .parent,
+pre .haskell .type {
+  color: #cc9393;
+}
+pre .preprocessor,
+pre .preprocessor .keyword,
+pre .shebang,
+pre .symbol,
+pre .symbol .string,
+pre .diff .change,
+pre .special,
+pre .attr_selector,
+pre .important,
+pre .subst,
+pre .cdata,
+pre .clojure .title {
+  color: #cc9393;
+}
+pre .deletion {
+  color: #cc9393;
+}
