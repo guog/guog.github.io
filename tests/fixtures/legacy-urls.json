@@ -1,0 +1,82 @@
+{
+  "sourceCommit": "6a5d72102b114787f9135c9e6aad50ab08176f30",
+  "site": "https://guog.github.io",
+  "capturedFrom": "Git-tracked source and successful baseline production build",
+  "pages": ["/", "/blog/", "/search/", "/about/", "/rss.xml"],
+  "articles": [
+    {
+      "path": "src/content/blog/git-merge-vs-rebase.md",
+      "id": "git-merge-vs-rebase",
+      "url": "/blog/git-merge-vs-rebase/",
+      "sha256": "767956285695ab29fbfa3efa6d7659a1da07bc787966d98b39f5bb09510b02ae",
+      "bodySha256": "187fb0610b1e755bcb8d398bcd42ba8d07dfd257ca128df071e38504244f6c05",
+      "frontmatter": {
+        "title": "Git 学习笔记：merge 与 rebase 该怎么选",
+        "description": "团队协作中 merge 和 rebase 的适用场景，以及我常用的工作流。",
+        "pubDate": "2026-10-10",
+        "category": "技术",
+        "tags": ["Git", "版本控制"]
+      },
+      "frontmatterSource": "title: 'Git 学习笔记：merge 与 rebase 该怎么选'\ndescription: '团队协作中 merge 和 rebase 的适用场景，以及我常用的工作流。'\npubDate: '2026-10-10'\ncategory: '技术'\ntags: ['Git', '版本控制']"
+    },
+    {
+      "path": "src/content/blog/translated-simplicity.md",
+      "id": "translated-simplicity",
+      "url": "/blog/translated-simplicity/",
+      "sha256": "a5f4d41c1d962f2b45d13662ee90a2f275487cc6f497a99249739adfc7a3248e",
+      "bodySha256": "d78f1f2578359a8f46642000e5b493a7521c63b42e1e79f52a32ac34d04b821c",
+      "frontmatter": {
+        "title": "简单即是美：软件设计中的克制（示例）",
+        "description": "一篇经典短文的翻译示例：为什么好的软件设计总是在做减法。",
+        "pubDate": "2026-10-14",
+        "category": "翻译",
+        "tags": ["翻译", "设计"]
+      },
+      "frontmatterSource": "title: '简单即是美：软件设计中的克制（示例）'\ndescription: '一篇经典短文的翻译示例：为什么好的软件设计总是在做减法。'\npubDate: '2026-10-14'\ncategory: '翻译'\ntags: ['翻译', '设计']"
+    },
+    {
+      "path": "src/content/blog/why-write-blog.md",
+      "id": "why-write-blog",
+      "url": "/blog/why-write-blog/",
+      "sha256": "a5dc909054a595c1b9fc01d5bdf5c2d8d2f2a9b8374158dd9d35c427225d14d7",
+      "bodySha256": "df68aacfbb0014c9cb2bce4a87bb1ace10f415d5688153046e9145320455dddb",
+      "frontmatter": {
+        "title": "心得：为什么我决定开始写博客",
+        "description": "关于写作、输出倒逼输入，以及对抗遗忘的一些想法。",
+        "pubDate": "2026-10-12",
+        "category": "随笔",
+        "tags": ["写作", "成长"]
+      },
+      "frontmatterSource": "title: '心得：为什么我决定开始写博客'\ndescription: '关于写作、输出倒逼输入，以及对抗遗忘的一些想法。'\npubDate: '2026-10-12'\ncategory: '随笔'\ntags: ['写作', '成长']"
+    }
+  ],
+  "staticResources": [
+    {
+      "url": "/favicon.svg",
+      "path": "public/favicon.svg",
+      "sha256": "2d7a310283d6f9cc753210d83224cd6db6348cb82a5536348884e5831d46203f"
+    }
+  ],
+  "rssArticleUrls": [
+    "https://guog.github.io/blog/translated-simplicity/",
+    "https://guog.github.io/blog/why-write-blog/",
+    "https://guog.github.io/blog/git-merge-vs-rebase/"
+  ],
+  "sitemapUrls": [
+    "https://guog.github.io/",
+    "https://guog.github.io/about/",
+    "https://guog.github.io/blog/",
+    "https://guog.github.io/blog/git-merge-vs-rebase/",
+    "https://guog.github.io/blog/translated-simplicity/",
+    "https://guog.github.io/blog/why-write-blog/",
+    "https://guog.github.io/search/"
+  ],
+  "giscus": {
+    "repo": "guog/guog.github.io",
+    "repoId": "R_kgDOVIqxYA",
+    "category": "General",
+    "categoryId": "DIC_kwDOVIqxYM4DIZa2",
+    "mapping": "pathname",
+    "lang": "zh-CN"
+  }
+}
