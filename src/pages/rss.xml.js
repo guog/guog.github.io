@@ -1,21 +1,19 @@
-import { getCollection } from 'astro:content';
-import rss from '@astrojs/rss';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-
-export async function GET(context) {
-	const posts = (await getCollection('blog')).sort(
-		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-	);
-	return rss({
-		title: SITE_TITLE,
-		description: SITE_DESCRIPTION,
-		site: context.site,
-		items: posts.map((post) => ({
-			title: post.data.title,
-			description: post.data.description,
-			pubDate: post.data.pubDate,
-			link: `/blog/${post.id}/`,
-			categories: [post.data.category, ...post.data.tags],
-		})),
-	});
+import rss from "@astrojs/rss";
+import { getPublishedPosts } from "../data/blog";
+import { siteConfig } from "../site.config";
+import { getPostUrl } from "../utils/blog";
+export async function GET() {
+  return rss({
+    title: siteConfig.title,
+    description: siteConfig.description,
+    site: siteConfig.url,
+    customData: "<language>zh-CN</language>",
+    items: (await getPublishedPosts()).map((post) => ({
+      title: post.data.title,
+      description: post.data.description,
+      pubDate: post.data.pubDate,
+      link: getPostUrl(post.id),
+      categories: [post.data.category, ...post.data.tags],
+    })),
+  });
 }

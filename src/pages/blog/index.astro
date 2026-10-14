@@ -1,77 +1,28 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
+import PostPreview from "../../components/blog/PostPreview.astro";
+import { getPublishedPosts } from "../../data/blog";
+import Base from "../../layouts/Base.astro";
+import { getTaxonomyId } from "../../utils/blog";
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+const posts = await getPublishedPosts();
+const categories = [...new Set(posts.map((post) => post.data.category))];
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) =>
+  a.localeCompare(b, "zh-CN"),
 );
-
-// 按分类分组
-const byCategory = new Map<string, typeof posts>();
-for (const post of posts) {
-	const cat = post.data.category;
-	if (!byCategory.has(cat)) byCategory.set(cat, []);
-	byCategory.get(cat)!.push(post);
-}
-
-// 收集全部标签
-const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
 ---
-
-<!doctype html>
-<html lang="zh-CN">
-	<head>
-		<BaseHead title="归档" description="按分类与标签浏览全部文章" />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>归档</h1>
-			<section>
-				<h2>标签</h2>
-				<p>
-					{allTags.map((tag) => <span class="tag">{tag}</span>)}
-				</p>
-			</section>
-			{
-				[...byCategory.entries()].map(([category, items]) => (
-					<section>
-						<h2>{category}</h2>
-						<ul class="post-list">
-							{items.map((post) => (
-								<li>
-									<div class="post-meta">
-										<FormattedDate date={post.data.pubDate} />
-									</div>
-									<h2>
-										<a href={`/blog/${post.id}/`}>{post.data.title}</a>
-									</h2>
-								</li>
-							))}
-						</ul>
-					</section>
-				))
-			}
-		</main>
-		<Footer />
-	</body>
-</html>
-
-<style>
-	.post-list h2 {
-		font-size: 1.15rem;
-	}
-	.post-list h2 a {
-		color: var(--fg);
-	}
-	.post-list h2 a:hover {
-		color: var(--accent);
-		text-decoration: none;
-	}
-	section {
-		margin-bottom: 2rem;
-	}
-</style>
+<Base title="归档" description="按分类与标签浏览全部文章">
+  <h1>归档</h1><p class="muted">共 {posts.length} 篇文章，记录不断积累的经验。</p>
+  <nav aria-label="文章分类" class="taxonomy-links">{categories.map((category) => <a href={`#${encodeURIComponent(getTaxonomyId('category', category))}`}>{category}</a>)}</nav>
+  <section class="tag-summary"><h2>标签</h2><ul class="tags">{tags.map((tag) => <li><a href={`#${encodeURIComponent(getTaxonomyId('tag', tag))}`}>#{tag}</a></li>)}</ul></section>
+  {categories.map((category) => <section class="archive-section" id={getTaxonomyId('category', category)}><h2>{category}</h2><ul class="post-list">{posts.filter((post) => post.data.category === category).map((post) => <PostPreview post={post} headingLevel="h3" />)}</ul></section>)}
+  <section class="tag-index"><h2>按标签浏览</h2>{tags.map((tag) => <details id={getTaxonomyId('tag', tag)}><summary>{tag}</summary><ul class="post-list">{posts.filter((post) => post.data.tags.includes(tag)).map((post) => <PostPreview post={post} headingLevel="h3" withDescription={false} />)}</ul></details>)}</section>
+</Base>
+<script>
+  function openTag() {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const target = document.getElementById(id);
+    if (target instanceof HTMLDetailsElement) target.open = true;
+  }
+  window.addEventListener('hashchange', openTag);
+  openTag();
+</script>

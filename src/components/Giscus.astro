@@ -1,69 +1,40 @@
 ---
-/**
- * giscus 评论组件（占位）。
- *
- * 启用步骤：
- *  1. 博客源码仓库开启 Discussions，并安装 giscus GitHub App；
- *  2. 打开 https://giscus.app/zh-CN ，选择「通过 Discussion 连接」，
- *     按页面提示选好仓库和分类；
- *  3. 把页面给出的 repo / repoId / category / categoryId
- *     填到 src/consts.ts 的 GISCUS 对象里。
- *
- * 参数说明：
- *  - repo / repoId：评论数据存放的仓库（填源码仓库，如 guog/guog.github.io）
- *  - category / categoryId：存放评论的 Discussion 分类
- *  - mapping="pathname"：按文章路径区分评论区
- *  - theme 会跟随本站深浅色自动切换
- */
-import { GISCUS } from '../consts';
-
-const configured = Boolean(GISCUS.repo && GISCUS.repoId && GISCUS.categoryId);
+import { giscusConfig } from "../site.config";
 ---
-
-{
-	configured ? (
-		<div class="giscus">
-			<script
-				src="https://giscus.app/client.js"
-				data-repo={GISCUS.repo}
-				data-repo-id={GISCUS.repoId}
-				data-category={GISCUS.category}
-				data-category-id={GISCUS.categoryId}
-				data-mapping={GISCUS.mapping}
-				data-strict="0"
-				data-reactions-enabled="1"
-				data-emit-metadata="0"
-				data-input-position="top"
-				data-theme="preferred_color_scheme"
-				data-lang={GISCUS.lang}
-				crossorigin="anonymous"
-				async
-			/>
-		</div>
-	) : (
-		<div class="giscus-placeholder">
-			<p>
-				评论功能尚未配置。要启用评论，请在 <code>src/consts.ts</code> 的{' '}
-				<code>GISCUS</code> 中填写 <code>repo</code>、<code>repoId</code>、<code>category</code>、
-				<code>categoryId</code>（获取方式见 README 和本组件顶部注释）。
-			</p>
-		</div>
-	)
-}
-
-<style>
-	.giscus,
-	.giscus-placeholder {
-		margin-top: 3rem;
-		padding-top: 1.5rem;
-		border-top: 1px solid var(--border);
-	}
-	.giscus-placeholder {
-		color: var(--muted);
-		font-size: 0.9rem;
-		background: var(--card-bg);
-		border: 1px dashed var(--border);
-		border-radius: 8px;
-		padding: 1rem 1.25rem;
-	}
-</style>
+<section class="comments" aria-label="评论" data-pagefind-ignore>
+  <h2>评论</h2>
+  <div class="giscus" data-repo={giscusConfig.repo} data-mapping={giscusConfig.mapping}></div>
+  <noscript>启用 JavaScript 后可查看 Giscus 评论。</noscript>
+</section>
+<script is:inline define:vars={{ config: giscusConfig }}>
+  (() => {
+    const container = document.querySelector('.giscus');
+    if (!container) return;
+    const getTheme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    const attrs = {
+      repo: config.repo, 'repo-id': config.repoId, category: config.category,
+      'category-id': config.categoryId, mapping: config.mapping, strict: '0',
+      'reactions-enabled': '1', 'emit-metadata': '0', 'input-position': 'top',
+      theme: getTheme(), lang: config.lang,
+    };
+    for (const [key, value] of Object.entries(attrs)) script.setAttribute(`data-${key}`, value);
+    container.appendChild(script);
+    function sync() {
+      const theme = getTheme();
+      container.dataset.theme = theme;
+      script.setAttribute('data-theme', theme);
+      container.querySelector('iframe')?.contentWindow?.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
+    }
+    document.addEventListener('theme-changed', sync);
+    new MutationObserver(() => {
+      const frame = container.querySelector('iframe');
+      if (frame) frame.addEventListener('load', sync, { once: true });
+      sync();
+    }).observe(container, { childList: true });
+    sync();
+  })();
+</script>
