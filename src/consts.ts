@@ -14,10 +14,10 @@ export const GITHUB_URL = 'https://github.com/guog';
 //      页面会给出 repo / repoId / category / categoryId，复制到下方。
 // 下面留空时，文章页会显示配置提示而不是评论框。
 export const GISCUS = {
-	repo: '', // 例: 'guog/guog.github.io'
-	repoId: '', // 例: 'R_kgDOGxxxxxxxx'
-	category: '', // 例: 'Announcements'
-	categoryId: '', // 例: 'DIC_kwDOGxxxxxxxx'
+	repo: 'guog/guog.github.io',
+	repoId: 'R_kgDOVIqxYA',
+	category: 'General',
+	categoryId: 'DIC_kwDOVIqxYM4DIZa2',
 	mapping: 'pathname',
 	lang: 'zh-CN',
 };
