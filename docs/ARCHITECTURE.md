@@ -92,3 +92,7 @@ Expressive Code 采用 `dracula` 与 `github-light`，通过相同的 `data-them
 唯一 CI/CD 入口 `.github/workflows/site.yml` 区分 PR 校验与生产发布：`Validate PR` → `Verify site`；只有 `main` push 才继续 `Deploy Pages` → `Release site`。部署使用已验证的 `dist/`，发布器只处理版本标签与 GitHub Release。
 
 工作流、版本规则、最小权限、失败恢复和待人工设置项见 [贡献指南](CONTRIBUTING.md)。不要通过新增独立部署工作流绕过这些门禁。
+
+## 构建依赖安全补丁
+
+`package.json` 对 `@expressive-code/core@0.44.2 → postcss-nested@6.2.0` 的 `postcss-selector-parser` 使用精确 `7.1.6` override，修复 [GHSA-rj75-hqrm-r3gf](https://github.com/advisories/GHSA-rj75-hqrm-r3gf)。该解析器只参与构建；不因此降级 Expressive Code。补丁已通过正式站点与 MDX/代码块测试构建，`npm audit` 在核验时为 0 个已知漏洞。未来升级 Expressive Code 时应重新核对并尽可能移除此临时 override，不要盲目执行 `npm audit fix --force`。

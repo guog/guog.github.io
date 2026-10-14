@@ -337,7 +337,8 @@
     margin-block: 1.8rem 0.8rem;
   }
   .prose h2::before {
-    content: "# ";
+    /* Decorative marker must not change the heading’s accessible name. */
+    content: "# " / "";
     color: var(--color-accent);
     font-weight: 400;
   }

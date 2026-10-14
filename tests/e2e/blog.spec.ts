@@ -65,7 +65,7 @@ for (const width of [375, 768, 1440]) {
 
 test("Chinese Pagefind UI returns an existing article and navigates to it", async ({ page }) => {
   await page.goto("/search/");
-  const search = page.getByRole("searchbox");
+  const search = page.getByRole("textbox", { name: "搜索文章", exact: true });
   await expect(search).toBeVisible();
   await search.fill("写作");
   const result = page.locator('.pagefind-ui__result-link[href*="/blog/why-write-blog/"]');
@@ -87,7 +87,9 @@ test("drafts stay absent from generated routes, listing, feeds, sitemap and Page
     expect(await response.text()).not.toContain("/blog/__regression__/draft/");
   }
   await page.goto("/search/");
-  await page.getByRole("searchbox").fill("DraftInvisibleSentinel");
+  const search = page.getByRole("textbox", { name: "搜索文章", exact: true });
+  await expect(search).toBeVisible();
+  await search.fill("DraftInvisibleSentinel");
   await expect(page.locator(".pagefind-ui__message")).toContainText("没有找到");
   await expect(page.locator(".pagefind-ui__result")).toHaveCount(0);
 });
@@ -111,7 +113,9 @@ test("nested case-sensitive, Chinese and explicit-slug article URLs are consiste
     await expect(page.locator(`a[href="${route}"]`).first()).toBeVisible();
   }
   await page.goto("/search/");
-  await page.getByRole("searchbox").fill("中文路径");
+  const search = page.getByRole("textbox", { name: "搜索文章", exact: true });
+  await expect(search).toBeVisible();
+  await search.fill("中文路径");
   const chineseResult = page
     .locator(".pagefind-ui__result-link")
     .filter({ hasText: "中文路径回归测试" })

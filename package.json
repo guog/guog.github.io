@@ -47,5 +47,12 @@
     "typescript": "6.0.3",
     "unified": "11.0.5",
     "yaml": "2.9.1"
+  },
+  "overrides": {
+    "@expressive-code/core@0.44.2": {
+      "postcss-nested@6.2.0": {
+        "postcss-selector-parser": "7.1.6"
+      }
+    }
   }
 }

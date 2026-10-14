@@ -54,3 +54,15 @@
 按照 [贡献指南](CONTRIBUTING.md#github-仓库设置待人工核实) 核验 Pages Source、`main` 保护、必需检查、Squash 设置、Environment 的 `main` 限制和最小 Token 权限。配置文件不会自动创建这些保护规则。
 
 回滚使用新的 `fix/*` 恢复性 PR 或 revert PR，经同一 CI 后重新部署；不强推、不移动旧标签。Release 失败时保留部署与标签，按原 SHA 恢复，不重新覆盖已发布版本。
+
+## PR 阶段补充证据
+
+- 远程草稿 PR：[#1](https://github.com/guog/guog.github.io/pull/1)，目标仍为原始 `main`。三个迁移提交与本地文件树核验一致。
+- 对首轮提交 `f6361674c78d74b534e5610e2174fd52f379093e` 的实际 dry-run 推断 `v1.0.0`；没有写入标签或 Release，也没有验证发布 Token 的写权限。
+- 隔离回滚演练通过：在临时 detached worktree 中反向应用三个迁移提交且不创建提交，所得文件树与原始 `main` 完全一致，再次 `npm ci` 和构建通过。没有变更主工作区或远程历史。
+- GitHub 只读查询确认：`main` 当前 `protected=false`，必需状态检查为空；仓库仍同时允许 Merge、Rebase 和 Squash。保护设置必须由维护者人工完成。
+- [首轮 CI](https://github.com/guog/guog.github.io/actions/runs/38557748826) 的安装、类型、内容、39 项测试、构建和真实索引验证通过。浏览器 11 项通过、4 项失败、1 项可选真实 Giscus 检查跳过；失败项分别是 Pagefind 的实际 `textbox` 与测试预期 `searchbox` 不一致，以及装饰性 `#` 进入标题无障碍名称。
+- 已按实际渲染语义修正搜索定位，并为装饰标记提供空替代文本，保留对标题、搜索结果和导航的严格断言。未删除或跳过失败测试。后续 CI 结果以 PR 最新提交为准。
+- 首轮 6 组尺寸/主题测试全部通过并留下 36 张页面截图：[浏览器证据](https://github.com/guog/guog.github.io/actions/runs/38557748826/artifacts/11890811154)。下载需要仓库访问者登录 GitHub；证据保留 14 天。
+- 首轮依赖审计发现一个 CSS 解析器复杂度漏洞沿依赖链产生的 10 个中风险条目；通过精确限定范围的 `postcss-selector-parser@7.1.6` override 修复。Expressive Code 和 postcss-nested 主版本不变；正式构建、12 页测试构建与 39 项单测再次通过，`npm audit` 为 0 个已知漏洞。
+- 截图上传 Action 更新到官方 `v7.0.2` 固定 SHA，使用 Node 24，消除首轮 CI 的 Node 20 兼容警告。
