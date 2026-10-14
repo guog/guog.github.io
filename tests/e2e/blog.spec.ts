@@ -216,9 +216,10 @@ test("Chinese TOC anchors navigate to real headings; categories and tags work", 
   );
   await page.locator(".tag-summary").getByRole("link", { name: "#写作", exact: true }).click();
   const tagAnchor = decodeURIComponent(new URL(page.url()).hash.slice(1));
-  expect(
-    await page.evaluate((id) => document.getElementById(id)?.hasAttribute("open"), tagAnchor),
-  ).toBe(true);
+  // The hashchange handler opens the details asynchronously after the link click.
+  await expect
+    .poll(() => page.evaluate((id) => document.getElementById(id)?.hasAttribute("open"), tagAnchor))
+    .toBe(true);
 });
 
 test("theme follows system, persists manual choice across navigation and refresh, and resets", async ({
