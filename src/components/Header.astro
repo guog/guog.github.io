@@ -1,103 +1,23 @@
 ---
-import { SITE_TITLE } from '../consts';
-
-const links = [
-	{ href: '/', label: '首页' },
-	{ href: '/blog', label: '归档' },
-	{ href: '/search', label: '搜索' },
-	{ href: '/about', label: '关于' },
-];
+import { menuLinks, siteConfig } from "../site.config";
+import ThemeToggle from "./ThemeToggle.astro";
 
 const pathname = Astro.url.pathname;
-const isActive = (href: string) =>
-	href === '/' ? pathname === '/' : pathname.startsWith(href);
 ---
-
-<header>
-	<nav>
-		<a class="site-title" href="/">{SITE_TITLE}</a>
-		<div class="nav-links">
-			{
-				links.map((l) => (
-					<a href={l.href} class={isActive(l.href) ? 'active' : ''}>
-						{l.label}
-					</a>
-				))
-			}
-			<button id="theme-toggle" type="button" aria-label="切换深色/浅色模式" title="切换深色/浅色模式">
-				<span class="icon-sun" aria-hidden="true">☀</span>
-				<span class="icon-moon" aria-hidden="true">☾</span>
-			</button>
-		</div>
-	</nav>
+<header class="site-header" id="main-header">
+  <div class="site-identity">
+    <a href="/" class="site-brand">
+      <!-- Cactus 8.3.0 logo, MIT, Chris Williams. -->
+      <svg aria-hidden="true" width="27" height="48" viewBox="0 0 272 480" fill="none">
+        <path fill="#cdffb8" d="M181.334 93.333v-40L226.667 80v40zM136.001 53.333 90.667 26.667v426.666L136.001 480zM45.333 220 0 193.334v140L45.333 360z"/>
+        <path fill="#d482ab" d="M90.667 26.667 136.001 0l45.333 26.667-45.333 26.666zM181.334 53.33l45.333-26.72L272 53.33 226.667 80zM136 240l-45.333-26.67v53.34zM0 193.33l45.333-26.72 45.334 26.72L45.333 220zM181.334 93.277 226.667 120l-45.333 26.67z"/>
+        <path fill="#2abc89" d="m136 53.333 45.333-26.666v120L226.667 120V80L272 53.333V160l-90.667 53.333v240L136 480V306.667L45.334 360V220l45.333-26.667v73.334L136 240z"/>
+      </svg>
+      <span>{siteConfig.title}</span>
+    </a>
+    <ThemeToggle />
+  </div>
+  <nav aria-label="主导航" class="site-nav">
+    {menuLinks.map((link) => <a href={link.path} aria-current={(link.path === '/' ? pathname === '/' : pathname.startsWith(link.path)) ? 'page' : undefined}>{link.title}</a>)}
+  </nav>
 </header>
-
-<script>
-	const btn = document.getElementById('theme-toggle');
-	btn?.addEventListener('click', () => {
-		const dark = document.documentElement.classList.toggle('dark');
-		try {
-			localStorage.setItem('theme', dark ? 'dark' : 'light');
-		} catch {}
-	});
-</script>
-
-<style>
-	header {
-		border-bottom: 1px solid var(--border);
-	}
-	nav {
-		max-width: 44rem;
-		margin: 0 auto;
-		padding: 0 1.25rem;
-		height: 3.5rem;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	.site-title {
-		font-weight: 700;
-		font-size: 1.1rem;
-		color: var(--fg);
-	}
-	.site-title:hover {
-		text-decoration: none;
-	}
-	.nav-links {
-		display: flex;
-		align-items: center;
-		gap: 1.1rem;
-	}
-	.nav-links a {
-		color: var(--muted);
-		font-size: 0.95rem;
-	}
-	.nav-links a:hover {
-		color: var(--fg);
-		text-decoration: none;
-	}
-	.nav-links a.active {
-		color: var(--accent);
-	}
-	#theme-toggle {
-		background: none;
-		border: 1px solid var(--border);
-		border-radius: 999px;
-		width: 2rem;
-		height: 2rem;
-		cursor: pointer;
-		color: var(--fg);
-		font-size: 1rem;
-		line-height: 1;
-		padding: 0;
-	}
-	.icon-moon {
-		display: none;
-	}
-	html.dark .icon-sun {
-		display: none;
-	}
-	html.dark .icon-moon {
-		display: inline;
-	}
-</style>

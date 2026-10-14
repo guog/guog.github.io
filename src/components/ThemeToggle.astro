@@ -1,0 +1,21 @@
+<div class="theme-controls">
+  <button id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="深色模式" title="切换深色模式">
+    <svg class="theme-sun" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+    <svg class="theme-moon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 15.6A9 9 0 0 1 8.4 4a9 9 0 1 0 11.6 11.6Z"/></svg>
+  </button>
+  <button id="theme-system" type="button" aria-label="主题跟随系统" title="主题跟随系统">自动</button>
+</div>
+<script>
+  const button = document.querySelector<HTMLButtonElement>('#theme-toggle');
+  const system = document.querySelector<HTMLButtonElement>('#theme-system');
+  function sync() {
+    button?.setAttribute('aria-checked', String(document.documentElement.dataset.theme === 'dark'));
+    system?.setAttribute('aria-pressed', String(document.documentElement.dataset.themePreference === 'system'));
+  }
+  button?.addEventListener('click', () => document.dispatchEvent(new CustomEvent('theme-change', {
+    detail: { theme: document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark' },
+  })));
+  system?.addEventListener('click', () => document.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: 'system' } })));
+  document.addEventListener('theme-changed', sync);
+  sync();
+</script>

@@ -1,0 +1,64 @@
+---
+title: '中文代码与排版回归测试'
+description: '仅在临时测试构建中出现，覆盖 MDX、行号、复制、表格、目录和中文排版。'
+pubDate: '2026-10-14'
+category: '回归测试'
+tags: ['中文', 'MDX']
+---
+
+import { Code } from 'astro-expressive-code/components';
+
+## 中文目录与代码
+
+这篇临时文章验证中文段落、English identifiers 与数字 42 的排版。正式站点不应包含此测试文章。
+
+<p data-testid="mdx-proof">MDX 运算结果：{6 * 7}</p>
+
+```typescript title="example.ts" {2}
+function greet(name: string): string {
+  return `你好，${name}`;
+}
+```
+
+### 关闭行号
+
+```bash title="commands.sh" showLineNumbers=false
+npm ci
+npm run dev
+```
+
+### 起始行号
+
+```python title="offset.py" startLineNumber=42
+def greet(name: str) -> str:
+    return f"你好，{name}"
+```
+
+### 共用配置的组件
+
+<Code code={'const answer: number = 42;\nconsole.log(answer);'} lang="typescript" title="component.ts" />
+
+## 长代码与表格
+
+```typescript title="long-line.ts"
+const unusuallyLongLine = "这是用于验证横向滚动的中文代码示例。abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789";
+```
+
+| 检查项目 | 第一个中文字段 | 第二个中文字段 | 第三个中文字段 | 第四个中文字段 |
+| --- | --- | --- | --- | --- |
+| 二维数据矩阵 | 长数据单元格abcdefghijklmnop | 长数据单元格abcdefghijklmnop | 长数据单元格abcdefghijklmnop | 长数据单元格abcdefghijklmnop |
+| 窄屏滚动验证 | 应保持正文宽度稳定 | 应保持代码独立滚动 | 应保持导航能够操作 | 应保持所有内容可读 |
+
+超长链接：[链接应该在正文容器内换行](https://example.com/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz).
+
+![博客图标示例](/favicon.svg)
+
+> 引用文本展示中文标点与长段落。检查引用边框、行距，以及深浅主题下的阅读体验。
+
+- 一级列表
+  - 二级列表与 `inlineCode`
+  - 另一个条目
+
+## 总结
+
+仙人掌回归测试包含可检查的代码、图片、标题和中文搜索内容。

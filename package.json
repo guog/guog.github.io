@@ -3,21 +3,56 @@
   "type": "module",
   "version": "0.0.1",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "postbuild": "pagefind --site dist",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "astro check && biome check",
+    "test": "node --test tests/*.test.mjs",
+    "test:built": "node scripts/check-built.mjs",
+    "test:e2e": "playwright test",
+    "lint:content": "node scripts/check-content.mjs",
+    "check:migration": "node scripts/check-migration.mjs",
+    "validate:pr": "node scripts/validate-pr.mjs",
+    "release:dry-run": "node scripts/release.mjs --dry-run"
   },
   "dependencies": {
-    "@astrojs/mdx": "^8.0.3",
-    "@astrojs/rss": "^4.0.19",
-    "@astrojs/sitemap": "^3.7.4",
-    "astro": "^7.3.8",
+    "@astrojs/mdx": "8.0.3",
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.4",
+    "@expressive-code/plugin-frames": "0.44.2",
+    "@expressive-code/plugin-line-numbers": "0.44.2",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "7.3.8",
+    "astro-expressive-code": "0.44.2",
     "pagefind": "^1.5.2",
-    "sharp": "^0.35.0"
+    "sharp": "^0.35.0",
+    "tailwindcss": "4.3.3"
+  },
+  "private": true,
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@biomejs/biome": "2.5.13",
+    "@playwright/test": "1.64.0",
+    "@types/node": "24.19.2",
+    "parse5": "8.0.1",
+    "remark-frontmatter": "5.0.0",
+    "remark-gfm": "4.0.1",
+    "remark-mdx": "3.1.1",
+    "remark-parse": "11.0.0",
+    "typescript": "6.0.3",
+    "unified": "11.0.5",
+    "yaml": "2.9.1"
+  },
+  "overrides": {
+    "@expressive-code/core@0.44.2": {
+      "postcss-nested@6.2.0": {
+        "postcss-selector-parser": "7.1.6"
+      }
+    }
   }
 }
