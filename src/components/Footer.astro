@@ -1,0 +1,25 @@
+---
+import { GITHUB_URL, SITE_TITLE } from '../consts';
+const today = new Date();
+---
+
+<footer>
+	<p>
+		&copy; {today.getFullYear()} {SITE_TITLE} · <a href={GITHUB_URL} target="_blank" rel="noopener">GitHub</a> ·
+		<a href="/rss.xml">RSS</a>
+	</p>
+	<p class="muted">用 Astro 构建，部署在 GitHub Pages</p>
+</footer>
+
+<style>
+	footer {
+		border-top: 1px solid var(--border);
+		text-align: center;
+		padding: 2rem 1rem;
+		font-size: 0.85rem;
+		color: var(--muted);
+	}
+	footer p {
+		margin: 0.3em 0;
+	}
+</style>

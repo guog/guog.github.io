@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+// 按分类分组
+const byCategory = new Map<string, typeof posts>();
+for (const post of posts) {
+	const cat = post.data.category;
+	if (!byCategory.has(cat)) byCategory.set(cat, []);
+	byCategory.get(cat)!.push(post);
+}
+
+// 收集全部标签
+const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title="归档" description="按分类与标签浏览全部文章" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>归档</h1>
+			<section>
+				<h2>标签</h2>
+				<p>
+					{allTags.map((tag) => <span class="tag">{tag}</span>)}
+				</p>
+			</section>
+			{
+				[...byCategory.entries()].map(([category, items]) => (
+					<section>
+						<h2>{category}</h2>
+						<ul class="post-list">
+							{items.map((post) => (
+								<li>
+									<div class="post-meta">
+										<FormattedDate date={post.data.pubDate} />
+									</div>
+									<h2>
+										<a href={`/blog/${post.id}/`}>{post.data.title}</a>
+									</h2>
+								</li>
+							))}
+						</ul>
+					</section>
+				))
+			}
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.post-list h2 {
+		font-size: 1.15rem;
+	}
+	.post-list h2 a {
+		color: var(--fg);
+	}
+	.post-list h2 a:hover {
+		color: var(--accent);
+		text-decoration: none;
+	}
+	section {
+		margin-bottom: 2rem;
+	}
+</style>

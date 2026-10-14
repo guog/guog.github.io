@@ -1,0 +1,200 @@
+/*
+ * 简洁主题：系统字体栈，无花哨动画，阅读宽度适中。
+ * 深色模式通过 <html class="dark"> 切换，配色变量集中在这里。
+ */
+:root {
+	--bg: #ffffff;
+	--fg: #1a1a1a;
+	--muted: #6b7280;
+	--border: #e5e7eb;
+	--accent: #1d4ed8;
+	--code-bg: #f3f4f6;
+	--card-bg: #f9fafb;
+}
+
+html.dark {
+	--bg: #111318;
+	--fg: #e5e7eb;
+	--muted: #9ca3af;
+	--border: #262b36;
+	--accent: #7aa2ff;
+	--code-bg: #1b1f27;
+	--card-bg: #161a21;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--fg);
+	/* 系统字体栈：中文优先苹方/微软雅黑/Noto */
+	font-family:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+		'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+	font-size: 17px;
+	line-height: 1.75;
+}
+
+main {
+	width: 100%;
+	max-width: 44rem; /* 阅读宽度 */
+	margin: 0 auto;
+	padding: 2rem 1.25rem 4rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	line-height: 1.4;
+	margin: 1.8em 0 0.8em;
+}
+
+h1 {
+	font-size: 1.9rem;
+}
+h2 {
+	font-size: 1.5rem;
+}
+h3 {
+	font-size: 1.25rem;
+}
+
+p {
+	margin: 1em 0;
+}
+
+a {
+	color: var(--accent);
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+hr {
+	border: none;
+	border-top: 1px solid var(--border);
+	margin: 2em 0;
+}
+
+code {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 0.9em;
+	background: var(--code-bg);
+	padding: 0.15em 0.4em;
+	border-radius: 4px;
+}
+
+pre {
+	background: var(--code-bg);
+	padding: 1em;
+	border-radius: 8px;
+	overflow-x: auto;
+}
+pre code {
+	background: none;
+	padding: 0;
+}
+
+blockquote {
+	margin: 1.5em 0;
+	padding: 0.2em 1em;
+	border-left: 3px solid var(--border);
+	color: var(--muted);
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 1.5em 0;
+}
+th,
+td {
+	border: 1px solid var(--border);
+	padding: 0.5em 0.75em;
+	text-align: left;
+}
+
+/* 文章列表 */
+.post-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.post-list li {
+	padding: 1.25rem 0;
+	border-bottom: 1px solid var(--border);
+}
+.post-list h2 {
+	margin: 0 0 0.25em;
+	font-size: 1.3rem;
+}
+.post-meta {
+	color: var(--muted);
+	font-size: 0.85rem;
+	margin-bottom: 0.5em;
+}
+.post-desc {
+	color: var(--muted);
+	margin: 0.25em 0 0;
+}
+
+/* 分类与标签 */
+.category {
+	display: inline-block;
+	font-size: 0.8rem;
+	color: var(--accent);
+	border: 1px solid var(--accent);
+	border-radius: 999px;
+	padding: 0.1em 0.7em;
+	margin-right: 0.5em;
+}
+.tag {
+	display: inline-block;
+	font-size: 0.8rem;
+	color: var(--muted);
+	background: var(--card-bg);
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	padding: 0.1em 0.7em;
+	margin-right: 0.4em;
+}
+
+/* pagefind 搜索框的深色适配 */
+#search {
+	--pagefind-ui-scale: 0.9;
+	--pagefind-ui-primary: var(--accent);
+	--pagefind-ui-text: var(--fg);
+	--pagefind-ui-background: var(--bg);
+	--pagefind-ui-border: var(--border);
+	--pagefind-ui-tag: var(--card-bg);
+	--pagefind-ui-border-width: 1px;
+	--pagefind-ui-border-radius: 8px;
+	--pagefind-ui-image-border-radius: 8px;
+	--pagefind-ui-image-box-ratio: 3 / 2;
+	--pagefind-ui-font: inherit;
+}
+
+@media (max-width: 640px) {
+	body {
+		font-size: 16px;
+	}
+	main {
+		padding: 1.5rem 1rem 3rem;
+	}
+}

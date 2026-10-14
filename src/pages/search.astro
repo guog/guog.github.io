@@ -1,0 +1,42 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`站内搜索 | ${SITE_TITLE}`} description="搜索本站全部文章（支持中文）" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>站内搜索</h1>
+			<p class="muted">由 pagefind 提供，支持中文分词。搜索索引在构建时生成。</p>
+			<div id="search"></div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<!-- pagefind 的 UI 资源由构建后脚本生成到 /pagefind/ 目录 -->
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+<script src="/pagefind/pagefind-ui.js" is:inline></script>
+<script is:inline>
+	window.addEventListener('DOMContentLoaded', () => {
+		if (window.PagefindUI) {
+			new window.PagefindUI({ element: '#search', showSubResults: true });
+		} else {
+			document.getElementById('search').innerHTML =
+				'<p>搜索索引尚未生成，请先执行构建（npm run build）。</p>';
+		}
+	});
+</script>
+
+<style>
+	.muted {
+		color: var(--muted);
+	}
+</style>
