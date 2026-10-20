@@ -16,6 +16,7 @@
     "test:built": "node scripts/check-built.mjs",
     "test:e2e": "playwright test",
     "lint:content": "node scripts/check-content.mjs",
+    "lint:names": "node scripts/check-names.mjs",
     "check:migration": "node scripts/check-migration.mjs",
     "validate:pr": "node scripts/validate-pr.mjs",
     "release:dry-run": "node scripts/release.mjs --dry-run"

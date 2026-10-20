@@ -10,7 +10,7 @@ tags: ["软件工程", "GitHub", "CI/CD"]
 
 *以一次需求的完整交付为主线，理解协作、自动化、可复现和持续反馈*
 
-![从需求到可追溯交付的工程主线](/images/modern-se/00_封面.jpg)
+![从需求到可追溯交付的工程主线](/images/modern-se/delivery-overview.jpg)
 
 一个软件团队是否现代化，不能只看使用了什么编程语言、安装了多少开发工具，甚至不能只看是否已经使用 Git 或人工智能（Artificial Intelligence，AI）编程助手。更能说明问题的是：**一项需求从提出到交付，团队能否清楚回答为什么改、由谁改、如何验证、交付了什么，以及发布后如何发现并修正问题。**
 
@@ -39,7 +39,7 @@ Markdown 在这里是重要的辅助载体。它以纯文本保存需求、设�
 
 我们以“新增异步报表导出”为例。如果只留下“报表导出太慢”一句话，开发者无法判断数据量、权限、超时处理和验收条件。**Issue（议题或工作事项）**则把问题转化为可讨论、可追踪的工作对象：说明背景、预期行为、限制条件、负责人及相关讨论，并关联后续 PR。GitHub 的 [Issues 官方文档](https://docs.github.com/zh/issues/tracking-your-work-with-issues/learning-about-issues/about-issues) 提供了这一机制的说明。
 
-![轻量需求与复杂提案两种合理路径](/images/modern-se/02_需求路径.jpg)
+![轻量需求与复杂提案两种合理路径](/images/modern-se/requirements-paths.jpg)
 
 两种需求路径需要区别对待：
 
@@ -56,7 +56,7 @@ Markdown 在这里是重要的辅助载体。它以纯文本保存需求、设�
 
 有了明确的需求，下一步不是让所有人直接向 `main` 提交修改，而是把一次变更组织成可以独立审查的单元。**GitHub Flow** 是 GitHub 官方推荐的轻量、基于分支的协作工作流：从稳定主干创建短期分支，在分支上提交改动，借助 PR 讨论和检查，符合条件后合并回主干。参见 [GitHub Flow 官方中文文档](https://docs.github.com/zh/get-started/using-github/github-flow)。
 
-![短期分支、Pull Request 与主干集成](/images/modern-se/03_短分支PR.jpg)
+![短期分支、Pull Request 与主干集成](/images/modern-se/short-lived-branches.jpg)
 
 针对异步导出，可以建立 `feature/async-export` 分支。开发者提交后台任务与接口修改，创建 PR 时写明关联 Issue、主要变更、已执行的验证和潜在风险。同事无需先找开发者当面解释，就能从 PR 看见代码差异、讨论、自动化检查状态和修改历史。
 
@@ -64,7 +64,7 @@ Markdown 在这里是重要的辅助载体。它以纯文本保存需求、设�
 
 常见的三个 Git 概念解决不同层面的问题：
 
-![Fork、Branch 与 Worktree 所在的协作层次](/images/modern-se/04_ForkWorktree.jpg)
+![Fork、Branch 与 Worktree 所在的协作层次](/images/modern-se/fork-and-worktree.jpg)
 
 - **Branch（分支）**：在同一仓库中隔离一项变更，是团队内部协作的基本单位。
 - **Fork（派生仓库）**：在自己账号或组织下创建另一个仓库，常用于缺少上游写入权限的开源贡献；并非企业内部协作的必备步骤。
@@ -78,11 +78,11 @@ Markdown 在这里是重要的辅助载体。它以纯文本保存需求、设�
 
 代码进入主干之前，团队需要一种可重复的证据，说明变更至少满足规定的基础质量要求。**持续集成（Continuous Integration，CI）**强调频繁集成，并在每次有意义的变更后尽快得到自动反馈；它不是每晚有人手工运行的编译脚本。
 
-![代码评审、自动化检查与合并门禁](/images/modern-se/05_评审质量.jpg)
+![代码评审、自动化检查与合并门禁](/images/modern-se/review-quality.jpg)
 
 对于异步导出 PR，可以将下列检查连接到同一个变更：构建是否成功、现有接口是否兼容、权限用例是否通过、静态分析是否发现明显问题、关键页面操作是否仍可完成。**质量门禁的目的不是让工具代替专业测试，而是把适合机器重复执行的验证前移**，让人工审查集中在业务逻辑和复杂风险上。
 
-![从变更提交到自动化构建、验证与制品生成](/images/modern-se/06_CICD.jpg)
+![从变更提交到自动化构建、验证与制品生成](/images/modern-se/ci-cd.jpg)
 
 一个典型的自动化工作流是：**提交或 PR 触发 → 安装受控依赖 → 构建 → 检查 → 输出结果与制品**。GitHub Actions、GitLab CI/CD 和 Azure Pipelines 都能实现类似机制。执行这些任务的 **Runner** 可以位于云平台，也可以是企业受控的自托管机器。对于依赖 Windows、专用开发套件和硬件许可证的项目，自托管 Runner 比强行改造成 Linux 容器更现实。
 
@@ -98,7 +98,7 @@ Markdown 在这里是重要的辅助载体。它以纯文本保存需求、设�
 
 假设异步导出功能在开发者电脑上通过，却只能在一台经过多年手工配置的编译机上打包。机器损坏后，团队找不到完整安装步骤和依赖版本。这种“只有这一台能工作”的环境常被称为**雪花服务器（Snowflake Server）**；风险的本质是构建条件没有被记录为可维护的工程资产。
 
-![从手工环境到可定义、可重建的构建环境](/images/modern-se/07_环境标准化.jpg)
+![从手工环境到可定义、可重建的构建环境](/images/modern-se/standardized-environments.jpg)
 
 解决办法不是只引入一个 Docker，而是分层管理环境：
 
@@ -116,7 +116,7 @@ Markdown 在这里是重要的辅助载体。它以纯文本保存需求、设�
 
 源代码只是交付的起点。真正安装到用户环境中的可能是压缩包、二进制程序、NuGet 包、容器镜像或离线安装介质。即使能找到某个 Git 提交，如果不知道构建工具版本、依赖来源和制品哈希，也不一定能还原现场正在运行的内容。
 
-![从依赖、构建到软件制品与可信来源](/images/modern-se/08_供应链.jpg)
+![从依赖、构建到软件制品与可信来源](/images/modern-se/software-supply-chain.jpg)
 
 这一环节要把三种不同对象区分清楚：
 
@@ -138,7 +138,7 @@ Markdown 在这里是重要的辅助载体。它以纯文本保存需求、设�
 
 完成构建还不是完成发布。**Tag（标签）**用于在 Git 中标记特定代码状态；**Release（发布）**对应一次面向用户或下游团队的交付；**Changelog（变更日志）**与 **Release Notes（发布说明）**则回答“此版本有什么变化”。GitHub 官方的 [Releases 文档](https://docs.github.com/zh/repositories/releasing-projects-on-github/about-releases) 将这些对象与源码版本和发布资产联系起来。
 
-![版本、构建证据、发布制品与部署记录的关联](/images/modern-se/09_可追溯发布.jpg)
+![版本、构建证据、发布制品与部署记录的关联](/images/modern-se/traceable-releases.jpg)
 
 对于面向外部依赖方的库或 API，可以采用 **SemVer（Semantic Versioning，语义化版本）**：在已约定公共接口语义的前提下，使用主版本、次版本、修订号表达不兼容变更、兼容功能和兼容修复。对企业定制应用，版本规则还应考虑客户分支、数据库迁移和支持窗口，而不是一律套用库的版本策略。
 
@@ -163,7 +163,7 @@ Markdown 在这里是重要的辅助载体。它以纯文本保存需求、设�
 - **统一遥测数据**：**OpenTelemetry** 提供厂商中立的日志、指标、链路追踪相关接口与采集组件。它不是一个自动替你诊断所有问题的监控平台。
 - **存储与可视化**：**Prometheus** 适合收集时序指标；**Grafana** 连接不同数据源形成仪表盘与告警；**SigNoz** 提供基于 OpenTelemetry 的集成式可观测性方案。具体选型依赖数据规模与运维能力，并不意味着这些产品应同时部署。
 
-![发布、异常发现、工作事项和再次交付的反馈闭环](/images/modern-se/12_质量反馈闭环.jpg)
+![发布、异常发现、工作事项和再次交付的反馈闭环](/images/modern-se/quality-feedback-loop.jpg)
 
 只有当反馈能回到工程流程，监控才真正产生研发价值。报表超时可能由 SQL 查询、异步任务队列、外部接口或网络问题引起；定位后形成带有复现条件和发布版本的 Issue，由短期分支修复，通过 PR 与 CI 验证，再进入下次受控发布。
 
@@ -175,7 +175,7 @@ Markdown 在这里是重要的辅助载体。它以纯文本保存需求、设�
 
 只有需求、PR、自动化检查、制品、发布和运行记录相互连接，团队才具备度量工程表现的基础。否则，单纯统计提交数、代码行数或 AI 生成量，容易把活动量当成成果。
 
-![软件交付吞吐与稳定性的五项度量](/images/modern-se/10_DORA.jpg)
+![软件交付吞吐与稳定性的五项度量](/images/modern-se/dora-metrics.jpg)
 
 **DORA（DevOps Research and Assessment）** 在其[官方软件交付性能指标](https://dora.dev/guides/dora-metrics/)中使用五项指标，分别观察交付吞吐与不稳定性：
 
@@ -193,7 +193,7 @@ PR 合并率、等待评审时间、CI 成功率也能帮助定位瓶颈，但**
 
 前述能力不仅需要人能通过网页操作，还需要流水线与自动化程序可靠调用。这里涉及三个应当分清的层次：**执行接口、使用约定、工具连接协议**。
 
-![命令行、Skills 与 MCP 在工程工具链中的位置](/images/modern-se/11_命令行与工具生态.jpg)
+![命令行、Skills 与 MCP 在工程工具链中的位置](/images/modern-se/cli-and-tool-ecosystem.jpg)
 
 **CLI（Command-Line Interface，命令行接口）**适合明确参数、可组合的重复操作。GitHub 官方的 `gh` 和 GitLab 的 `glab` 能在终端中查询 Issue、PR/MR（Merge Request，合并请求）、CI 状态或发布信息。对具备终端能力的 Agent，成熟 CLI 通常比模拟鼠标点击更可重复、易于记录和调试，因此“CLI First”是一种值得重视的工具设计思想；但它并不是永远优于 API 的规则。
 
