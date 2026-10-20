@@ -94,7 +94,7 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
 
   for (const route of [
     ...baseline.pages,
-    ...baseline.articles.map((post) => post.url),
+    ...baseline.articles.filter((post) => !post.retired).map((post) => post.url),
     ...baseline.staticResources.map((resource) => resource.url),
   ]) {
     await check(`Legacy URL ${route}`, () => resolveLocalTarget(dist, new URL(route, SITE)));
@@ -207,6 +207,29 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
       await resolveLocalTarget(dist, parsed);
     });
   for (const post of baseline.articles) {
+    if (post.retired) {
+      await check(`Retired sample ${post.url}`, async () => {
+        await assert.rejects(
+          resolveLocalTarget(dist, new URL(post.url, SITE)),
+          /Missing local resource/,
+        );
+        assert.ok(!rssURLs.includes(`${SITE}${post.url}`), "Retired sample leaked into RSS");
+        assert.ok(
+          !sitemapURLs.includes(`${SITE}${post.url}`),
+          "Retired sample leaked into sitemap",
+        );
+        for (const document of documents.values())
+          assert.equal(
+            elements(
+              document,
+              (node) => node.tagName === "a" && attribute(node, "href") === post.url,
+            ).length,
+            0,
+            "Retired sample leaked into navigation",
+          );
+      });
+      continue;
+    }
     const url = `${SITE}${post.url}`;
     await check(`Legacy RSS ${post.url}`, () => assert.ok(rssURLs.includes(url)));
     await check(`Legacy sitemap ${post.url}`, () => assert.ok(sitemapURLs.includes(url)));
@@ -253,6 +276,9 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
     } else {
       await check(`Published article ${route}`, async () => {
         await documentAt(route);
+        const html = await readFile(await resolveLocalTarget(dist, new URL(route, SITE)), "utf8");
+        for (const value of Object.values(baseline.giscus))
+          assert.ok(html.includes(value), `Missing Giscus value ${value}`);
         assert.ok(rssURLs.includes(absolute), "Missing from RSS");
         assert.ok(sitemapURLs.includes(absolute), "Missing from sitemap");
         const item = rssItems.find((entry) => xmlValues(entry, "link").includes(absolute));
