@@ -1,10 +1,11 @@
 /** Exercise the built Pagefind JS/WASM with local files, independently of a browser or network. */
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const dist = path.resolve(process.argv[2] ?? "dist");
+// Resolve macOS /var -> /private/var before checking file URL containment.
+const dist = await realpath(path.resolve(process.argv[2] ?? "dist"));
 // This script runs in its own process so the minimal browser globals never leak into other tests.
 globalThis.document = {
   currentScript: null,
