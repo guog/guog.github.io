@@ -8,7 +8,14 @@ test("blog content names use lowercase English, digits and hyphens with a leadin
     validateNames(["public/images/markdown-workflow.jpg", "src/content/blog/markdown-101.md"]),
     [],
   );
-  for (const name of ["中文.jpg", "MixedCase.png", "00-cover.jpg", "a_b.png", "a b.png"])
+  for (const name of [
+    "中文.jpg",
+    "MixedCase.png",
+    "00-cover.jpg",
+    "a_b.png",
+    "a b.png",
+    "image.backup.jpg",
+  ])
     assert.deepEqual(validateNames([`public/images/${name}`]), [`public/images/${name}`]);
   assert.deepEqual(validateNames(["public/images/Bad/file.jpg", "src/content/blog/a.b/file.md"]), [
     "public/images/Bad",

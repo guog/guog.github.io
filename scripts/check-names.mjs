@@ -18,7 +18,7 @@ export function validateNames(files) {
     const segments = file.slice(root.length).split("/");
     for (const [index, name] of segments.entries()) {
       const pattern =
-        index === segments.length - 1 ? /^[a-z][a-z0-9-]*(?:\.[a-z0-9-]+)*$/ : segmentPattern;
+        index === segments.length - 1 ? /^[a-z][a-z0-9-]*(?:\.[a-z0-9]+)?$/ : segmentPattern;
       if (!pattern.test(name)) problems.add(root + segments.slice(0, index + 1).join("/"));
     }
   }
