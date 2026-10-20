@@ -3,8 +3,17 @@ import { expect, type Page, test } from "@playwright/test";
 const fixtureURL = "/blog/__regression__/nested/MixedCase/";
 const chineseURL = "/blog/__regression__/%E4%B8%AD%E6%96%87%E8%B7%AF%E5%BE%84/";
 const explicitURL = "/blog/__regression__/Custom/%E6%98%BE%E5%BC%8F%E8%B7%AF%E5%BE%84/";
-const legacyURL = "/blog/git-merge-vs-rebase/";
-const corePages = ["/", "/blog/", "/search/", "/about/", legacyURL, fixtureURL];
+const articleURL = "/blog/modern-se/";
+const corePages = [
+  "/",
+  "/blog/",
+  "/search/",
+  "/about/",
+  articleURL,
+  "/blog/markdown-101/",
+  "/blog/the-ai-native-sdlc-playbook/",
+  fixtureURL,
+];
 
 async function noPageOverflow(page: Page) {
   const dimensions = await page.evaluate(() => ({
@@ -67,12 +76,12 @@ test("Chinese Pagefind UI returns an existing article and navigates to it", asyn
   await page.goto("/search/");
   const search = page.getByRole("textbox", { name: "搜索文章", exact: true });
   await expect(search).toBeVisible();
-  await search.fill("写作");
-  const result = page.locator('.pagefind-ui__result-link[href*="/blog/why-write-blog/"]');
+  await search.fill("工程");
+  const result = page.locator('.pagefind-ui__result-link[href*="/blog/modern-se/"]');
   await expect(result.first()).toBeVisible();
   await result.first().click();
-  await expect(page).toHaveURL(/\/blog\/why-write-blog\/(?:#.*)?$/);
-  await expect(page.locator("h1")).toContainText("为什么我决定开始写博客");
+  await expect(page).toHaveURL(/\/blog\/modern-se\/(?:#.*)?$/);
+  await expect(page.locator("h1")).toContainText("现代软件工程与研发交付工具链");
 });
 
 test("drafts stay absent from generated routes, listing, feeds, sitemap and Pagefind", async ({
@@ -89,7 +98,7 @@ test("drafts stay absent from generated routes, listing, feeds, sitemap and Page
   await page.goto("/search/");
   const search = page.getByRole("textbox", { name: "搜索文章", exact: true });
   await expect(search).toBeVisible();
-  await search.fill("DraftInvisibleSentinel");
+  await search.fill('"DraftInvisibleSentinel"');
   await expect(page.locator(".pagefind-ui__message")).toContainText("没有找到");
   await expect(page.locator(".pagefind-ui__result")).toHaveCount(0);
 });
@@ -234,7 +243,7 @@ test("theme follows system, persists manual choice across navigation and refresh
   await page.locator("#theme-toggle").click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   expect(await page.evaluate(() => localStorage.getItem("theme"))).toBe("dark");
-  await page.goto(legacyURL);
+  await page.goto(articleURL);
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
@@ -287,7 +296,7 @@ test("Giscus keeps legacy pathname mapping and synchronizes mocked iframe themes
     });
   });
   await page.emulateMedia({ colorScheme: "light" });
-  await page.goto(legacyURL);
+  await page.goto(articleURL);
   const script = page.locator(".giscus script");
   for (const [attribute, value] of Object.entries({
     "data-repo": "guog/guog.github.io",
@@ -334,7 +343,7 @@ test("optional live Giscus service check is separate from local functionality", 
   );
   await page.unroute("https://giscus.app/**");
   const responsePromise = page.waitForResponse("https://giscus.app/client.js");
-  await page.goto(legacyURL);
+  await page.goto(articleURL);
   expect((await responsePromise).ok()).toBe(true);
   await expect(page.locator(".giscus iframe.giscus-frame")).toBeVisible({ timeout: 20_000 });
 });

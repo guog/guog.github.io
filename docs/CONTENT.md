@@ -65,7 +65,7 @@ ogImage: '/images/astro-guide-share.png'
 
 已发布的 slug、文件路径和 URL 是兼容契约。禁止为统一命名而重命名旧文件；Giscus 按 `pathname` 关联评论，路径改变也会影响评论。不要手工拼接另一套 `/posts/` 地址。
 
-迁移基线保存在 `tests/fixtures/legacy-urls.json`。URL 回归长期执行；`node scripts/check-migration.mjs` 的正文和文件哈希检查只用于迁移验收，不限制之后获得授权的文章修改。旧文只在实际编辑时渐进修订，禁止为通过风格检查批量改写。
+迁移基线保存在 `tests/fixtures/legacy-urls.json`。其中标记 `retired: true` 的 3 篇示例文章已按作者要求删除，生产检查确认其页面、导航和订阅均不再出现，其余 URL 回归长期执行；`node scripts/check-migration.mjs` 的正文和文件哈希检查只用于迁移验收，不限制之后获得授权的文章修改。旧文只在实际编辑时渐进修订，禁止为通过风格检查批量改写。
 
 ## 中文排版与文章结构
 

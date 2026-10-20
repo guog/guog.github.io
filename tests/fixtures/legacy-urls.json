@@ -17,6 +17,7 @@
         "category": "技术",
         "tags": ["Git", "版本控制"]
       },
+      "retired": true,
       "frontmatterSource": "title: 'Git 学习笔记：merge 与 rebase 该怎么选'\ndescription: '团队协作中 merge 和 rebase 的适用场景，以及我常用的工作流。'\npubDate: '2026-10-10'\ncategory: '技术'\ntags: ['Git', '版本控制']"
     },
     {
@@ -32,6 +33,7 @@
         "category": "翻译",
         "tags": ["翻译", "设计"]
       },
+      "retired": true,
       "frontmatterSource": "title: '简单即是美：软件设计中的克制（示例）'\ndescription: '一篇经典短文的翻译示例：为什么好的软件设计总是在做减法。'\npubDate: '2026-10-14'\ncategory: '翻译'\ntags: ['翻译', '设计']"
     },
     {
@@ -47,6 +49,7 @@
         "category": "随笔",
         "tags": ["写作", "成长"]
       },
+      "retired": true,
       "frontmatterSource": "title: '心得：为什么我决定开始写博客'\ndescription: '关于写作、输出倒逼输入，以及对抗遗忘的一些想法。'\npubDate: '2026-10-12'\ncategory: '随笔'\ntags: ['写作', '成长']"
     }
   ],

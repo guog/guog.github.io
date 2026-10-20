@@ -32,12 +32,29 @@ await pagefind.options({ baseUrl: "/" });
 try {
   const query = async (term) =>
     Promise.all((await pagefind.search(term)).results.map((result) => result.data()));
-  const writing = await query("写作");
+  const writing = await query("工程");
   assert.ok(
-    writing.some((result) => result.url === "/blog/why-write-blog/"),
-    "Chinese 写作 query did not return the legacy writing article",
+    writing.some((result) => result.url === "/blog/modern-se/"),
+    "Chinese 工程 query did not return the software engineering article",
   );
   const allResults = [...writing];
+  for (const [term, expected] of [
+    ["Markdown", "/blog/markdown-101/"],
+    ["SDLC", "/blog/the-ai-native-sdlc-playbook/"],
+  ]) {
+    const results = await query(term);
+    assert.ok(
+      results.some((result) => result.url === expected),
+      `Search omitted ${expected}`,
+    );
+    allResults.push(...results);
+  }
+  for (const term of ["为什么我决定开始写博客", "merge", "简单即是美"]) {
+    for (const result of await query(term))
+      assert.ok(
+        !/\/blog\/(?:why-write-blog|git-merge-vs-rebase|translated-simplicity)\//.test(result.url),
+      );
+  }
   const hasFixtures = await access(path.join(dist, "blog/__regression__/中文路径/index.html")).then(
     () => true,
     (error) => {
@@ -61,8 +78,9 @@ try {
       allResults.push(...results);
     }
   }
+  // A quoted phrase avoids Pagefind matching the real article term "Draft PR".
   assert.equal(
-    (await query("DraftInvisibleSentinel")).length,
+    (await query('"DraftInvisibleSentinel"')).length,
     0,
     "Draft content leaked into Pagefind",
   );
