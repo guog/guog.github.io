@@ -36,9 +36,14 @@ export function validateArticleId(id) {
 }
 
 export async function checkNames(root = process.cwd()) {
+  const deleted = new Set(
+    execFileSync("git", ["ls-files", "--deleted", "-z"], { cwd: root, encoding: "utf8" }).split(
+      "\0",
+    ),
+  );
   const files = execFileSync("git", ["ls-files", "-z"], { cwd: root, encoding: "utf8" })
     .split("\0")
-    .filter(Boolean);
+    .filter((file) => file && !deleted.has(file));
   const problems = validateNames(files);
   for (const file of files.filter(
     (file) => file.startsWith(contentRoots[0]) && /\.mdx?$/.test(file),

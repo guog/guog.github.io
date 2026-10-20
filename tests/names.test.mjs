@@ -1,4 +1,8 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import { mkdir, mkdtemp, rm, unlink, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { checkNames, validateArticleId, validateNames } from "../scripts/check-names.mjs";
@@ -57,4 +61,20 @@ test("published article slugs cannot bypass the readable URL naming rule", () =>
 test("all Git-managed production content files and published slugs comply", async () => {
   const result = await checkNames(fileURLToPath(new URL("../", import.meta.url)));
   assert.deepEqual(result.problems, [], result.problems.join("\n"));
+});
+
+test("an unstaged article deletion is excluded without a read failure", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "blog-names-test-"));
+  try {
+    execFileSync("git", ["init", "--initial-branch=main"], { cwd: root, stdio: "pipe" });
+    const directory = path.join(root, "src/content/blog");
+    await mkdir(directory, { recursive: true });
+    const file = path.join(directory, "removed.md");
+    await writeFile(file, "---\ntitle: Test\n---\n");
+    execFileSync("git", ["add", "."], { cwd: root });
+    await unlink(file);
+    assert.deepEqual(await checkNames(root), { problems: [], files: 0 });
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
