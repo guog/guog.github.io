@@ -48,7 +48,7 @@ tags: ["AI", "软件工程", "Claude"]
 - 原有控制方式不再适用。代码由人逐行编写时，逐行检查尚可行；当大部分代码由 AI 生成时，这种做法很难持续。
 - 治理成本上升，因为决策仍要经过按周或按月召开的会议与委员会。
 
-![传统 SDLC 中构建瓶颈与 AI 加速后的流程对比](/images/the-ai-native-sdlc-playbook/6a8739a1b934ffe55bfc9715_44592f18.png)
+![传统 SDLC 中构建瓶颈与 AI 加速后的流程对比](/images/the-ai-native-sdlc-playbook/bottleneck-comparison.png)
 
 > **构建已不再是瓶颈——围绕它的那些“人类速度”步骤才是。** 人类速度阶段的耗时保持不变，而构建（时间）却缩减至数小时。
 
@@ -60,7 +60,7 @@ tags: ["AI", "软件工程", "Claude"]
 
 AI-Native SDLC 在保留控制目标的同时改变执行方式。流程从线性接力变为循环，AI 进入每个环节，并自动交接、触发后续工作。它也常被称为“Agentic SDLC”“AI SDLC”或“Agentic 软件开发”。
 
-![AI 原生 SDLC 六个阶段的协作流程](/images/the-ai-native-sdlc-playbook/6a8858c2eccce183e7553cf2_53b010df.png)
+![AI 原生 SDLC 六个阶段的协作流程](/images/the-ai-native-sdlc-playbook/sdlc-stages.png)
 
 ### AI-Native(AI 原生) SDLC 六阶段的变化
 
@@ -111,7 +111,7 @@ AI-Native SDLC 在保留控制目标的同时改变执行方式。流程从线�
 
 人只在关键决策点介入，优先审查 AI 标记的内容，而非从头参与每个步骤。
 
-![AI 原生 SDLC 各阶段的实践概览](/images/the-ai-native-sdlc-playbook/6a8855c75344623fc81efcb8_5d5a3c05.png)
+![AI 原生 SDLC 各阶段的实践概览](/images/the-ai-native-sdlc-playbook/lifecycle-practices.png)
 
 > 不必按阶段顺序推进。先做没有依赖的模块，再处理依赖较少的，最后解决复杂依赖。
 
@@ -1424,7 +1424,7 @@ Claude Security 是对现有静态分析和依赖扫描的增强。确定性检�
 
 > 在 Anthropic 内部，这套系统的工作流程是：当 CI/CD 流水线出现故障（如大量测试失败），工程师只需在 Slack 值班频道 **@Claude** 并询问情况。Claude Tag 会立即作为“第一响应人”展开调查，利用其权限和工具访问权限分析问题。
 
-![AI 原生软件开发的治理与反馈闭环](/images/the-ai-native-sdlc-playbook/6a8760aded54a2a8319cd5b9_fe6d780d.png)
+![AI 原生软件开发的治理与反馈闭环](/images/the-ai-native-sdlc-playbook/governance-feedback.png)
 
 该频道(channel)是审计追踪——请求、诊断、人工授权与修复操作，均保留在事件处理的原始上下文中。
 
