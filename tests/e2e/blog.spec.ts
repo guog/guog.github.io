@@ -223,7 +223,7 @@ test("Chinese TOC anchors navigate to real headings; categories and tags work", 
   expect(await page.evaluate((id) => Boolean(document.getElementById(id)), categoryAnchor)).toBe(
     true,
   );
-  await page.locator(".tag-summary").getByRole("link", { name: "#写作", exact: true }).click();
+  await page.locator(".tag-summary").getByRole("link", { name: "#Markdown", exact: true }).click();
   const tagAnchor = decodeURIComponent(new URL(page.url()).hash.slice(1));
   // The hashchange handler opens the details asynchronously after the link click.
   await expect
