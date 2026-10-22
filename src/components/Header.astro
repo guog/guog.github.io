@@ -6,52 +6,41 @@ const showLogo = true
 ---
 
 <header
-  class:list={['group relative mb-28 flex items-center', showLogo && 'sm:ps-18']}
+  class:list={['group relative mb-12 flex items-center']}
   id='main-header'
 >
-  <div class='flex sm:flex-col sm:items-start'>
-    <a
-      aria-current={Astro.url.pathname === '/' ? 'page' : false}
-      class='inline-flex items-center sm:relative sm:inline-block sm:grayscale sm:hover:filter-none'
-      href='/'
-    >
-      {showLogo && (
-        <img
-          src='/favicon.svg?v=20261022'
-          alt={siteConfig.title}
-          aria-hidden='true'
-          class='me-3 h-10 w-6 object-contain sm:absolute sm:-inset-s-18 sm:me-0 sm:h-20 sm:w-12'
-          width='259'
-          height='233'
-        />
-      )}
-      <span class='text-accent-2 text-xl font-bold sm:text-2xl'>{siteConfig.title}</span>
-    </a>
-    <nav
-      aria-label='Main'
-      class='bg-global-bg absolute -inset-x-4 top-12 hidden flex-col divide-y px-2 py-4 group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:-ms-4 sm:mt-1 sm:flex sm:flex-row sm:divide-x sm:divide-y-0 sm:bg-transparent sm:p-0'
-      id='navigation-menu'
-    >
-      {menuLinks.map((link) => (
-        <a
-          aria-current={
-            (
-              link.path === '/'
-                ? Astro.url.pathname === '/'
-                : Astro.url.pathname.startsWith(link.path) ||
-                  (link.path === '/blog/' && Astro.url.pathname.startsWith('/tags/'))
-            )
-              ? 'page'
-              : false
-          }
-          class='text-accent px-2 py-4 font-semibold sm:px-4 sm:py-0 sm:underline-offset-2 sm:hover:underline'
-          href={link.path}
-        >
-          {link.title}
-        </a>
-      ))}
-    </nav>
-  </div>
+  <a
+    aria-current={Astro.url.pathname === '/' ? 'page' : false}
+    class='inline-flex items-center sm:relative sm:inline-block sm:grayscale sm:hover:filter-none'
+    href='/'
+  >
+    <span class='text-accent-2 text-xl font-bold sm:text-2xl'>{siteConfig.title}</span>
+  </a>
+  <nav
+    aria-label='Main'
+    class='bg-global-bg absolute -inset-x-4 top-12 hidden flex-col divide-y px-2 py-4 group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:mt-1 sm:flex sm:flex-row sm:divide-x sm:divide-y-0 sm:bg-transparent sm:p-0'
+    id='navigation-menu'
+  >
+    {menuLinks.map((link) => (
+      <a
+        aria-current={
+          (
+            link.path === '/'
+              ? Astro.url.pathname === '/'
+              : Astro.url.pathname.startsWith(link.path) ||
+                (link.path === '/blog/' && Astro.url.pathname.startsWith('/tags/'))
+          )
+            ? 'page'
+            : false
+        }
+        class='text-accent px-2 py-4 font-semibold sm:px-4 sm:py-0 sm:underline-offset-2 sm:hover:underline'
+        href={link.path}
+      >
+        {link.title}
+      </a>
+    ))}
+  </nav>
+
   <Search />
   <ThemeToggle />
   <mobile-button>

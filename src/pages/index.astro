@@ -1,6 +1,5 @@
 ---
 import PostPreview from '../components/blog/PostPreview.astro'
-import SocialList from '../components/SocialList.astro'
 import { getPublishedPosts } from '../data/blog'
 import Base from '../layouts/Base.astro'
 import { siteConfig } from '../site.config'
@@ -8,14 +7,14 @@ const posts = await getPublishedPosts()
 ---
 
 <Base title='Home'>
-  <section>
-    <h1 class='title mb-12'>Hello World!</h1>
-    <p class='mb-4'>{siteConfig.description}</p>
-    <SocialList />
+  <section class='mb-12'>
+    <p class='text-muted underline underline-offset-8 decoration-wavy tracking-wide'>
+      {siteConfig.description}
+    </p>
   </section>
-  <section class='mt-16'>
+  <section>
     <h2 class='title text-accent mb-6 text-xl'>
-      <a href='/blog/'>Posts</a>
+      <a href='/blog/'>More...</a>
     </h2>
     <ul
       class='space-y-4'
