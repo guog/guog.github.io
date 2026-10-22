@@ -63,7 +63,11 @@ for (const width of [375, 768, 1440]) {
           const posts = page.locator('main ul[role="list"] > li')
           expect(await posts.count()).toBeGreaterThan(0)
           expect(await posts.count()).toBeLessThanOrEqual(10)
-          await expect(posts.first().getByRole('link')).toBeVisible()
+          for (const post of await posts.all()) {
+            const link = post.getByRole('link')
+            await expect(link).toBeVisible()
+            await expect(link).toHaveAttribute('href', /^\/blog\/[^?#]+\/$/)
+          }
         } else {
           await expect(page.locator('h1')).toHaveCount(1)
           await expect(page.locator('h1')).toBeVisible()
