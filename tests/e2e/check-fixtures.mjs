@@ -55,8 +55,10 @@ export async function checkFixtureArtifacts(dist) {
   assert.equal(copied('offset.py'), 'def greet(name: str) -> str:\n    return f"你好，{name}"')
   assert.equal(find(document, (node) => node.tagName === 'table').length, 1)
   assert.ok(
-    find(document, (node) => node.tagName === 'nav' && attribute(node, 'aria-label') === '文章目录')
-      .length,
+    find(
+      document,
+      (node) => node.tagName === 'nav' && attribute(node, 'aria-label') === 'Table of Contents',
+    ).length,
   )
   console.log(
     'Fixture render OK: MDX, default/disabled/offset/shared Code line numbers, line highlight, copy payload, table and Chinese TOC.',

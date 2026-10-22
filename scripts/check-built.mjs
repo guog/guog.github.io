@@ -9,6 +9,8 @@ import { parse } from 'parse5'
 import { articleFiles, parseArticle, walk } from './check-content.mjs'
 
 const SITE = 'https://guog.github.io'
+// Explicitly retired by the author; retain the original migration evidence.
+const retiredPages = ['/about/']
 const baseline = JSON.parse(
   await readFile(new URL('../tests/fixtures/legacy-urls.json', import.meta.url), 'utf8'),
 )
@@ -92,7 +94,7 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
   }
 
   for (const route of [
-    ...baseline.pages,
+    ...baseline.pages.filter((route) => !retiredPages.includes(route)),
     ...baseline.articles.filter((post) => !post.retired).map((post) => post.url),
     ...baseline.staticResources.map((resource) => resource.url),
   ]) {
@@ -129,6 +131,34 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
       assert.ok(attribute(meta('name', 'description')[0], 'content')?.trim(), 'Missing description')
       assert.equal(attribute(meta('property', 'og:locale')[0], 'content'), 'zh_CN')
       assert.ok(attribute(meta('name', 'twitter:card')[0], 'content'), 'Missing Twitter card')
+    })
+    await check(`${route} favicon declarations`, () => {
+      const links = elements(document, (node) => node.tagName === 'link')
+      const expected = [
+        ['icon', '/favicon-96x96.png?v=20261022', 'image/png', '96x96'],
+        ['icon', '/favicon.svg?v=20261022', 'image/svg+xml'],
+        ['shortcut icon', '/favicon.ico?v=20261022'],
+        ['apple-touch-icon', '/apple-touch-icon.png?v=20261022', undefined, '180x180'],
+        ['manifest', '/site.webmanifest?v=20261022'],
+      ]
+      for (const [rel, href, type, sizes] of expected) {
+        const matching = links.filter(
+          (node) => attribute(node, 'rel') === rel && attribute(node, 'href') === href,
+        )
+        assert.equal(matching.length, 1, `Expected one ${href}`)
+        if (type) assert.equal(attribute(matching[0], 'type'), type)
+        if (sizes) assert.equal(attribute(matching[0], 'sizes'), sizes)
+      }
+      assert.equal(links.filter((node) => attribute(node, 'rel') === 'icon').length, 2)
+      for (const rel of ['shortcut icon', 'apple-touch-icon', 'manifest'])
+        assert.equal(links.filter((node) => attribute(node, 'rel') === rel).length, 1)
+      const titles = elements(
+        document,
+        (node) =>
+          node.tagName === 'meta' && attribute(node, 'name') === 'apple-mobile-web-app-title',
+      )
+      assert.equal(titles.length, 1)
+      assert.equal(attribute(titles[0], 'content'), 'guog')
     })
     const ids = elements(document, (node) => attribute(node, 'id') !== undefined).map((node) =>
       attribute(node, 'id'),
@@ -188,12 +218,61 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
     })
   }
 
+  await check('Favicon asset formats and manifest', async () => {
+    const dimensions = async (filename, size) => {
+      const buffer = await readFile(path.join(dist, filename))
+      assert.equal(
+        buffer.subarray(0, 8).toString('hex'),
+        '89504e470d0a1a0a',
+        `${filename}: invalid PNG`,
+      )
+      assert.equal(buffer.readUInt32BE(16), size)
+      assert.equal(buffer.readUInt32BE(20), size)
+    }
+    await dimensions('favicon-96x96.png', 96)
+    await dimensions('apple-touch-icon.png', 180)
+    const svg = await readFile(path.join(dist, 'favicon.svg'), 'utf8')
+    assert.match(svg, /<svg\b/)
+    assert.match(svg, /viewBox=/)
+    const ico = await readFile(path.join(dist, 'favicon.ico'))
+    assert.equal(ico.readUInt16LE(0), 0)
+    assert.equal(ico.readUInt16LE(2), 1)
+    assert.ok(ico.readUInt16LE(4) > 0)
+    const manifest = JSON.parse(await readFile(path.join(dist, 'site.webmanifest'), 'utf8'))
+    assert.equal(manifest.name, 'guog blog')
+    assert.equal(manifest.short_name, 'guog')
+    assert.equal(manifest.display, 'standalone')
+    assert.equal(manifest.theme_color, '#ffffff')
+    assert.equal(manifest.background_color, '#ffffff')
+    assert.equal(manifest.icons.length, 2)
+    for (const size of [192, 512]) {
+      const icon = manifest.icons.find((icon) => icon.sizes === `${size}x${size}`)
+      assert.ok(icon, `Missing ${size}px manifest icon`)
+      assert.equal(icon.src, `/web-app-manifest-${size}x${size}.png`)
+      assert.equal(icon.type, 'image/png')
+      assert.equal(icon.purpose, 'maskable')
+      await dimensions(icon.src.slice(1), size)
+    }
+  })
   const rss = await readFile(path.join(dist, 'rss.xml'), 'utf8')
   const sitemapFiles = files.filter((filename) => /(?:^|\/)sitemap.*\.xml$/.test(filename))
   const sitemap = (
     await Promise.all(sitemapFiles.map((filename) => readFile(filename, 'utf8')))
   ).join('\n')
   const sitemapURLs = xmlValues(sitemap, 'loc')
+  for (const route of retiredPages) {
+    await check(`Retired page ${route}`, async () => {
+      await assert.rejects(resolveLocalTarget(dist, new URL(route, SITE)), /Missing local resource/)
+      assert.ok(!sitemapURLs.includes(`${SITE}${route}`), 'Retired page leaked into sitemap')
+      for (const document of documents.values())
+        assert.equal(
+          elements(document, (node) => node.tagName === 'a' && attribute(node, 'href') === route)
+            .length,
+          0,
+          'Retired page leaked into navigation',
+        )
+    })
+  }
   const rssItems = xmlValues(rss, 'item')
   const rssURLs = rssItems.flatMap((item) => xmlValues(item, 'link'))
   for (const url of [...sitemapURLs, ...rssURLs])

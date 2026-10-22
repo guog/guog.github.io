@@ -96,6 +96,14 @@ PR_TITLE="feat(content): add astro guide" npm run validate:pr
 3. 依赖修复创建 `fix/update-astro`。使用 npm 更新明确的包，同时提交 `package.json` 和 `package-lock.json`；阅读升级说明和 Node.js 要求。
 4. 用 `npm ci` 重新安装后执行完整检查，再提交 `fix(deps): ...` 或 `build(deps): ...` 并发起 PR。不要为更新依赖引入第二套锁文件。
 
+### 主题与 favicon
+
+主题更新须同时同步 `AGENTS.md`、架构、设计、内容规范和测试说明。以固定的 Cactus 提交核对布局，保留英文界面、中文文章、现有 URL 与 Giscus 配置。不得复制上游的格式化、lint 或 CI/CD 配置。
+
+favicon 文件放在 `public/` 根目录，由 `BaseHead.astro` 声明一次。当前缓存参数为 `?v=20261022`。更新后检查 PNG 尺寸、SVG/ICO 格式、manifest 引用和所有页面的声明唯一性。历史迁移基线保持原样，新图标不执行旧图标字节一致性验收。
+
+UI 验收同时覆盖移动菜单、搜索弹窗、独立搜索页、标签页、目录、主题持久化、代码和评论。截图必须来自本次生产构建，不复用旧截图作为本次证据。
+
 ## 版本与发布
 
 站点遵循 [SemVer 2.0.0](https://semver.org/lang/zh-CN/)。`vMAJOR.MINOR.PATCH` Git 标签和 GitHub Release 是唯一发布版本来源；`package.json` 的 `version` 只是私有项目元信息。它与上游 Astro Cactus 8.3.0、Astro 框架版本各自独立。

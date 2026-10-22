@@ -8,7 +8,8 @@ const corePages = [
   '/',
   '/blog/',
   '/search/',
-  '/about/',
+  '/tags/',
+  '/tags/CI/CD/',
   articleURL,
   '/blog/markdown-101/',
   '/blog/the-ai-native-sdlc-playbook/',
@@ -74,7 +75,7 @@ for (const width of [375, 768, 1440]) {
 
 test('Chinese Pagefind UI returns an existing article and navigates to it', async ({ page }) => {
   await page.goto('/search/')
-  const search = page.getByRole('textbox', { name: '搜索文章', exact: true })
+  const search = page.getByRole('textbox', { name: 'Search posts', exact: true })
   await expect(search).toBeVisible()
   await search.fill('工程')
   const result = page.locator('.pagefind-ui__result-link[href*="/blog/modern-se/"]')
@@ -96,10 +97,10 @@ test('drafts stay absent from generated routes, listing, feeds, sitemap and Page
     expect(await response.text()).not.toContain('/blog/__regression__/draft/')
   }
   await page.goto('/search/')
-  const search = page.getByRole('textbox', { name: '搜索文章', exact: true })
+  const search = page.getByRole('textbox', { name: 'Search posts', exact: true })
   await expect(search).toBeVisible()
   await search.fill('"DraftInvisibleSentinel"')
-  await expect(page.locator('.pagefind-ui__message')).toContainText('没有找到')
+  await expect(page.locator('.pagefind-ui__message')).toContainText('No results')
   await expect(page.locator('.pagefind-ui__result')).toHaveCount(0)
 })
 
@@ -122,7 +123,7 @@ test('nested case-sensitive, Chinese and explicit-slug article URLs are consiste
     await expect(page.locator(`a[href="${route}"]`).first()).toBeVisible()
   }
   await page.goto('/search/')
-  const search = page.getByRole('textbox', { name: '搜索文章', exact: true })
+  const search = page.getByRole('textbox', { name: 'Search posts', exact: true })
   await expect(search).toBeVisible()
   await search.fill('中文路径')
   const chineseResult = page
@@ -206,7 +207,7 @@ test('Chinese TOC anchors navigate to real headings; categories and tags work', 
   page,
 }) => {
   await page.goto(fixtureURL)
-  const toc = page.getByRole('navigation', { name: '文章目录' })
+  const toc = page.getByRole('navigation', { name: 'Table of Contents' })
   const link = toc.getByRole('link', { name: '长代码与表格', exact: true })
   const href = await link.getAttribute('href')
   expect(href).toBeTruthy()
@@ -214,24 +215,21 @@ test('Chinese TOC anchors navigate to real headings; categories and tags work', 
   expect(decodeURIComponent(new URL(page.url()).hash)).toBe(decodeURIComponent(href ?? ''))
   const heading = page.getByRole('heading', { name: '长代码与表格', exact: true })
   await expect(heading).toBeInViewport()
-  await page.goto('/blog/')
-  await page
-    .getByRole('navigation', { name: '文章分类' })
-    .getByRole('link', { name: '技术', exact: true })
-    .click()
-  const categoryAnchor = decodeURIComponent(new URL(page.url()).hash.slice(1))
-  expect(await page.evaluate((id) => Boolean(document.getElementById(id)), categoryAnchor)).toBe(
-    true,
-  )
-  await page.locator('.tag-summary').getByRole('link', { name: '#Markdown', exact: true }).click()
-  const tagAnchor = decodeURIComponent(new URL(page.url()).hash.slice(1))
-  // The hashchange handler opens the details asynchronously after the link click.
-  await expect
-    .poll(() => page.evaluate((id) => document.getElementById(id)?.hasAttribute('open'), tagAnchor))
-    .toBe(true)
+  await page.goto('/blog/#category-%E6%8A%80%E6%9C%AF')
+  await expect(page.locator('[id="category-技术"]')).toBeInViewport()
+  await page.goto('/blog/#tag-Markdown')
+  await expect(page.locator('[id="tag-Markdown"]')).toBeInViewport()
+  await page.locator('[id="tag-Markdown"]').click()
+  await expect(page).toHaveURL(/\/tags\/Markdown\/$/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Posts about Markdown')
+  await page.goto('/tags/CI/CD/')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Posts about CI/CD')
+  await expect(page.locator('main a[href="/blog/modern-se/"]')).toBeVisible()
+  await page.goto('/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/')
+  await expect(page.locator('main a[href^="/blog/"]')).toHaveCount(3)
 })
 
-test('theme follows system, persists manual choice across navigation and refresh, and resets', async ({
+test('theme follows system, persists manual choice across navigation and refresh, and responds to provider preference changes', async ({
   page,
 }) => {
   await page.emulateMedia({ colorScheme: 'dark' })
@@ -247,7 +245,9 @@ test('theme follows system, persists manual choice across navigation and refresh
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
   await page.reload()
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
-  await page.locator('#theme-system').click()
+  await page.evaluate(() => {
+    document.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: 'system' } }))
+  })
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
   expect(await page.evaluate(() => localStorage.getItem('theme'))).toBeNull()
   await page.emulateMedia({ colorScheme: 'dark' })
@@ -324,7 +324,9 @@ test('Giscus keeps legacy pathname mapping and synchronizes mocked iframe themes
       ),
     )
     .toBe('dark')
-  await page.locator('#theme-system').click()
+  await page.evaluate(() => {
+    document.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: 'system' } }))
+  })
   await expect
     .poll(() =>
       page.evaluate(() =>
@@ -346,4 +348,82 @@ test('optional live Giscus service check is separate from local functionality', 
   await page.goto(articleURL)
   expect((await responsePromise).ok()).toBe(true)
   await expect(page.locator('.giscus iframe.giscus-frame')).toBeVisible({ timeout: 20_000 })
+})
+
+for (const width of [375, 1440]) {
+  test(`${width}px: English navigation and accessible mobile menu`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/')
+    const menu = page.getByRole('navigation', { name: 'Main', exact: true })
+    const toggle = page.locator('#toggle-navigation-menu')
+    if (width < 640) {
+      await expect(menu).toBeHidden()
+      await toggle.focus()
+      await page.keyboard.press('Enter')
+      await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+      await expect(menu).toBeVisible()
+      await menu.getByRole('link', { name: 'Blog', exact: true }).focus()
+      await page.keyboard.press('Escape')
+      await expect(menu).toBeHidden()
+      await expect(toggle).toBeFocused()
+      await toggle.click()
+    }
+    await expect(menu.getByRole('link')).toHaveText(['Home', 'Blog'])
+    await expect(page.getByRole('link', { name: 'Notes', exact: true })).toHaveCount(0)
+    await menu.getByRole('link', { name: 'Blog', exact: true }).click()
+    await expect(page).toHaveURL(/\/blog\/$/)
+    await expect(page.getByRole('heading', { name: 'Posts', exact: true })).toBeVisible()
+    if (width < 640) await expect(menu).toBeHidden()
+    await noPageOverflow(page)
+  })
+
+  test(`${width}px: search modal finds Chinese posts, closes and returns focus`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto('/')
+    const trigger = page.locator('pagefind-modal-trigger button')
+    await expect(trigger).toHaveAttribute('aria-label', 'search')
+    await trigger.focus()
+    await page.keyboard.press('Enter')
+    const dialog = page.getByRole('dialog')
+    await expect(dialog).toBeVisible()
+    const input = dialog.locator('input[type="search"]')
+    await expect(input).toBeFocused()
+    await expect(input).toHaveAttribute('placeholder', 'Search')
+    await input.fill('工程')
+    const result = dialog.locator('a[href*="/blog/modern-se/"]').first()
+    await expect(result).toBeVisible()
+    await noPageOverflow(page)
+    await page.keyboard.press('Escape')
+    await expect(dialog).toBeHidden()
+    await expect(trigger).toBeFocused()
+    await trigger.click()
+    await expect(dialog).toBeVisible()
+    await dialog.locator('input[type="search"]').fill('工程')
+    await dialog.locator('a[href*="/blog/modern-se/"]').first().click()
+    await expect(page).toHaveURL(/\/blog\/modern-se\/(?:#.*)?$/)
+  })
+}
+
+test('TOC uses upstream responsive placement and back to top respects reduced motion', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto(articleURL)
+  const toc = page.getByRole('navigation', { name: 'Table of Contents' })
+  const details = page.locator('details').filter({ has: toc })
+  expect(await details.evaluate((el) => getComputedStyle(el).position)).toBe('sticky')
+  const content = page.locator('.prose')
+  const tocBox = await details.boundingBox()
+  const contentBox = await content.boundingBox()
+  expect(tocBox!.x).toBeGreaterThan(contentBox!.x)
+  await content.locator('h2').last().scrollIntoViewIfNeeded()
+  const top = page.getByRole('button', { name: 'Back to top', exact: true })
+  await expect(top).toBeVisible()
+  await top.click()
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(0)
+  await page.setViewportSize({ width: 375, height: 900 })
+  expect(await details.evaluate((el) => getComputedStyle(el).position)).toBe('static')
+  expect((await details.boundingBox())!.y).toBeLessThan((await content.boundingBox())!.y)
 })

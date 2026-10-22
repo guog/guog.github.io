@@ -1,10 +1,11 @@
 # guog 的博客
 
-中文技术笔记、实践心得与翻译，发布于 <https://guog.github.io>。基于 Astro 7 与 [Astro Cactus 8.3.0](https://github.com/chrismwilliams/astro-theme-cactus/tree/82eabb6151a8e47838cb7f6d12ea29451926bd3e)，保留 `/blog/{slug}/` 文章地址。
+中文技术笔记、实践心得与翻译，发布于 <https://guog.github.io>。基于 Astro 7 与 [Astro Cactus 8.3.0](https://github.com/chrismwilliams/astro-theme-cactus/tree/728f1f4eeb80208398649261d7635f311cafa011)，保留 `/blog/{slug}/` 文章地址。
 
-- 中文无衬线排版，移动端可读，支持浅色、深色及跟随系统。
-- Markdown/MDX、分类与标签、文章目录、默认带行号的 Expressive Code。
-- Pagefind 中文搜索、RSS、Sitemap、SEO 和保留原映射的 Giscus 评论。
+- Cactus 原版等宽排版与响应式布局，英文界面，中文文章；支持浅色、深色及系统配色。
+- Markdown/MDX、年份归档、标签页面、响应式文章目录、默认带行号的 Expressive Code。
+- Pagefind 搜索弹窗与独立搜索页，支持中文；保留 RSS、Sitemap、SEO 和原映射的 Giscus 评论。
+- RealFaviconGenerator 图标覆盖 SVG、PNG、ICO、Apple Touch Icon 和 Web App Manifest。
 - PR 质量检查，`main` 验证通过后部署 GitHub Pages，再按需生成 SemVer Release。
 
 ## 本地运行
@@ -48,7 +49,7 @@ npm run test:e2e
 - `src/content.config.ts`：`blog` 内容集合与 frontmatter schema。
 - `src/content/blog/`：文章；`src/pages/`：页面与 RSS、robots 输出。
 - `src/layouts/`、`src/components/`：公共布局和文章组件。
-- `src/styles/global.css`：中文排版和主题 token。
+- `src/styles/global.css`：Cactus 排版、Typography 插件和主题 token。
 - `astro.config.mjs`：Astro、MDX、Tailwind CSS 和 Sitemap 集成。
 - `ec.config.mjs`：Expressive Code 及行号插件配置。
 - `scripts/`、`tests/`：内容、URL、浏览器和发布规则检查。
@@ -56,6 +57,12 @@ npm run test:e2e
 Giscus 已配置为 `guog/guog.github.io` 的 `General` 分类，按 `pathname` 关联评论。更换主题不需要重新配置；外部 Discussions 与 App 权限仍须保持有效。
 
 GitHub 分支保护、Squash merge、Pages 发布源和 Environment 规则须由管理员核实，参见 [待人工设置清单](docs/CONTRIBUTING.md#github-仓库设置待人工核实)。仓库内的配置文件不等于这些设置已经生效。
+
+## favicon
+
+图标安装在 `public/` 根目录，统一由 `src/components/BaseHead.astro` 引用。资源版本参数为 `?v=20261022`，Apple 应用标题为 `guog`。`site.webmanifest` 保留生成器给出的 `guog blog`、`guog` 和两种图标尺寸。
+
+替换图标时，同时检查 manifest 内的根路径、全站声明和生产资源。历史 `check:migration` 用于旧版本验收，不用于要求新 favicon 与旧图标字节一致。完整来源见 [第三方声明](THIRD_PARTY_NOTICES.md)。
 
 ## 文档导航
 

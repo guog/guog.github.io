@@ -1,9 +1,8 @@
 ---
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
-import { getReadingMinutes } from '../../utils/blog'
+import { getReadingMinutes, getTagUrl } from '../../utils/blog'
 import FormattedDate from '../FormattedDate.astro'
-
 interface Props {
   post: CollectionEntry<'blog'>
 }
@@ -11,43 +10,70 @@ const { post } = Astro.props
 const { data } = post
 ---
 
-<header class='post-header'>
-  {data.coverImage && (
+{data.coverImage && (
+  <div class='mb-6 aspect-video'>
     <Image
       src={data.coverImage.src}
       alt={data.coverImage.alt}
-      width={736}
+      layout='constrained'
+      width={748}
+      height={420}
       loading='eager'
     />
-  )}
-  <p
-    class='eyebrow'
-    data-pagefind-filter='分类'
-  >
-    {data.category}
-  </p>
-  <h1 data-pagefind-meta='title'>{data.title}</h1>
-  <div class='post-meta'>
-    <FormattedDate date={data.pubDate} /> · 约 {getReadingMinutes(post.body)} 分钟阅读
-    {data.updatedDate && (
-      <span>
-        {' '}
-        · 更新于 <FormattedDate date={data.updatedDate} />
-      </span>
-    )}
   </div>
-  <p
-    class='post-description'
-    data-pagefind-meta='description'
-  >
-    {data.description}
+)}
+<h1
+  class='title'
+  data-pagefind-meta='title'
+>
+  {data.title}
+</h1>
+<div class='flex flex-wrap items-center gap-x-3 gap-y-2'>
+  <p class='font-semibold'>
+    <FormattedDate date={data.pubDate} /> / {getReadingMinutes(post.body)} min read
   </p>
-  <ul
-    class='tags'
-    aria-label='文章标签'
-  >
-    {data.tags.map((tag) => (
-      <li data-pagefind-filter={`标签:${tag}`}>#{tag}</li>
+  {data.updatedDate && (
+    <span class='bg-quote/5 text-quote rounded-lg px-2 py-1'>
+      Updated: <FormattedDate date={data.updatedDate} />
+    </span>
+  )}
+</div>
+<span
+  class='sr-only'
+  data-pagefind-filter='category'
+>
+  {data.category}
+</span>
+<span
+  class='sr-only'
+  data-pagefind-meta='description'
+>
+  {data.description}
+</span>
+{data.tags.length > 0 && (
+  <div class='mt-2'>
+    <svg
+      aria-hidden='true'
+      class='inline-block h-6 w-6'
+      fill='none'
+      stroke='var(--color-muted)'
+      stroke-width='1.5'
+      viewBox='0 0 24 24'
+    >
+      <path d='M7.859 6H5.025A2.025 2.025 0 0 0 3 8.025v2.834c0 .537.213 1.052.593 1.432l6.116 6.116a2.025 2.025 0 0 0 2.864 0l2.834-2.834a2.025 2.025 0 0 0 0-2.864L9.29 6.593A2.025 2.025 0 0 0 7.859 6Z' />
+      <path d='m17.573 18.407 2.834-2.834a2.025 2.025 0 0 0 0-2.864l-7.117-7.116M6 9h-.01' />
+    </svg>
+    {data.tags.map((tag, i) => (
+      <span class='contents'>
+        <a
+          class='cactus-link inline-block'
+          data-pagefind-filter={`tag:${tag}`}
+          href={getTagUrl(tag)}
+        >
+          <span class='sr-only'>View more blogs with the tag </span>#{tag}
+        </a>
+        {i < data.tags.length - 1 && ', '}
+      </span>
     ))}
-  </ul>
-</header>
+  </div>
+)}

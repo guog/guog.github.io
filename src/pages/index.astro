@@ -1,32 +1,30 @@
 ---
 import PostPreview from '../components/blog/PostPreview.astro'
+import SocialList from '../components/SocialList.astro'
 import { getPublishedPosts } from '../data/blog'
 import Base from '../layouts/Base.astro'
 import { siteConfig } from '../site.config'
-
 const posts = await getPublishedPosts()
 ---
 
-<Base>
-  <section class='intro'>
-    <p class='eyebrow'>记录 · 实践 · 思考</p>
-    <h1>
-      把问题想清楚，
-      <br />
-      把经验写下来。
-    </h1>
-    <p>{siteConfig.description}</p>
+<Base title='Home'>
+  <section>
+    <h1 class='title mb-12'>Hello World!</h1>
+    <p class='mb-4'>{siteConfig.description}</p>
+    <SocialList />
   </section>
-  <section aria-labelledby='latest-heading'>
-    <div class='section-heading'>
-      <h2 id='latest-heading'>最新文章</h2>
-      <a href='/blog/'>全部归档 →</a>
-    </div>
-    <ul class='post-list'>
-      {posts.map((post) => (
+  <section class='mt-16'>
+    <h2 class='title text-accent mb-6 text-xl'>
+      <a href='/blog/'>Posts</a>
+    </h2>
+    <ul
+      class='space-y-4'
+      role='list'
+    >
+      {posts.slice(0, 10).map((post) => (
         <PostPreview post={post} />
       ))}
     </ul>
-    {posts.length === 0 && <p>文章正在准备中。</p>}
+    {posts.length === 0 && <p>No posts yet.</p>}
   </section>
 </Base>

@@ -86,3 +86,10 @@ test('IDs normalize to NFC and reject ambiguous or unsafe path syntax', () => {
   ])
     assert.throws(() => getPostUrl(id), undefined, id)
 })
+
+test('tag URLs preserve Chinese and slash-bearing tag identities', async () => {
+  const { getTagUrl } = await import('../src/utils/blog.ts')
+  assert.equal(getTagUrl('CI/CD'), '/tags/CI/CD/')
+  assert.equal(getTagUrl('软件工程'), '/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/')
+  assert.equal(getTagUrl('A B'), '/tags/A%20B/')
+})

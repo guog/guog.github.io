@@ -6,21 +6,25 @@ import TOCHeading from './TOCHeading.astro'
 interface Props {
   headings: MarkdownHeading[]
 }
-const toc = generateToc(Astro.props.headings)
+
+const { headings } = Astro.props
+
+const toc = generateToc(headings)
 ---
 
-{toc.length > 0 && (
-  <details
-    class='toc'
-    open
+<details
+  open
+  class='lg:sticky lg:top-12 lg:order-2 lg:-me-32 lg:basis-64'
+>
+  <summary class='title hover:marker:text-accent cursor-pointer text-lg'>Table of Contents</summary>
+  <nav
+    aria-label='Table of Contents'
+    class='ms-4 lg:w-full'
   >
-    <summary>文章目录</summary>
-    <nav aria-label='文章目录'>
-      <ol>
-        {toc.map((heading) => (
-          <TOCHeading heading={heading} />
-        ))}
-      </ol>
-    </nav>
-  </details>
-)}
+    <ol class='mt-4'>
+      {toc.map((heading) => (
+        <TOCHeading heading={heading} />
+      ))}
+    </ol>
+  </nav>
+</details>

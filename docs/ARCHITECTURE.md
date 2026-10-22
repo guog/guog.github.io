@@ -1,99 +1,72 @@
 # 架构说明
 
-## 范围与主题来源
+## 主题与保留边界
 
-本站是仅专注 Blog 的中文静态网站，生产地址为 `https://guog.github.io`。使用 Astro 7.3.8、Tailwind CSS 4、TypeScript、Markdown/MDX、Expressive Code 和 Pagefind；依赖的实际版本以 `package-lock.json` 为准。
+本站是 guog 的中文技术博客，生产地址为 `https://guog.github.io`。使用 Astro 7.3.8、Tailwind CSS 4、TypeScript、Markdown/MDX、Expressive Code 和 Pagefind。npm 依赖的实际版本以锁文件为准。
 
-视觉和组件基础来自 Astro Cactus 8.3.0，固定提交为 [`82eabb6151a8e47838cb7f6d12ea29451926bd3e`](https://github.com/chrismwilliams/astro-theme-cactus/tree/82eabb6151a8e47838cb7f6d12ea29451926bd3e)。MIT 版权与许可保存在 [第三方声明](../THIRD_PARTY_NOTICES.md)。
+视觉、布局和交互严格对齐 Astro Cactus 8.3.0，固定提交为 [`728f1f4eeb80208398649261d7635f311cafa011`](https://github.com/chrismwilliams/astro-theme-cactus/tree/728f1f4eeb80208398649261d7635f311cafa011)。版权和许可见 [第三方声明](../THIRD_PARTY_NOTICES.md)。
 
-保留 Cactus 的窄幅基础布局、仙人掌标识、页眉页脚组织、文章列表、Masthead、目录、色彩体系、`data-theme` 和 Expressive Code。以下是有意保留的本地差异：
+采用上游等宽字体、窄幅页面、站点标识、导航、页脚、紧凑列表、文章 Masthead、响应式目录和搜索弹窗。界面为英文，文章和个人介绍为中文，HTML 语言仍为 `zh-CN`。不引入 Notes、Webmentions、演示内容、远程字体、动态 OG 图片或额外前端框架。
 
-- 继续使用 `src/content/blog/`、`blog` 集合、`pubDate` 和 `/blog/{slug}/`，不切换为上游 `posts` 模型。
-- 维持原博客文章、分类、标签和 Giscus Discussion 映射。
-- 全站简体中文，正文使用中文系统无衬线字体；代码保持等宽字体。
-- 使用原站较新的 Astro 7.3.8，不为对齐上游 package.json 降级到 7.3.2。
-- 不引入 Notes、Webmentions、作品集、演示文章、远程字体、动态 OG 图片或额外前端框架。
-- 使用小型原生组件和 CSS 管理博客排版；不整体复制上游插件与依赖。
+保留原站的 `blog` 集合、`pubDate`、文章地址、分类与标签元数据及 Giscus 映射。继续使用较新的 Astro 7.3.8，不复制上游的包管理器、检查或部署配置。新增依赖仅为 `@pagefind/component-ui` 与 `@tailwindcss/typography`。页脚按当前定制仅显示作者与年份，不重复主导航。
 
 ## 权威配置入口
 
-- `src/site.config.ts`：`siteConfig` 定义身份、站点 URL、语言和 SEO 基础信息；`menuLinks` 定义导航；`giscusConfig` 保留评论参数。
-- `src/content.config.ts`：内容加载与 schema。详细字段见 [内容规范](CONTENT.md)。
-- `astro.config.mjs`：站点地址读取 `siteConfig.url`；统一末尾斜杠；`prerenderConflictBehavior: "error"` 拒绝预渲染路由冲突；注册 Expressive Code、MDX、Sitemap 和 Tailwind Vite 插件。
-- `ec.config.mjs`：代码主题、行号插件和代码样式，供 Markdown、MDX 及 `<Code>` 共用。
-- `src/styles/global.css`：Tailwind CSS 4 层、颜色、字体和布局样式。
-- `.prettierrc.json`：Prettier 是唯一格式化工具，统一工程源码、配置和文档，采用两空格缩进、100 字符行宽、单引号、无分号和每行一个属性，嵌入代码自动格式化。官方 `prettier-plugin-astro` 处理 `.astro` 文件，使用 `htmlWhitespaceSensitivity: "css"` 保留行内元素的空格语义。`.prettierignore` 定义排除范围，`astro check` 负责类型检查；VS Code 使用 Prettier 扩展在保存时格式化。
+- `src/site.config.ts`：站点身份、SEO、`Home / Blog` 导航和现有 Giscus 参数。
+- `src/content.config.ts`：内容加载与 schema，继续使用 `src/content/blog/`。
+- `astro.config.mjs`：静态构建、末尾斜杠、路由冲突检查、Expressive Code、MDX、Sitemap 和 Tailwind 集成。
+- `ec.config.mjs`：代码配色、行号、英文控件与代码样式；Markdown、MDX 和 `<Code>` 共用。
+- `src/styles/global.css`：Cactus token、Typography 插件和必要的可访问性、宽度约束；搜索组件样式位于 `src/styles/blocks/search.css`。
+- `src/components/BaseHead.astro`：统一 SEO 和 favicon 声明。`public/` 根目录保存 7 个生成器文件，不另建图标生成流程。
 
-不要恢复旧 `src/consts.ts` 或新增重复配置。更新配置后同步相关文档与测试。
+Prettier 仍是唯一格式化工具。保留现有格式配置、排除范围和编辑器设置；`astro check` 负责类型检查。不要恢复重复的站点配置或加入另一套主题状态。
 
-## 内容到静态页面
+## 内容与 URL
 
-```text
-src/content/blog/**/*.{md,mdx}
-  -> src/content.config.ts：glob 加载与 schema 校验
-  -> src/data/blog.ts：过滤 draft、按 pubDate 倒序
-  -> src/pages/blog/[...slug].astro：getStaticPaths 与 render()
-  -> BlogPost / Base 布局和文章组件
-  -> dist/blog/{slug}/index.html
-  -> npm postbuild：dist/pagefind/ 搜索索引
-```
+文章从 `src/content/blog/` 加载，经 schema 校验、`getPublishedPosts()` 排序与过滤，再由 `/blog/{slug}/` 渲染。生产构建后，Pagefind 只索引带 `data-pagefind-body` 的文章；评论带忽略标记，不进入索引。
 
-文章 ID 默认取相对文件路径并去掉扩展名，可用 `slug` 显式覆盖。加载器和 `getPostUrl()` 统一调用 `src/utils/blog.ts` 的 `normalizePostId()`：先执行 Unicode NFC 归一化，再拒绝空白路径段、`.`、`..`、原始 `%`、`?`、`#`、反斜杠和控制字符，保留中文、大小写和嵌套结构。`getPostUrl()` 在 URL 边界逐段编码，统一供列表和 RSS 使用，末尾保留 `/`。
+`getPublishedPosts()` 只排除 `draft: true`。未来日期不会自动隐藏；相同日期按 ID 排序。首页显示最新 10 篇，当前正式内容共 3 篇。年份归档使用 UTC 年份，日期界面按 UTC 日历日、`YYYY-MM-DD` 格式显示。
 
-内容校验器拒绝归一化后重复的文章 ID，草稿也参与检查；Astro 同时以错误处理预渲染路径冲突。新增文章不能覆盖另一篇文章或 `/blog/` 归档。原有 3 篇示例文章已按作者要求删除，由 trainings 仓库的 3 篇正式文章替代；历史基线保留删除标记，生产检查验证示例 URL 不再生成。
+文章 ID 和链接继续共用 `normalizePostId()` 与 `getPostUrl()`。执行 NFC 归一化，拒绝空路径段、`.`、`..`、原始 `%`、`?`、`#`、反斜杠和控制字符。所有文章包括草稿均须具有唯一 ID，构建同时拒绝路由冲突。旧文章、图片、slug、canonical 和评论路径不因主题变化改写。
 
-`getPublishedPosts()` 是公开内容筛选的唯一入口，只排除 `draft: true`。未来日期不会自动隐藏，定时发布尚未实现。日期相同的文章再按 ID 排序，保持输出稳定。
+标签链接统一使用 `getTagUrl()`，逐段编码。标签详情使用 catch-all 路由，支持中文和 `CI/CD` 等含斜杠标签。标签与分类元数据、RSS 和搜索筛选继续保留。旧分类锚点定位到该分类首篇文章，旧标签锚点定位到 Tags 侧栏中对应链接。
 
-`src/utils/blog.ts` 同时提供中文与非中文词数结合的阅读时间估算，以及分类、标签锚点 ID。阅读时间是估算值，不是统计承诺。
+## 路由与组件
 
-## 路由与组件职责
+- `/`：作者简介、GitHub 链接和最新文章列表。
+- `/blog/`：按年份分组的全部文章与 Tags 侧栏。
+- `/blog/{slug}/`：文章、目录、代码、评论和返回顶部按钮。
+- `/tags/`、`/tags/{tag}/`：标签索引、计数和对应文章列表。
+- `/search/`：独立 Pagefind 搜索页；各页页眉另有搜索弹窗。
+- `/rss.xml`、Sitemap 和 `/robots.txt`：保留现有生成方式。
+- `/404.html`：英文错误页，带 `noindex`，不进入 Sitemap。
 
-- `/`：首页介绍及全部已发布文章的倒序列表。
-- `/blog/`：分类归档和标签索引；标签在本页展开相应文章，不新增一套标签页面。
-- `/blog/{slug}/`：文章详情、目录、代码和评论。
-- `/search/`：Pagefind 中文搜索。
-- `/about/`：作者与站点介绍。
-- `/rss.xml`：已发布文章的标题、简介、日期、分类和标签。
-- `/sitemap-index.xml`、`/sitemap-0.xml`：Sitemap 集成生成的站点地址。
-- `/robots.txt`：允许抓取，并指向 Sitemap。
-- `/404.html`：中文错误页，带 `noindex`，不进入 Sitemap。
+About 页面已按作者要求移除，`/about/` 返回 404；页眉、页脚和 Sitemap 不再包含该入口。历史迁移基线保留原记录，生产检查单独声明已退役页面。
 
-`layouts/Base.astro` 提供文档结构、中文 `lang`、SEO、主题初始化、跳到正文链接和公共导航。`BaseHead.astro` 统一生成 title、description、canonical、Open Graph 和 Twitter 元数据；只有传入 `ogImage` 才输出分享图片，不生成远程 OG 图片。
+`Base.astro` 提供 HTML 结构、主题初始化、跳到正文链接、页眉和页脚。`BaseHead.astro` 生成唯一的页面元数据与 canonical；只有提供 `ogImage` 时输出分享图片。
 
-`layouts/BlogPost.astro` 组织文章，`blog/Masthead.astro` 输出封面、唯一 H1、日期、分类、标签和阅读时间。`blog/PostPreview.astro` 负责文章列表。`blog/TOC.astro` 和 `TOCHeading.astro` 使用 Astro 渲染后的 heading slug，目录只收录 H2～H4，使用可折叠的原生 `details`。
+文章布局的目录使用原生 `details`，收录 H2～H4。`lg` 起在正文右侧固定，窄屏在正文前。Masthead 展示标题、日期、阅读时间、更新日期和标签；简介与分类仍提供给 SEO 或搜索。阅读时间继续使用现有中英文估算函数。
 
 ## 主题、代码与搜索
 
-`ThemeProvider.astro` 在文档头部同步初始化 `html[data-theme]`，避免加载时先显示错误主题。默认跟随系统；手动选择保存为 `localStorage.theme` 的 `light` 或 `dark`。选择“自动”会移除该存储值，恢复跟随系统。
+`ThemeProvider.astro` 在头部同步初始化 `html[data-theme]`。默认跟随系统，手动选择保存到 `localStorage.theme`。存储不可用时仍可切换；跨标签页与页面恢复继续同步。界面只显示一个深浅色按钮，不显示旧“自动”按钮。
 
-`ThemeToggle.astro` 发出 `theme-change` 请求，Provider 应用后发出 `theme-changed`。系统变化、跨标签页存储事件和页面恢复均同步。`data-theme-preference` 只记录选择来源，实际配色只由 `data-theme` 决定；不存在 `html.dark` 并行机制。
+按钮发出 `theme-change`，Provider 应用主题后发出 `theme-changed`。代码和 Giscus 共用此状态，不使用 `html.dark`。代码继续采用 `github-light` 与 `dracula`，默认开启行号，保留高亮、复制和按块配置能力。控件语言改为英文。
 
-Expressive Code 采用 `dracula` 与 `github-light`，通过相同的 `data-theme` 选择器切换。`defaultLocale: 'zh-CN'` 与 `pluginFramesTexts` 统一提供“终端窗口”“复制代码”“已复制”文案。行号默认启用，按块覆盖方式见 [内容规范](CONTENT.md#代码示例)。
+搜索弹窗使用上游 `@pagefind/component-ui`，空闲时加载；仅生产预览具有完整索引。组件显式设置英文界面，索引仍为中文。独立搜索页继续使用现有 Default UI。两者读取同一套本地 `/pagefind/` 索引。
 
-`npm run build` 自动触发 `postbuild`，Pagefind 对 `dist/` 生成索引。文章的 `data-pagefind-body` 限定搜索主体，标题、简介、分类和标签提供搜索元数据；评论位于主体外并带忽略标记。搜索页加载本地 `/pagefind/` 资源，样式变量沿用本站 token。开发服务器不生成搜索索引。
+## favicon 与评论
 
-## Giscus 与外部服务
+favicon 来源为本次指定的 RealFaviconGenerator 资源包，安装在 `public/` 根目录。`BaseHead.astro` 每页各输出一次 PNG、SVG、ICO、Apple Touch Icon、应用标题和 manifest 声明，资源参数为 `?v=20261022`。manifest 保留生成器的名称、白色主题与背景色、`standalone` 模式和 192、512 px 图标。页眉 LOGO 也引用 `/favicon.svg?v=20261022`，与浏览器图标共用资源；保留上游布局和响应式尺寸，并使用 `object-contain` 保持图像比例。
 
-评论已配置，参数集中在 `src/site.config.ts`：
+Giscus 参数保持不变：仓库 `guog/guog.github.io`，仓库 ID `R_kgDOVIqxYA`，分类 `General`，分类 ID `DIC_kwDOVIqxYM4DIZa2`，映射 `pathname`，语言 `zh-CN`。评论标题为英文，第三方评论界面仍为中文。
 
-- `repo`：`guog/guog.github.io`。
-- `repoId`：`R_kgDOVIqxYA`。
-- `category`：`General`。
-- `categoryId`：`DIC_kwDOVIqxYM4DIZa2`。
-- `mapping`：`pathname`；语言为 `zh-CN`。
+本地回归通过参数和模拟 iframe 检查主题消息。真实评论依赖外部网络、Discussions 和 App 权限，须另行验收。
 
-`Giscus.astro` 加载官方脚本，初始配色与页面一致；收到主题事件后向 `https://giscus.app` 的 iframe 发送主题设置。保持旧路径才能保持原 Discussion 关联。
+## 验证与部署
 
-本地测试可以验证参数、容器和主题消息；真实评论加载仍依赖网络、Giscus App、Discussions 和仓库权限。不能把模拟通过当作第三方服务在线验收。
+保留工程检查命令和唯一工作流 `.github/workflows/site.yml`。PR 只验证；人工审核合并后，`main` 再次验证，成功才部署 Pages 和按需发布 Release。权限、版本和回滚规则见 [贡献指南](CONTRIBUTING.md)。
 
-## 质量与部署边界
+生产检查覆盖本地链接、图片、锚点、favicon 声明及文件、manifest、canonical、RSS、Sitemap 和中文搜索。浏览器检查覆盖布局、菜单、搜索弹窗、标签、目录、代码与主题。历史迁移基线和审计脚本保持原样；新 favicon 已授权替换，不要求与历史图标哈希一致。
 
-`scripts/` 和 `tests/` 负责内容、旧 URL、生产 HTML、链接、代码渲染、中文搜索和浏览器回归。`tests/fixtures/legacy-urls.json` 保存迁移来源提交、文章摘要、哈希、旧地址及评论参数；正文哈希只用于一次性迁移验收。
-
-唯一 CI/CD 入口 `.github/workflows/site.yml` 区分 PR 校验与生产发布：`Validate PR` → `Verify site`；只有 `main` push 才继续 `Deploy Pages` → `Release site`。部署使用已验证的 `dist/`，发布器只处理版本标签与 GitHub Release。
-
-工作流、版本规则、最小权限、失败恢复和待人工设置项见 [贡献指南](CONTRIBUTING.md)。不要通过新增独立部署工作流绕过这些门禁。
-
-## 构建依赖安全补丁
-
-`package.json` 对 `@expressive-code/core@0.44.2 → postcss-nested@6.2.0` 的 `postcss-selector-parser` 使用精确 `7.1.6` override，修复 [GHSA-rj75-hqrm-r3gf](https://github.com/advisories/GHSA-rj75-hqrm-r3gf)。该解析器只参与构建；不因此降级 Expressive Code。补丁已通过正式站点与 MDX/代码块测试构建，`npm audit` 在核验时为 0 个已知漏洞。未来升级 Expressive Code 时应重新核对并尽可能移除此临时 override，不要盲目执行 `npm audit fix --force`。
+Expressive Code 和 Typography 的 `postcss-selector-parser` 精确覆盖为 `7.1.6`，修复 [GHSA-rj75-hqrm-r3gf](https://github.com/advisories/GHSA-rj75-hqrm-r3gf)。该解析器用于构建。升级依赖后应重新核对覆盖是否仍必要，不使用强制降级解决告警。

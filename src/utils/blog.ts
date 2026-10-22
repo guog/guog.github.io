@@ -28,3 +28,8 @@ export function getReadingMinutes(body = ''): number {
 export function getTaxonomyId(kind: 'tag' | 'category', value: string): string {
   return `${kind}-${value}`
 }
+
+/** Tags may contain slashes (CI/CD); encode each URL segment exactly once. */
+export function getTagUrl(tag: string): string {
+  return `/tags/${tag.split('/').map(encodeURIComponent).join('/')}/`
+}
