@@ -6,8 +6,6 @@ category: '技术'
 tags: ["软件工程", "GitHub", "CI/CD"]
 ---
 
-> 本文迁自 [trainings 仓库](https://github.com/guog/trainings/blob/master/modern-se/src/modern-se.md)，保留原文内容与图片，调整为博客在线阅读格式。
-
 *以一次需求的完整交付为主线，理解协作、自动化、可复现和持续反馈*
 
 ![从需求到可追溯交付的工程主线](/images/modern-se/delivery-overview.jpg)

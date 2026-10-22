@@ -6,8 +6,6 @@ category: '技术'
 tags: ["Markdown", "软件工程", "AI"]
 ---
 
-> 本文迁自 [trainings 仓库](https://github.com/guog/trainings/blob/master/markdown-101/src/markdown-101.md)，保留原文内容与图片，调整为博客在线阅读格式。
-
 *理解为什么一种极简的纯文本格式，能够连接项目知识、协作流程和 AI Agent*
 
 ![Markdown 从纯文本成为工程协作载体](/images/markdown-101/markdown-workflow.jpg)

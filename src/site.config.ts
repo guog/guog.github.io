@@ -1,8 +1,8 @@
 /** Site identity and existing Giscus mapping are defined only here. */
 export const siteConfig = {
   url: 'https://guog.github.io',
-  title: 'guog 的博客',
-  description: '软件开发者的技术笔记、心得与翻译',
+  title: 'guog',
+  description: '不写代码的程序员',
   author: 'guog',
   github: 'https://github.com/guog',
   lang: 'zh-CN',
@@ -10,10 +10,10 @@ export const siteConfig = {
 }
 
 export const menuLinks = [
-  { path: '/', title: '首页' },
-  { path: '/blog/', title: '归档' },
-  { path: '/search/', title: '搜索' },
-  { path: '/about/', title: '关于' },
+  { path: '/', title: 'Index' },
+  { path: '/blog/', title: 'Blog' },
+  { path: '/search/', title: 'Search' },
+  { path: '/about/', title: 'About' },
 ]
 
 export const giscusConfig = {
