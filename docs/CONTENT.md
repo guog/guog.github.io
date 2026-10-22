@@ -87,7 +87,7 @@ ogImage: '/images/astro-guide-share.png'
 ````markdown
 ```typescript title="greet.ts" {2}
 function greet(name: string): string {
-  return `你好，${name}`;
+  return `你好，${name}`
 }
 ```
 

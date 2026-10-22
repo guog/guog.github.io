@@ -1,0 +1,9 @@
+dist/
+node_modules/
+.astro/
+test-results/
+playwright-report/
+package-lock.json
+src/content/blog/
+tests/fixtures/
+public/

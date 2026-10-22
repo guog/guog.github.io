@@ -1,18 +1,35 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import { getPostUrl } from "../../utils/blog";
-import FormattedDate from "../FormattedDate.astro";
+import type { CollectionEntry } from 'astro:content'
+import { getPostUrl } from '../../utils/blog'
+import FormattedDate from '../FormattedDate.astro'
 
 interface Props {
-  post: CollectionEntry<"blog">;
-  headingLevel?: "h2" | "h3";
-  withDescription?: boolean;
+  post: CollectionEntry<'blog'>
+  headingLevel?: 'h2' | 'h3'
+  withDescription?: boolean
 }
-const { post, headingLevel: Heading = "h2", withDescription = true } = Astro.props;
+const { post, headingLevel: Heading = 'h2', withDescription = true } = Astro.props
 ---
-<li class="post-preview">
-  <div class="post-meta"><FormattedDate date={post.data.pubDate} /> · <span>{post.data.category}</span></div>
-  <Heading><a class="cactus-link" href={getPostUrl(post.id)}>{post.data.title}</a></Heading>
+
+<li class='post-preview'>
+  <div class='post-meta'>
+    <FormattedDate date={post.data.pubDate} /> · <span>{post.data.category}</span>
+  </div>
+  <Heading>
+    <a
+      class='cactus-link'
+      href={getPostUrl(post.id)}
+    >
+      {post.data.title}
+    </a>
+  </Heading>
   {withDescription && <p>{post.data.description}</p>}
-  <ul class="tags" aria-label="文章标签">{post.data.tags.map((tag) => <li>#{tag}</li>)}</ul>
+  <ul
+    class='tags'
+    aria-label='文章标签'
+  >
+    {post.data.tags.map((tag) => (
+      <li>#{tag}</li>
+    ))}
+  </ul>
 </li>

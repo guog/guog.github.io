@@ -1,12 +1,32 @@
 ---
-import PostPreview from "../components/blog/PostPreview.astro";
-import { getPublishedPosts } from "../data/blog";
-import Base from "../layouts/Base.astro";
-import { siteConfig } from "../site.config";
+import PostPreview from '../components/blog/PostPreview.astro'
+import { getPublishedPosts } from '../data/blog'
+import Base from '../layouts/Base.astro'
+import { siteConfig } from '../site.config'
 
-const posts = await getPublishedPosts();
+const posts = await getPublishedPosts()
 ---
+
 <Base>
-  <section class="intro"><p class="eyebrow">记录 · 实践 · 思考</p><h1>把问题想清楚，<br />把经验写下来。</h1><p>{siteConfig.description}</p></section>
-  <section aria-labelledby="latest-heading"><div class="section-heading"><h2 id="latest-heading">最新文章</h2><a href="/blog/">全部归档 →</a></div><ul class="post-list">{posts.map((post) => <PostPreview post={post} />)}</ul>{posts.length === 0 && <p>文章正在准备中。</p>}</section>
+  <section class='intro'>
+    <p class='eyebrow'>记录 · 实践 · 思考</p>
+    <h1>
+      把问题想清楚，
+      <br />
+      把经验写下来。
+    </h1>
+    <p>{siteConfig.description}</p>
+  </section>
+  <section aria-labelledby='latest-heading'>
+    <div class='section-heading'>
+      <h2 id='latest-heading'>最新文章</h2>
+      <a href='/blog/'>全部归档 →</a>
+    </div>
+    <ul class='post-list'>
+      {posts.map((post) => (
+        <PostPreview post={post} />
+      ))}
+    </ul>
+    {posts.length === 0 && <p>文章正在准备中。</p>}
+  </section>
 </Base>
