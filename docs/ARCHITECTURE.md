@@ -4,9 +4,9 @@
 
 本站是 guog 的中文技术博客，生产地址为 `https://guog.github.io`。使用 Astro 7.3.8、Tailwind CSS 4、TypeScript、Markdown/MDX、Expressive Code 和 Pagefind。npm 依赖的实际版本以锁文件为准。
 
-视觉、布局和交互严格对齐 Astro Cactus 8.3.0，固定提交为 [`728f1f4eeb80208398649261d7635f311cafa011`](https://github.com/chrismwilliams/astro-theme-cactus/tree/728f1f4eeb80208398649261d7635f311cafa011)。版权和许可见 [第三方声明](../THIRD_PARTY_NOTICES.md)。
+视觉与交互基于 Astro Cactus 8.3.0，固定提交为 [`728f1f4eeb80208398649261d7635f311cafa011`](https://github.com/chrismwilliams/astro-theme-cactus/tree/728f1f4eeb80208398649261d7635f311cafa011)。版权和许可见 [第三方声明](../THIRD_PARTY_NOTICES.md)。
 
-采用上游等宽字体、窄幅页面、站点标识、导航、页脚、紧凑列表、文章 Masthead、响应式目录和搜索弹窗。界面为英文，文章和个人介绍为中文，HTML 语言仍为 `zh-CN`。不引入 Notes、Webmentions、演示内容、远程字体、动态 OG 图片或额外前端框架。
+采用上游等宽字体、窄幅页面、导航、页脚、紧凑列表、文章 Masthead、响应式目录和搜索弹窗。页眉与首页保留作者的紧凑定制。界面为英文，文章和个人介绍为中文，HTML 语言仍为 `zh-CN`。不引入 Notes、Webmentions、演示内容、远程字体、动态 OG 图片或额外前端框架。
 
 保留原站的 `blog` 集合、`pubDate`、文章地址、分类与标签元数据及 Giscus 映射。继续使用较新的 Astro 7.3.8，不复制上游的包管理器、检查或部署配置。新增依赖仅为 `@pagefind/component-ui` 与 `@tailwindcss/typography`。页脚按当前定制仅显示作者与年份，不重复主导航。
 
@@ -33,7 +33,7 @@ Prettier 仍是唯一格式化工具。保留现有格式配置、排除范围�
 
 ## 路由与组件
 
-- `/`：作者简介、GitHub 链接和最新文章列表。
+- `/`：作者简介、`More...` 归档入口和最新文章列表；不显示欢迎标题与社交链接，不生成 H1。其他页面仍须具有唯一 H1。
 - `/blog/`：按年份分组的全部文章与 Tags 侧栏。
 - `/blog/{slug}/`：文章、目录、代码、评论和返回顶部按钮。
 - `/tags/`、`/tags/{tag}/`：标签索引、计数和对应文章列表。
@@ -57,7 +57,7 @@ About 页面已按作者要求移除，`/about/` 返回 404；页眉、页脚和
 
 ## favicon 与评论
 
-favicon 来源为本次指定的 RealFaviconGenerator 资源包，安装在 `public/` 根目录。`BaseHead.astro` 每页各输出一次 PNG、SVG、ICO、Apple Touch Icon、应用标题和 manifest 声明，资源参数为 `?v=20261022`。manifest 保留生成器的名称、白色主题与背景色、`standalone` 模式和 192、512 px 图标。页眉 LOGO 也引用 `/favicon.svg?v=20261022`，与浏览器图标共用资源；保留上游布局和响应式尺寸，并使用 `object-contain` 保持图像比例。
+favicon 来源为本次指定的 RealFaviconGenerator 资源包，安装在 `public/` 根目录。`BaseHead.astro` 每页各输出一次 PNG、SVG、ICO、Apple Touch Icon、应用标题和 manifest 声明，资源参数为 `?v=20261022`。manifest 保留生成器的名称、白色主题与背景色、`standalone` 模式和 192、512 px 图标。页眉使用文字站名，不再显示图标；favicon 声明与资源仍保留。
 
 Giscus 参数保持不变：仓库 `guog/guog.github.io`，仓库 ID `R_kgDOVIqxYA`，分类 `General`，分类 ID `DIC_kwDOVIqxYM4DIZa2`，映射 `pathname`，语言 `zh-CN`。评论标题为英文，第三方评论界面仍为中文。
 

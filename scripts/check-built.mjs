@@ -113,7 +113,11 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
       assert.equal(elements(document, (node) => node.tagName === 'title').length, 1),
     )
     await check(`${route} H1`, () =>
-      assert.equal(elements(document, (node) => node.tagName === 'h1').length, 1),
+      // The compact homepage intentionally starts with an introduction and an H2.
+      assert.equal(
+        elements(document, (node) => node.tagName === 'h1').length,
+        route === '/' ? 0 : 1,
+      ),
     )
     await check(`${route} canonical`, () => {
       const canonicals = elements(
