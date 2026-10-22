@@ -1,8 +1,8 @@
 /* Adapted from Astro Cactus v8.3.0. See THIRD_PARTY_NOTICES.md. */
 @layer theme, base, pagefind, components, utilities;
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/preflight.css" layer(base);
-@import "tailwindcss/utilities.css" layer(utilities);
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities);
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
@@ -14,10 +14,10 @@
   --color-accent-2: oklch(18.15% 0 0);
   --color-quote: oklch(55.27% 0.195 19.06);
   --font-sans:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Noto Sans SC', sans-serif;
   --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Noto Sans Mono CJK SC", monospace;
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Noto Sans Mono CJK SC', monospace;
 }
 
 @layer base {
@@ -26,7 +26,7 @@
     accent-color: var(--color-accent);
     scrollbar-gutter: stable;
   }
-  html[data-theme="dark"] {
+  html[data-theme='dark'] {
     color-scheme: dark;
     --color-global-bg: oklch(23.64% 0.0045 248);
     --color-global-text: oklch(83.54% 0 264);
@@ -138,7 +138,7 @@
     color: var(--color-accent);
     font-size: 0.95rem;
   }
-  .site-nav a[aria-current="page"] {
+  .site-nav a[aria-current='page'] {
     text-decoration: underline;
     text-decoration-thickness: 2px;
   }
@@ -158,15 +158,15 @@
   #theme-system {
     font-size: 0.75rem;
   }
-  #theme-system[aria-pressed="true"] {
+  #theme-system[aria-pressed='true'] {
     color: var(--color-accent);
     text-decoration: underline;
   }
   .theme-moon,
-  [data-theme="dark"] .theme-sun {
+  [data-theme='dark'] .theme-sun {
     display: none;
   }
-  [data-theme="dark"] .theme-moon {
+  [data-theme='dark'] .theme-moon {
     display: block;
   }
   .skip-link {
@@ -338,7 +338,7 @@
   }
   .prose h2::before {
     /* Decorative marker must not change the heading’s accessible name. */
-    content: "# " / "";
+    content: '# ' / '';
     color: var(--color-accent);
     font-weight: 400;
   }

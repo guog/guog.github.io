@@ -1,36 +1,40 @@
 {/* Adapted from Cactus: parser-blocking initialization avoids a wrong-theme flash. */}
 <script is:inline>
-  (() => {
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    let preference = null;
-    try { preference = localStorage.getItem('theme'); } catch {}
-    if (preference !== 'light' && preference !== 'dark') preference = null;
+  ;(() => {
+    const media = window.matchMedia('(prefers-color-scheme: dark)')
+    let preference = null
+    try {
+      preference = localStorage.getItem('theme')
+    } catch {}
+    if (preference !== 'light' && preference !== 'dark') preference = null
     function apply() {
-      const theme = preference || (media.matches ? 'dark' : 'light');
-      document.documentElement.dataset.theme = theme;
-      document.documentElement.dataset.themePreference = preference || 'system';
-      document.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme } }));
+      const theme = preference || (media.matches ? 'dark' : 'light')
+      document.documentElement.dataset.theme = theme
+      document.documentElement.dataset.themePreference = preference || 'system'
+      document.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme } }))
     }
     function readPreference() {
       try {
-        const saved = localStorage.getItem('theme');
-        preference = saved === 'light' || saved === 'dark' ? saved : null;
+        const saved = localStorage.getItem('theme')
+        preference = saved === 'light' || saved === 'dark' ? saved : null
       } catch {}
-      apply();
+      apply()
     }
-    apply();
+    apply()
     document.addEventListener('theme-change', (event) => {
-      const requested = event.detail.theme;
-      if (!['light', 'dark', 'system'].includes(requested)) return;
-      preference = requested === 'system' ? null : requested;
+      const requested = event.detail.theme
+      if (!['light', 'dark', 'system'].includes(requested)) return
+      preference = requested === 'system' ? null : requested
       try {
-        if (preference) localStorage.setItem('theme', preference);
-        else localStorage.removeItem('theme');
+        if (preference) localStorage.setItem('theme', preference)
+        else localStorage.removeItem('theme')
       } catch {}
-      apply();
-    });
-    media.addEventListener('change', () => { if (!preference) apply(); });
-    window.addEventListener('storage', readPreference);
-    window.addEventListener('pageshow', readPreference);
-  })();
+      apply()
+    })
+    media.addEventListener('change', () => {
+      if (!preference) apply()
+    })
+    window.addEventListener('storage', readPreference)
+    window.addEventListener('pageshow', readPreference)
+  })()
 </script>

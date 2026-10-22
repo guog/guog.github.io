@@ -1,7 +1,19 @@
 ---
-import { siteConfig } from "../site.config";
+import { siteConfig } from '../site.config'
 ---
-<footer class="site-footer">
-  <p>© {new Date().getFullYear()} {siteConfig.author}</p>
-  <p><a href={siteConfig.github} rel="me">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="https://github.com/chrismwilliams/astro-theme-cactus">Astro Cactus</a></p>
+
+<footer class='site-footer'>
+  <p>
+    © {new Date().getFullYear()} {siteConfig.author}
+  </p>
+  <p>
+    <a
+      href={siteConfig.github}
+      rel='me'
+    >
+      GitHub
+    </a>{' '}
+    · <a href='/rss.xml'>RSS</a> ·{' '}
+    <a href='https://github.com/chrismwilliams/astro-theme-cactus'>Astro Cactus</a>
+  </p>
 </footer>

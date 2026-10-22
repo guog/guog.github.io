@@ -1,8 +1,8 @@
-import { getCollection } from "astro:content";
+import { getCollection } from 'astro:content'
 
 export async function getPublishedPosts() {
-  return (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  return (await getCollection('blog', ({ data }) => !data.draft)).sort(
     (a, b) =>
-      b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || a.id.localeCompare(b.id, "zh-CN"),
-  );
+      b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || a.id.localeCompare(b.id, 'zh-CN'),
+  )
 }

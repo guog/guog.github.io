@@ -1,9 +1,19 @@
 ---
-import type { TocItem } from "../../utils/generateToc";
+import type { TocItem } from '../../utils/generateToc'
 
 interface Props {
-  heading: TocItem;
+  heading: TocItem
 }
-const { children, slug, text } = Astro.props.heading;
+const { children, slug, text } = Astro.props.heading
 ---
-<li><a href={`#${slug}`}>{text}</a>{children.length > 0 && <ol>{children.map((heading) => <Astro.self heading={heading} />)}</ol>}</li>
+
+<li>
+  <a href={`#${slug}`}>{text}</a>
+  {children.length > 0 && (
+    <ol>
+      {children.map((heading) => (
+        <Astro.self heading={heading} />
+      ))}
+    </ol>
+  )}
+</li>

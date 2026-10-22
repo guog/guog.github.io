@@ -22,6 +22,7 @@
 - `astro.config.mjs`：站点地址读取 `siteConfig.url`；统一末尾斜杠；`prerenderConflictBehavior: "error"` 拒绝预渲染路由冲突；注册 Expressive Code、MDX、Sitemap 和 Tailwind Vite 插件。
 - `ec.config.mjs`：代码主题、行号插件和代码样式，供 Markdown、MDX 及 `<Code>` 共用。
 - `src/styles/global.css`：Tailwind CSS 4 层、颜色、字体和布局样式。
+- `.prettierrc.json`：Prettier 是唯一格式化工具，统一工程源码、配置和文档，采用两空格缩进、100 字符行宽、单引号、无分号和每行一个属性，嵌入代码自动格式化。官方 `prettier-plugin-astro` 处理 `.astro` 文件，使用 `htmlWhitespaceSensitivity: "css"` 保留行内元素的空格语义。`.prettierignore` 定义排除范围，`astro check` 负责类型检查；VS Code 使用 Prettier 扩展在保存时格式化。
 
 不要恢复旧 `src/consts.ts` 或新增重复配置。更新配置后同步相关文档与测试。
 

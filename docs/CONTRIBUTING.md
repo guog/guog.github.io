@@ -24,7 +24,9 @@ git switch -c feat/astro-guide origin/main
 推荐使用 `.nvmrc` 锁定的 Node.js 24.19.0；最低要求为 `>=24.0.0`。测试直接导入 TypeScript 辅助函数，依赖 Node.js 原生类型剥离能力。包管理器使用 npm。依赖以 `package-lock.json` 锁定，干净安装使用 `npm ci`。不要加入其他包管理器锁文件。
 
 - `npm run dev`：启动开发服务器，默认端口为 `4321`。
-- `npm run check`：执行 `astro check && biome check`，不修改文件。
+- `npm run check`：执行 Astro 类型检查和 Prettier 格式检查，不修改文件。
+- `npm run format`：使用 Prettier 统一格式化工程源码、配置和文档，`.astro` 文件由 `prettier-plugin-astro` 处理。
+- `npm run format:check`：只检查格式，随 `check` 在本地和 CI 中执行。格式化范围由 `.prettierignore` 管理，排除文章、测试夹具、公共资源、锁文件和生成目录；嵌入代码按 Prettier 支持情况自动格式化。
 - `npm run lint:content`：检查所有文章的 frontmatter，并渐进检查新增或修改的正文。
 - `npm run test`：执行 `tests/*.test.mjs` 的 Node.js 单元和契约测试。
 - `npm run build`：执行 Astro 静态构建，npm 自动接着运行 `postbuild`，生成 `dist/pagefind/` 索引。
