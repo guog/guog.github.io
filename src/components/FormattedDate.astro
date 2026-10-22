@@ -3,13 +3,12 @@ interface Props {
   date: Date
 }
 const { date } = Astro.props
+const isoDate = date.toISOString()
 ---
 
-<time datetime={date.toISOString()}>
-  {date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    timeZone: 'UTC',
-  })}
+<time
+  class='text-muted min-w-30 font-semibold'
+  datetime={isoDate}
+>
+  {isoDate.slice(0, 10)}
 </time>

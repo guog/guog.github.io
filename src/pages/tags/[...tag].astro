@@ -1,0 +1,55 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import PostPreview from '../../components/blog/PostPreview.astro'
+import { getPublishedPosts } from '../../data/blog'
+import Base from '../../layouts/Base.astro'
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts()
+  return [...new Set(posts.flatMap((post) => post.data.tags))].map((tag) => ({
+    params: { tag },
+    props: { tag, posts: posts.filter((post) => post.data.tags.includes(tag)) },
+  }))
+}
+interface Props {
+  tag: string
+  posts: CollectionEntry<'blog'>[]
+}
+const { tag, posts } = Astro.props
+---
+
+<Base
+  title={`Posts about ${tag}`}
+  description={`View all posts with the tag - ${tag}`}
+>
+  <nav
+    class='mb-8'
+    aria-label='Breadcrumbs'
+  >
+    <ul class='flex items-center'>
+      <li>
+        <a
+          class='text-accent'
+          href='/tags/'
+        >
+          Tags
+        </a>
+        <span
+          aria-hidden='true'
+          class='mx-1.5'
+        >
+          ›
+        </span>
+      </li>
+      <li aria-current='page'>#{tag}</li>
+    </ul>
+  </nav>
+  <h1 class='title mb-16'>Posts about {tag}</h1>
+  <ul class='space-y-4'>
+    {posts.map((post) => (
+      <PostPreview
+        headingLevel='h2'
+        post={post}
+      />
+    ))}
+  </ul>
+</Base>

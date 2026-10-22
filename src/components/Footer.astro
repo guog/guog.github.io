@@ -1,19 +1,11 @@
 ---
 import { siteConfig } from '../site.config'
+
+const year = new Date().getFullYear()
 ---
 
-<footer class='site-footer'>
-  <p>
-    © {new Date().getFullYear()} {siteConfig.author}
-  </p>
-  <p>
-    <a
-      href={siteConfig.github}
-      rel='me'
-    >
-      GitHub
-    </a>{' '}
-    · <a href='/rss.xml'>RSS</a> ·{' '}
-    <a href='https://github.com/chrismwilliams/astro-theme-cactus'>Astro Cactus</a>
-  </p>
+<footer class='text-muted mt-auto flex w-full flex-col items-center justify-center gap-y-2 pt-20 pb-4 text-center align-top font-semibold sm:flex-row sm:justify-between sm:text-xs'>
+  <div class='me-0 sm:me-4'>
+    &copy; {siteConfig.author}&nbsp;{year}
+  </div>
 </footer>

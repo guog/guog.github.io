@@ -3,8 +3,8 @@ import Base from '../layouts/Base.astro'
 ---
 
 <Base
-  title='站内搜索'
-  description='搜索本站全部文章，支持中文'
+  title='Search'
+  description='Search all posts on this blog'
 >
   <Fragment slot='head'>
     <link
@@ -12,11 +12,11 @@ import Base from '../layouts/Base.astro'
       rel='stylesheet'
     />
   </Fragment>
-  <h1>站内搜索</h1>
-  <p class='muted'>输入中文或技术关键词，查找文章。</p>
-  <div id='search'></div>
+  <h1 class='title'>Search</h1>
+  <p class='mt-6 text-muted'>Search posts by topic or keyword.</p>
+  <div id='search-page'></div>
   <noscript>
-    搜索需要 JavaScript。你也可以在<a href='/blog/'>归档</a>中浏览全部文章。
+    Search requires JavaScript. Browse <a href='/blog/'>all posts</a> instead.
   </noscript>
   <script
     src='/pagefind/pagefind-ui.js'
@@ -26,24 +26,27 @@ import Base from '../layouts/Base.astro'
     window.addEventListener('DOMContentLoaded', () => {
       if (window.PagefindUI) {
         new window.PagefindUI({
-          element: '#search',
+          element: '#search-page',
           showSubResults: true,
           showImages: false,
           translations: {
-            placeholder: '搜索文章',
-            clear_search: '清除',
-            load_more: '加载更多',
-            search_label: '站内搜索',
-            filters_label: '筛选',
-            zero_results: '没有找到“[SEARCH_TERM]”',
-            many_results: '找到 [COUNT] 个关于“[SEARCH_TERM]”的结果',
-            one_result: '找到 1 个关于“[SEARCH_TERM]”的结果',
-            searching: '正在搜索“[SEARCH_TERM]”…',
+            placeholder: 'Search posts',
+            search_label: 'Search posts',
+            clear_search: 'Clear',
+            load_more: 'Load more results',
+            filters_label: 'Filters',
+            zero_results: 'No results for [SEARCH_TERM]',
+            many_results: '[COUNT] results for [SEARCH_TERM]',
+            one_result: '1 result for [SEARCH_TERM]',
+            searching: 'Searching for [SEARCH_TERM]...',
+            alt_search:
+              'No results for [SEARCH_TERM]. Showing results for [DIFFERENT_TERM] instead.',
+            search_suggestion: 'No results for [SEARCH_TERM]. Try one of the following searches:',
           },
         })
       } else
-        document.getElementById('search').textContent =
-          '搜索索引尚未生成。请先运行 npm run build，再运行 npm run preview。'
+        document.getElementById('search-page').textContent =
+          'Search is temporarily unavailable. Please browse all posts.'
     })
   </script>
 </Base>

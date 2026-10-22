@@ -11,10 +11,20 @@
 
 `fixtures/legacy-urls.json` 记录迁移前提交、文章完整哈希和 Frontmatter、已发布 URL、RSS/Sitemap、favicon 以及 Giscus 映射。
 
-`fixtures/content` 中的 Markdown/MDX 仅用于测试。覆盖行号默认开启、关闭、从 42 开始、共用配置的 `<Code>` 组件、复制内容、中文目录、长代码和表格、草稿排除、显式 slug、嵌套路径、大小写、中文及 Unicode NFC 规范化。`Café.md` 的文件名刻意使用分解形式重音字符，不要将它重命名为组合形式。
+`fixtures/content` 中的 Markdown/MDX 仅用于测试。覆盖行号默认开启、关闭、从 42 开始、共用配置的 `<Code>` 组件、复制内容、中文标题的目录、长代码和表格、草稿排除、显式 slug、嵌套路径、大小写、中文及 Unicode NFC 规范化。`Café.md` 的文件名刻意使用分解形式重音字符，不要将它重命名为组合形式。
 
 浏览器测试默认屏蔽 Giscus 网络请求，并另测模拟 iframe 的主题同步契约。只有显式设置 `CHECK_LIVE_GISCUS=1` 才会检查真实第三方服务；本地契约通过不代表第三方服务当前可用。
 
 CI 使用锁定的 Playwright 版本对应浏览器。若本地已有受信任的 Chromium，可设置 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 指向其可执行文件；这不能绕过系统或沙箱的执行限制。`PLAYWRIGHT_PORT` 可覆盖默认预览端口 4322。
 
-成功的布局用例也会保存截图：375 / 768 / 1440 px，浅色和深色，各覆盖首页、归档、搜索、关于、3 篇正式文章和排版测试文章，共 48 张。截图位于 `test-results/`，完整报告位于 `playwright-report/`；失败用例另存 trace。只有实际运行过的浏览器检查才能报告通过。
+成功的布局用例也会保存截图：375 / 768 / 1440 px，浅色和深色，各覆盖首页、归档、搜索、标签、3 篇正式文章和排版测试文章。截图数量由当前核心页面清单决定。截图位于 `test-results/`，完整报告位于 `playwright-report/`；失败用例另存 trace。只有实际运行过的浏览器检查才能报告通过。
+
+## Cactus 与 favicon 回归
+
+浏览器回归还覆盖英文导航、移动菜单开关与 Escape、搜索弹窗及焦点恢复、中文检索、年份归档、中文和 `CI/CD` 标签、宽屏固定目录、窄屏目录和返回顶部。保留 URL、草稿排除、复制与 Giscus 主题同步检查，按新界面更新定位断言。
+
+生产检查核对每页 favicon 声明的唯一性、版本参数、应用标题、PNG 尺寸、SVG/ICO 签名，以及 manifest 的图标文件。所有检查使用本地产物，不依赖下载服务。
+
+历史 `check:migration` 针对首次迁移前的内容和旧 favicon。本次授权替换 favicon，不修改该基线，也不将该历史审计当作本次回归通过条件。3 篇现有文章和 17 张配图另按本次实施前的清单与哈希验证。
+
+About 页面已退役。生产检查须验证 `/about/` 不再生成且 Sitemap 无该地址；历史基线中的页面记录保留，避免改写旧验收证据。

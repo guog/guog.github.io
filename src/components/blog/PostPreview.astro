@@ -2,20 +2,20 @@
 import type { CollectionEntry } from 'astro:content'
 import { getPostUrl } from '../../utils/blog'
 import FormattedDate from '../FormattedDate.astro'
-
 interface Props {
   post: CollectionEntry<'blog'>
-  headingLevel?: 'h2' | 'h3'
-  withDescription?: boolean
+  headingLevel?: 'h2' | 'h3' | 'div'
+  id?: string
 }
-const { post, headingLevel: Heading = 'h2', withDescription = true } = Astro.props
+const { post, headingLevel: Heading = 'div', id } = Astro.props
 ---
 
-<li class='post-preview'>
-  <div class='post-meta'>
-    <FormattedDate date={post.data.pubDate} /> · <span>{post.data.category}</span>
-  </div>
-  <Heading>
+<li
+  id={id}
+  class='grid gap-1 sm:grid-cols-[auto_1fr]'
+>
+  <FormattedDate date={post.data.pubDate} />
+  <Heading class='min-w-0 font-normal'>
     <a
       class='cactus-link'
       href={getPostUrl(post.id)}
@@ -23,13 +23,4 @@ const { post, headingLevel: Heading = 'h2', withDescription = true } = Astro.pro
       {post.data.title}
     </a>
   </Heading>
-  {withDescription && <p>{post.data.description}</p>}
-  <ul
-    class='tags'
-    aria-label='文章标签'
-  >
-    {post.data.tags.map((tag) => (
-      <li>#{tag}</li>
-    ))}
-  </ul>
 </li>

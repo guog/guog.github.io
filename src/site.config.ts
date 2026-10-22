@@ -10,10 +10,8 @@ export const siteConfig = {
 }
 
 export const menuLinks = [
-  { path: '/', title: 'Index' },
+  { path: '/', title: 'Home' },
   { path: '/blog/', title: 'Blog' },
-  { path: '/search/', title: 'Search' },
-  { path: '/about/', title: 'About' },
 ]
 
 export const giscusConfig = {
