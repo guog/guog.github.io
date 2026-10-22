@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
+import { siteConfig } from '../../src/site.config'
 
 const fixtureURL = '/blog/__regression__/nested/MixedCase/'
 const chineseURL = '/blog/__regression__/%E4%B8%AD%E6%96%87%E8%B7%AF%E5%BE%84/'
@@ -53,8 +54,28 @@ for (const width of [375, 768, 1440]) {
         expect(response?.status(), route).toBe(200)
         await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN')
         await expect(page.locator('html')).toHaveAttribute('data-theme', theme)
-        await expect(page.locator('h1')).toHaveCount(1)
-        await expect(page.locator('h1')).toBeVisible()
+        if (route === '/') {
+          await expect(page.locator('h1')).toHaveCount(0)
+          await expect(page.locator('main > section').first()).toHaveText(siteConfig.description)
+          const more = page.getByRole('heading', { level: 2, name: 'More...', exact: true })
+          await expect(more).toBeVisible()
+          await expect(more.getByRole('link')).toHaveAttribute('href', '/blog/')
+          const posts = page.locator('main ul[role="list"] > li')
+          expect(await posts.count()).toBeGreaterThan(0)
+          expect(await posts.count()).toBeLessThanOrEqual(10)
+          for (const post of await posts.all()) {
+            const link = post.getByRole('link')
+            await expect(link).toBeVisible()
+            await expect(link).toHaveAttribute('href', /^\/blog\/[^?#]+\/$/)
+          }
+        } else {
+          await expect(page.locator('h1')).toHaveCount(1)
+          await expect(page.locator('h1')).toBeVisible()
+        }
+        const brand = page.locator('#main-header > a')
+        await expect(brand).toHaveAccessibleName(siteConfig.title)
+        await expect(brand).toHaveAttribute('href', '/')
+        await expect(brand.locator('img')).toHaveCount(0)
         await noPageOverflow(page)
         await page.screenshot({
           path: testInfo.outputPath(`${index}-${width}-${theme}.png`),
