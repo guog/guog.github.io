@@ -72,6 +72,54 @@ const escapeAttribute = (value) =>
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
 
+/** SVG content needs an explicit textual equivalent; only declared decoration is discarded. */
+function svgTextFallback(svg, document, htmlURL) {
+  const properties = svg.properties ?? {}
+  if (
+    [true, 'true'].includes(properties.ariaHidden) ||
+    ['none', 'presentation'].includes(properties.role)
+  )
+    return null
+  const referenced = (references) => {
+    const ids = Array.isArray(references)
+      ? references
+      : String(references ?? '')
+          .split(/\s+/)
+          .filter(Boolean)
+    return ids
+      .map((id) => {
+        const matches = findAll(document, (node) => node.properties?.id === id)
+        if (matches.length !== 1)
+          throw new Error(`${htmlURL}: SVG reference #${id} is missing or ambiguous`)
+        return textContent(matches[0]).trim()
+      })
+      .join(' ')
+  }
+  const childText = (tagName) =>
+    findAll(svg, (node) => node.tagName === tagName)
+      .map(textContent)
+      .join(' ')
+      .trim()
+  const name =
+    referenced(properties.ariaLabelledBy) ||
+    String(properties.ariaLabel ?? '').trim() ||
+    childText('title')
+  const description = referenced(properties.ariaDescribedBy) || childText('desc')
+  if (!description)
+    throw new Error(
+      `${htmlURL}: informative SVG needs a static equivalent in desc or aria-describedby; a title alone is insufficient`,
+    )
+  const labels = findAll(svg, (node) => node.tagName === 'text')
+    .map(textContent)
+    .filter((value) => value.trim())
+  return {
+    type: 'element',
+    tagName: 'p',
+    properties: properties.id ? { id: properties.id } : {},
+    children: [{ type: 'text', value: [name, description, ...labels].filter(Boolean).join(' — ') }],
+  }
+}
+
 export async function convertPage(html, htmlURL) {
   const document = parseHTML(html)
   const title = textContent(
@@ -93,11 +141,15 @@ export async function convertPage(html, htmlURL) {
     if (!node.children) return
     node.children = (node.children ?? []).flatMap((child) => {
       if (
-        ['script', 'style', 'noscript', 'button', 'svg'].includes(child.tagName) ||
+        ['script', 'style', 'noscript', 'button'].includes(child.tagName) ||
         child.properties?.dataMarkdownExclude !== undefined ||
         hasClass(child, 'giscus')
       )
         return []
+      if (child.tagName === 'svg') {
+        child = svgTextFallback(child, document, htmlURL)
+        if (!child) return []
+      }
       clean(child)
       for (const key of ['href', 'src']) {
         if (typeof child.properties?.[key] === 'string') {

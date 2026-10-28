@@ -64,10 +64,10 @@ test('content includes taxonomy aside, links, anchors, GFM tables/footnotes, and
   )
   const { markdown } = await convertPage(html, 'https://guog.github.io/blog/')
   assert.match(markdown, /CI\/CD/)
-  assert.match(markdown, /https:\/\/guog.github.io\/tags\/CI\/CD\//)
+  assert.match(markdown, /https:\/\/guog\.github\.io\/tags\/CI\/CD\//)
   assert.match(markdown, /<a id="category-技术"><\/a>/)
   assert.equal(findAll(parseMD(markdown), (node) => node.type === 'table').length, 1)
-  assert.match(markdown, /!\[图\]\(https:\/\/guog.github.io\/favicon.svg\)/)
+  assert.match(markdown, /!\[图\]\(https:\/\/guog\.github\.io\/favicon\.svg\)/)
   assert.doesNotMatch(markdown, /PrivatePromptSentinel|Comments/)
 })
 
@@ -103,7 +103,7 @@ test('prompt quotes current page and verified attribution without inventing an u
   }
   const prompt = readingPrompt('nested/post', data)
   assert.match(prompt, /原作者：Verified Name；译者：未注明/)
-  assert.match(prompt, /https:\/\/guog.github.io\/blog\/nested\/post\/index.md/)
+  assert.match(prompt, /https:\/\/guog\.github\.io\/blog\/nested\/post\/index\.md/)
   assert.match(prompt, /只能|只读到部分内容/)
 })
 
@@ -152,4 +152,32 @@ test('plain pre/code from a rendered component preserves its terminal newline an
   const code = findAll(parseMD(markdown), (node) => node.type === 'code')[0]
   assert.equal(code.value, 'const answer = 42;\n')
   assert.equal(code.lang, 'javascript')
+})
+
+test('informative SVG keeps its static title, description and labels while explicit decoration disappears', async () => {
+  const html = page(
+    '<h1>Diagram</h1><svg role="img" aria-labelledby="flow-title" aria-describedby="flow-desc"><title id="flow-title">交付闭环</title><desc id="flow-desc">计划经构建和验证后回到反馈，失败返回构建。</desc><text>计划 → 构建 → 验证 → 反馈</text></svg><svg aria-hidden="true"><title>DecorativeIconSentinel</title><path d="M0 0"/></svg>',
+  )
+  const { markdown } = await convertPage(html, 'https://guog.github.io/blog/diagram/')
+  assert.match(markdown, /交付闭环/)
+  assert.match(markdown, /计划经构建和验证后回到反馈，失败返回构建。/)
+  assert.match(markdown, /计划 → 构建 → 验证 → 反馈/)
+  assert.doesNotMatch(markdown, /DecorativeIconSentinel/)
+})
+
+test('informative SVG without a trustworthy description fails instead of silently disappearing', async () => {
+  for (const svg of [
+    '<svg role="img"><title>Only a title</title><path d="M0 0"/></svg>',
+    '<svg><text>42</text></svg>',
+    '<svg aria-describedby="missing"><title>T</title><desc>D</desc></svg>',
+  ])
+    await assert.rejects(
+      convertPage(page(`<h1>Diagram</h1>${svg}`), 'https://guog.github.io/blog/diagram/'),
+      /SVG/,
+    )
+  const { markdown } = await convertPage(
+    page('<h1>Diagram</h1><svg role="presentation"><path d="M0 0"/></svg>'),
+    'https://guog.github.io/blog/diagram/',
+  )
+  assert.match(markdown, /Diagram/)
 })

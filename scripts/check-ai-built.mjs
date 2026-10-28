@@ -161,6 +161,26 @@ export async function checkAIBuilt({ root = process.cwd(), dist = path.join(root
     const legacy = JSON.parse(
       await readFile(new URL('../tests/fixtures/legacy-headings.json', import.meta.url), 'utf8'),
     )
+    if (route === '/blog/the-ai-native-sdlc-playbook/') {
+      for (const [first, second] of [
+        ['需求和设计', '变化-1'],
+        ['把-claude-code-的计划模式plan作为默认开端', '变化-2'],
+      ]) {
+        const wrong = structuredClone(
+          findAll(htmlTree, (node) => node.properties?.dataArticleBody !== undefined)[0],
+        )
+        const a = findAll(wrong, (node) => node.properties?.id === first)[0]
+        const b = findAll(wrong, (node) => node.properties?.id === second)[0]
+        assert.ok(a && b, 'Actual collision regression targets must exist')
+        a.properties.id = second
+        b.properties.id = first
+        assert.throws(
+          () => assertLegacyHeadings(wrong, legacy[route]),
+          /Legacy/,
+          `Actual legacy ID swap was accepted: ${first} / ${second}`,
+        )
+      }
+    }
     if (legacy[route])
       assertLegacyHeadings(
         findAll(htmlTree, (node) => node.properties?.dataArticleBody !== undefined)[0],

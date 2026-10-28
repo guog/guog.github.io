@@ -41,3 +41,11 @@
 Schema.org 词汇按官方定义核对，JSON-LD 的 URL、角色、日期和可见来源逐字段验证。尝试访问外部 Schema Markup Validator 时，执行器直接请求遇到 DNS EAI_AGAIN，经代理请求返回 HTTP 403；未实际向其提交验证，不声称外部验证器通过。后续可在该服务可访问的环境粘贴 JSON-LD 复核；缺少未知译者不作为造假补字段的理由。
 
 首期远程 [Site #40631096524](https://github.com/guog/guog.github.io/actions/runs/40631096524) 全部校验通过，使用锁定 Chromium；部署、发布均跳过。对应 artifact 为 `browser-evidence-40631096524-1`。增强 PR 的最终 SHA、CI 和截图以其 PR Checks 为准。
+
+## 独立审阅后的保真修复
+
+正文 SVG 不再无差别删除。只有明确声明 `aria-hidden=true` 或 `role=none/presentation` 的装饰图标被排除；有信息的 SVG 使用 title/aria-label/aria-labelledby、desc/aria-describedby 及可见 text 生成静态文字。缺少完整描述、引用缺失或歧义均使构建失败，避免只保留图名却丢失图示含义。MDX 的“交付闭环”金样本独立写明标题、关系描述和标签，并由生产预览检查实际图示与导出文本。
+
+章节基线仍来自 d5a9084 的独立构建，补充层级、祖先 ID 链和完整章节文字的 SHA-256。正常 ID 还必须匹配原标题；明确的空别名锚点才允许标题变更，并核对祖先别名映射。真实“需求和设计/变化-1”和“把 Claude Code 的计划模式(plan)作为默认开端/变化-2”交换 ID 的负例接入生产产物检查，不能仅靠相同前 100 字通过。另检查长公共前缀、父级合法改名及段落包装的别名。
+
+修复后单元测试为 62 项通过；测试域名正则和文件扩展名中的点改为字面点。完整构建、浏览器和真实 Agent 阅读证据随本次修复更新，不使用单元测试替代 Agent 回答。

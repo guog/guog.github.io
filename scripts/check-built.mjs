@@ -110,9 +110,12 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
         'zh-CN',
       ),
     )
-    await check(`${route} title`, () =>
-      assert.equal(elements(document, (node) => node.tagName === 'title').length, 1),
-    )
+    await check(`${route} title`, () => {
+      const heads = elements(document, (node) => node.tagName === 'head')
+      assert.equal(heads.length, 1)
+      // An accessible SVG may legitimately have its own title in the body.
+      assert.equal(elements(heads[0], (node) => node.tagName === 'title').length, 1)
+    })
     await check(`${route} H1`, () =>
       // The compact homepage intentionally starts with an introduction and an H2.
       assert.equal(
