@@ -62,3 +62,30 @@ const unusuallyLongLine = "这是用于验证横向滚动的中文代码示例�
 ## 总结
 
 仙人掌回归测试包含可检查的代码、图片、标题和中文搜索内容。
+
+## 原样空白
+
+<Code code={'42 starts here  \n\tif (a < b && c > 1) {\n\n\n  console.log("```", "&");\n}\n\n'} lang="typescript" title="whitespace.ts" />
+
+脚注测试[^proof]。
+
+[^proof]: 这条脚注必须保留。
+
+```typescript title="source-whitespace.ts"
+42 starts here
+	if (a < b && c > 1) {
+
+
+  console.log("```", "&");
+}
+
+
+```
+
+## 静态图示
+
+<svg role="img" aria-labelledby="flow-title" aria-describedby="flow-description" viewBox="0 0 600 100">
+  <title id="flow-title">交付闭环</title>
+  <desc id="flow-description">计划经构建和验证后回到反馈，失败返回构建。</desc>
+  <text x="10" y="50">计划 → 构建 → 验证 → 反馈</text>
+</svg>

@@ -1,0 +1,32 @@
+<script>
+  const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href
+  for (const heading of document.querySelectorAll<HTMLElement>(
+    '[data-article-body] :is(h2,h3,h4)[id]',
+  )) {
+    const controls = document.createElement('div')
+    controls.className =
+      'section-links not-prose -mt-3 mb-4 flex items-center gap-3 text-xs text-muted'
+    const link = document.createElement('a')
+    link.href = `${canonical}#${encodeURIComponent(heading.id)}`
+    link.textContent = 'Link'
+    link.setAttribute('aria-label', `Link to ${heading.textContent}`)
+    const button = document.createElement('button')
+    button.type = 'button'
+    button.textContent = 'Copy link'
+    button.setAttribute('aria-label', `Copy link to ${heading.textContent}`)
+    const status = document.createElement('span')
+    status.setAttribute('role', 'status')
+    button.addEventListener('click', async () => {
+      status.textContent = ''
+      try {
+        await navigator.clipboard.writeText(link.href)
+        status.textContent = 'Copied'
+      } catch {
+        status.textContent = 'Copy failed. Use the Link above.'
+        link.focus()
+      }
+    })
+    controls.append(link, button, status)
+    heading.after(controls)
+  }
+</script>

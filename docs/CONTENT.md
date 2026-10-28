@@ -124,3 +124,15 @@ MDX 中的表达式和导入必须可构建。代码样例中的花括号等语�
 6. 提交使用 `feat(content): ...` 或 `fix(content): ...`，发起 PR。CI 通过、人工审核并合并 `main` 后，由 GitHub Actions 验证和部署。
 
 `lint:content` 对所有文章检查 frontmatter，对比较基线以来新增或改动的文章检查正文结构。工作分支默认与 `main` 的共同祖先比较，`main` 默认与前一提交比较；CI 会提供相应基线。未跟踪的新文章也会检查。可以用 `npm run lint:content -- --base <git-ref>` 或 `CONTENT_BASE_REF` 指定比较基线，或用 `--all` 主动检查全部正文。它不能判断自然语言是否准确，也不会自动改写历史文章。完整命令与发布规则见 [贡献流程](CONTRIBUTING.md)。
+
+## 署名和机器阅读
+
+`contentKind` 默认为 `original`。原创可设置 `author`；未设置时沿用站点作者。译文必须设置 `contentKind: translation` 和 `source`，包含原作 `title`、HTTP/HTTPS `url`、`publishedDate`，以及核实后可填的 `author`。人员记录使用 `name`、可选 `type`（`Person` 或 `Organization`）和公开 `url`；译者使用独立的 `translator` 字段。未知身份省略，页面明确显示未注明，不推断译者是站点作者。原创不能声明译者或译作关系。
+
+原作日期与译文的 `pubDate`、`updatedDate` 各有含义，不互相替换。摘要向人可见，与 SEO 和 Markdown 导出共用 description；仅概括正文已有判断和限制。新增或修改描述不需要批量改写历史正文。
+
+构建为每个公开 HTML 页面生成 Markdown：目录 URL 使用 `index.md`，`/404.html` 使用 `/404.html.md`。代码、表格、脚注、图片说明及章节引用须保真。MDX 经 Astro 求值后导出，不公开 import、JSX 或表达式源码；客户端组件须提供有意义的静态文本，无法表达时停止构建。对话提示词、评论和复制控件不属于正文导出，也不进入 Pagefind 索引。
+
+文章 JSON-LD 读取相同署名与来源，不以构建时间补写更新时间。章节链接使用现有标题 ID；改标题前检查历史引用，必要时在新标题前保留旧 ID 别名。历史章节基线同时核对内容指向，不允许仅保留同名 ID 却移动到另一章节。正文编辑确需调整基线时，应在 PR 说明对应引用如何保持正确。
+
+正文内有信息的 SVG 须提供完整的静态等价说明，优先用 SVG `desc` 或 `aria-describedby`；`title`、`aria-label`、`aria-labelledby` 提供名称，可见 text 标签也会保留。仅有图名不足以表达图示，构建会要求补说明。明确的装饰 SVG 可使用 `aria-hidden=true` 或 `role=none/presentation`。不要把核心图示标为装饰来绕过内容保真检查。

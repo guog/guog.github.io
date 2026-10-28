@@ -13,6 +13,7 @@ const toc = generateToc(headings)
 ---
 
 <details
+  data-markdown-exclude
   open
   class='lg:sticky lg:top-12 lg:order-2 lg:-me-32 lg:basis-64'
 >
@@ -23,7 +24,10 @@ const toc = generateToc(headings)
   >
     <ol class='mt-4'>
       {toc.map((heading) => (
-        <TOCHeading heading={heading} />
+        <TOCHeading
+          heading={heading}
+          collapse={headings.length > 20}
+        />
       ))}
     </ol>
   </nav>

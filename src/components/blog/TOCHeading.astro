@@ -3,10 +3,12 @@ import type { TocItem } from '../../utils/generateToc'
 
 interface Props {
   heading: TocItem
+  collapse?: boolean
 }
 
 const {
   heading: { children, depth, slug, text },
+  collapse = false,
 } = Astro.props
 ---
 
@@ -24,10 +26,16 @@ const {
     {text}
   </a>
   {!!children.length && (
-    <ol>
-      {children.map((subheading) => (
-        <Astro.self heading={subheading} />
-      ))}
-    </ol>
+    <details open={!collapse}>
+      <summary class='mt-2 cursor-pointer text-xs text-muted'>Subsections</summary>
+      <ol>
+        {children.map((subheading) => (
+          <Astro.self
+            heading={subheading}
+            collapse={collapse}
+          />
+        ))}
+      </ol>
+    </details>
   )}
 </li>

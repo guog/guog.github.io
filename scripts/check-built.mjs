@@ -6,6 +6,7 @@ import { access, readdir, readFile, stat } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { parse } from 'parse5'
+import { checkAIBuilt } from './check-ai-built.mjs'
 import { articleFiles, parseArticle, walk } from './check-content.mjs'
 
 const SITE = 'https://guog.github.io'
@@ -109,9 +110,12 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
         'zh-CN',
       ),
     )
-    await check(`${route} title`, () =>
-      assert.equal(elements(document, (node) => node.tagName === 'title').length, 1),
-    )
+    await check(`${route} title`, () => {
+      const heads = elements(document, (node) => node.tagName === 'head')
+      assert.equal(heads.length, 1)
+      // An accessible SVG may legitimately have its own title in the body.
+      assert.equal(elements(heads[0], (node) => node.tagName === 'title').length, 1)
+    })
     await check(`${route} H1`, () =>
       // The compact homepage intentionally starts with an introduction and an H2.
       assert.equal(
@@ -221,6 +225,8 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
       )
     })
   }
+
+  await check('All-page Markdown, llms.txt and source fidelity', () => checkAIBuilt({ root, dist }))
 
   await check('Favicon asset formats and manifest', async () => {
     const dimensions = async (filename, size) => {

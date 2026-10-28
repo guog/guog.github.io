@@ -1,0 +1,1417 @@
+{
+  "/blog/modern-se/": [
+    {
+      "id": "一先看全局一次变更要留下什么证据",
+      "text": "一、先看全局：一次变更要留下什么证据",
+      "depth": 2,
+      "ancestors": [],
+      "following": "现代软件工程可以理解为一条 可追踪的变更链 ，并且在发布后形成反馈闭环： 需求 Issue → 方案（按需）→ 代码分支与 Pull Request（PR，拉取请求）→ 评审和自动化检查 → 受控构建",
+      "contentHash": "e8feb47a2060111fab7b890ce265cca5e07933dbfbc33ef4b175714ba06aa67f"
+    },
+    {
+      "id": "二需求如何进入研发issuerfc-与设计决策",
+      "text": "二、需求如何进入研发：Issue、RFC 与设计决策",
+      "depth": 2,
+      "ancestors": [],
+      "following": "我们以“新增异步报表导出”为例。如果只留下“报表导出太慢”一句话，开发者无法判断数据量、权限、超时处理和验收条件。**Issue（议题或工作事项）**则把问题转化为可讨论、可追踪的工作对象：说明背景、",
+      "contentHash": "e3890a88a391b50fe217894bd43df7f9bd87d1c3dac88d50096398eba835cfee"
+    },
+    {
+      "id": "三代码如何安全进入主干github-flow-与-pull-request",
+      "text": "三、代码如何安全进入主干：GitHub Flow 与 Pull Request",
+      "depth": 2,
+      "ancestors": [],
+      "following": "有了明确的需求，下一步不是让所有人直接向 main 提交修改，而是把一次变更组织成可以独立审查的单元。 GitHub Flow 是 GitHub 官方推荐的轻量、基于分支的协作工作流：从稳定主干创建短",
+      "contentHash": "761b9a953b7423a72779023e448ad6a5bc6907e401e94778e607fff0709f01e3"
+    },
+    {
+      "id": "四如何尽早发现问题质量门禁与持续集成",
+      "text": "四、如何尽早发现问题：质量门禁与持续集成",
+      "depth": 2,
+      "ancestors": [],
+      "following": "代码进入主干之前，团队需要一种可重复的证据，说明变更至少满足规定的基础质量要求。**持续集成（Continuous Integration，CI）**强调频繁集成，并在每次有意义的变更后尽快得到自动反",
+      "contentHash": "1e1d7af7d9517e2d652dec674746c7d6781ac69e7d09333032b1eba8ebe3762f"
+    },
+    {
+      "id": "五如何让环境不再依赖个人从雪花机器到可复现构建",
+      "text": "五、如何让环境不再依赖个人：从雪花机器到可复现构建",
+      "depth": 2,
+      "ancestors": [],
+      "following": "假设异步导出功能在开发者电脑上通过，却只能在一台经过多年手工配置的编译机上打包。机器损坏后，团队找不到完整安装步骤和依赖版本。这种“只有这一台能工作”的环境常被称为 雪花服务器（Snowflake S",
+      "contentHash": "d52425e500dde640fffdc02c3e123cc6ce89b2ef3baf07a8e4710563c58a6b1c"
+    },
+    {
+      "id": "六如何知道交付了什么依赖制品与供应链",
+      "text": "六、如何知道交付了什么：依赖、制品与供应链",
+      "depth": 2,
+      "ancestors": [],
+      "following": "源代码只是交付的起点。真正安装到用户环境中的可能是压缩包、二进制程序、NuGet 包、容器镜像或离线安装介质。即使能找到某个 Git 提交，如果不知道构建工具版本、依赖来源和制品哈希，也不一定能还原现",
+      "contentHash": "2108e9bb92500b1111abe38385051366bda8ce10d314508c3d46447e83ba8419"
+    },
+    {
+      "id": "七如何把制品变成可控发布版本启用与恢复",
+      "text": "七、如何把制品变成可控发布：版本、启用与恢复",
+      "depth": 2,
+      "ancestors": [],
+      "following": "完成构建还不是完成发布。**Tag（标签）**用于在 Git 中标记特定代码状态；**Release（发布）**对应一次面向用户或下游团队的交付；**Changelog（变更日志）**与 **Rele",
+      "contentHash": "316fe041f6c7f95303f0fe4094aa1c633d14f9f60902d83cf0dca085b48a059e"
+    },
+    {
+      "id": "八如何让交付形成闭环从-sentry-到下一次-issue",
+      "text": "八、如何让交付形成闭环：从 Sentry 到下一次 Issue",
+      "depth": 2,
+      "ancestors": [],
+      "following": "很多交付过程以“安装成功”结束，但软件真正的问题常在真实使用中出现。我们需要把 发布 → 异常发现 → 定位 → 工作事项 → 修复 PR → 再发布 连接起来，才能判断上一次改动是否达到了预期。 以",
+      "contentHash": "d7a69503eb5f37d85d3028b7bdf86ff4f2472fae1553bc5824e841138c10c949"
+    },
+    {
+      "id": "九如何判断改进是否有效指标要对应真实交付",
+      "text": "九、如何判断改进是否有效：指标要对应真实交付",
+      "depth": 2,
+      "ancestors": [],
+      "following": "只有需求、PR、自动化检查、制品、发布和运行记录相互连接，团队才具备度量工程表现的基础。否则，单纯统计提交数、代码行数或 AI 生成量，容易把活动量当成成果。 软件交付吞吐与稳定性的五项度量 DORA",
+      "contentHash": "cb62b047fc03121c857ce79063f907ce8852303313b3fcd916e7915c068e21f7"
+    },
+    {
+      "id": "十工程接口如何支持-ai-agentcliskills-与-mcp",
+      "text": "十、工程接口如何支持 AI Agent：CLI、Skills 与 MCP",
+      "depth": 2,
+      "ancestors": [],
+      "following": "前述能力不仅需要人能通过网页操作，还需要流水线与自动化程序可靠调用。这里涉及三个应当分清的层次： 执行接口、使用约定、工具连接协议 。 命令行、Skills 与 MCP 在工程工具链中的位置 **CL",
+      "contentHash": "7ca705ca8e35574ce809d10fed2cbc7aa1806af798d4d7d8d0b02e415d818de1"
+    },
+    {
+      "id": "结语真正先进的是一条能够闭合的证据链",
+      "text": "结语：真正先进的是一条能够闭合的证据链",
+      "depth": 2,
+      "ancestors": [],
+      "following": "回看“报表异步导出”的全过程：Issue 说清需求，复杂设计通过文档 PR 形成共识；短分支和 PR 管理代码变更；自动化检查尽早暴露问题；受控环境产生可追溯制品；发布记录说明交付了哪个版本；运行反馈",
+      "contentHash": "7b4720699c8039f7771fd494e65432241e77b17858294fdd672450ec5ee0d92d"
+    },
+    {
+      "id": "附录一常用术语速查",
+      "text": "附录一：常用术语速查",
+      "depth": 2,
+      "ancestors": [],
+      "following": "本附录用于首次接触相关术语时快速查阅；部分名称是产品或工作方式，而不是需要机械展开的缩写。 Issue ：问题、需求或任务的协作记录。 RFC（Request for Comments） ：征求意见提",
+      "contentHash": "b991adc84a01dd50021b4e18140fb006d237c4643a4645a2c92bf7686e0a086c"
+    },
+    {
+      "id": "附录二工具索引按工程职责而不是按流行程度",
+      "text": "附录二：工具索引——按工程职责，而不是按流行程度",
+      "depth": 2,
+      "ancestors": [],
+      "following": "正文有意只讲工具所承担的工作，详细产品集中放在这里。 本索引是进一步学习的入口，不是建议在一个项目中同时部署下列所有工具。 产品有不同版本和授权方式；“支持商用”“可自托管”“开源核心”是不同维度，尤",
+      "contentHash": "d0b8e5cec25e92db463b403480e13857b15d53e7967fac35632dc698e4bf2581"
+    },
+    {
+      "id": "需求版本控制与变更协作",
+      "text": "需求、版本控制与变更协作",
+      "depth": 3,
+      "ancestors": [
+        "附录二工具索引按工程职责而不是按流行程度"
+      ],
+      "following": "Git ：管理代码和文档的提交、分支与历史。 GitHub ：提供仓库、Issue、PR、评审及相关自动化平台。 GitLab ：提供仓库、Issue、MR、CI/CD 和包管理等协作能力。 Azur",
+      "contentHash": "255d96ba6f27579b298a2cde3f112997ff94e1d64b23fee97bc233aa576df0d7"
+    },
+    {
+      "id": "质量反馈与自动化验证",
+      "text": "质量反馈与自动化验证",
+      "depth": 3,
+      "ancestors": [
+        "附录二工具索引按工程职责而不是按流行程度"
+      ],
+      "following": "GitHub Actions ：响应 GitHub 事件执行构建、测试与交付工作流。 GitLab CI/CD ：GitLab 的持续集成和持续交付系统。 Azure Pipelines ：多平台构建",
+      "contentHash": "f82d2a697367f71ae3094b5ae2b5ab0ee44588b553029c9bda4ad07dc554c91b"
+    },
+    {
+      "id": "开发构建与基础设施",
+      "text": "开发、构建与基础设施",
+      "depth": 3,
+      "ancestors": [
+        "附录二工具索引按工程职责而不是按流行程度"
+      ],
+      "following": "Docker ：构建、分发与运行容器镜像。 Docker Compose ：声明多服务应用的本地或验证环境。 Dev Containers ：使用开放规范描述标准化开发环境。 PostgreSQL ：",
+      "contentHash": "f8dd9fe57dc06a9d9cda8ea6b6420e461837a69b96c85d21aee586f8162beaaf"
+    },
+    {
+      "id": "软件包镜像与存储",
+      "text": "软件包、镜像与存储",
+      "depth": 3,
+      "ancestors": [
+        "附录二工具索引按工程职责而不是按流行程度"
+      ],
+      "following": "npm / pnpm / NuGet ：分别承担常见 JavaScript 与 .NET 生态的依赖和软件包管理。 GitHub Packages ：与 GitHub 仓库及权限体系集成的软件包服务。",
+      "contentHash": "345cb5472ae27e6c09f4b001d5de42358e605a77e28a767c998c243c3b3db531"
+    },
+    {
+      "id": "发布与运行反馈",
+      "text": "发布与运行反馈",
+      "depth": 3,
+      "ancestors": [
+        "附录二工具索引按工程职责而不是按流行程度"
+      ],
+      "following": "Unleash ：通过功能开关管理渐进式开放；不同发布形态的许可证存在差异。 Argo CD ：在 Kubernetes 上按 GitOps 管理声明式交付；Apache-2.0。 Sentry ：应",
+      "contentHash": "4d980982a68d0e310b704b9df6299829d44a4ef5466c8eae39d925ca6b8ccc10"
+    },
+    {
+      "id": "ai-agent-的工程接口与公开技能",
+      "text": "AI Agent 的工程接口与公开技能",
+      "depth": 3,
+      "ancestors": [
+        "附录二工具索引按工程职责而不是按流行程度"
+      ],
+      "following": "GitHub MCP Server / GitLab MCP ：供兼容 AI 应用调用代码托管平台能力的工具接口。 Agent Skills 规范 ：规定 SKILL.md 与相关资源的开放格式。 A",
+      "contentHash": "f7a09f0987ad2fc8f20270a2b0aff53320b813925bc8f3fae623226cc1b30cb8"
+    },
+    {
+      "id": "附录三社区规范与工程约定",
+      "text": "附录三：社区规范与工程约定",
+      "depth": 2,
+      "ancestors": [],
+      "following": "下列规范用于帮助团队建立可理解、可协作的约定， 并不是要求一次性全部采用 。 Conventional Branch ：一种社区约定式分支命名建议，并非 Git 官方强制标准。 Conventiona",
+      "contentHash": "f094ea4e136c646718e10d0c75a0584cdc295349b21dcd5569b2348b67be8521"
+    },
+    {
+      "id": "主要参考资料",
+      "text": "主要参考资料",
+      "depth": 2,
+      "ancestors": [],
+      "following": "GitHub 官方中文：GitHub Flow ； GitHub 官方中文：Issues ； GitHub 官方中文：Pull Requests 。 Git 官方：git-worktree ； Rus",
+      "contentHash": "eb7ce3a619c8cc906f1c27133f10ea61d848dcdc849c0529363303ed98090af0"
+    }
+  ],
+  "/blog/markdown-101/": [
+    {
+      "id": "一markdown-为什么诞生让纯文本本身也值得阅读",
+      "text": "一、Markdown 为什么诞生：让纯文本本身也值得阅读",
+      "depth": 2,
+      "ancestors": [],
+      "following": "Markdown 由 John Gruber 在 2004 年发布，Aaron Swartz 参与了早期设计与反馈。它的出发点不是开发一个复杂的文档软件，而是让人以易读、易写的纯文本进行创作，并能够将",
+      "contentHash": "281cead031c2e2b58bc1ab8319382e9cec205887c8ff07e404daa077d6071b30"
+    },
+    {
+      "id": "二只掌握少量语法就能阅读大多数工程文档",
+      "text": "二、只掌握少量语法，就能阅读大多数工程文档",
+      "depth": 2,
+      "ancestors": [],
+      "following": "Markdown 的优势在于“够用而简单”。下面先展示源码，再展示人阅读时看到的结果。标题是例外：为避免混淆本文的章节层级，仅展示其源码。 # 一级标题 ## 二级标题 ### 三级标题 源码： 请先",
+      "contentHash": "8ea0488f5a416ae221f94ec8e9109d95479dbc846748b7a34092bfdfb5c3e05b"
+    },
+    {
+      "id": "标题通过井号表达层级",
+      "text": "标题：通过井号表达层级",
+      "depth": 3,
+      "ancestors": [
+        "二只掌握少量语法就能阅读大多数工程文档"
+      ],
+      "following": "# 一级标题 ## 二级标题 ### 三级标题",
+      "contentHash": "6bcd82f6cde7313fd75d2c3a155681da510a7bb070b78fc8f656ef9a2aa4ac8e"
+    },
+    {
+      "id": "强调列表与链接",
+      "text": "强调、列表与链接",
+      "depth": 3,
+      "ancestors": [
+        "二只掌握少量语法就能阅读大多数工程文档"
+      ],
+      "following": "源码： 请先完成 **权限检查**，再允许导出。 - 澄清需求边界 - 记录验收条件 - 包括异常情况 阅读 [GitHub 官方 Markdown 指南](https://docs.github.c",
+      "contentHash": "5ce7970b5abb525f5dee79449c53a66eb3260327cbc924597ebc6ed3b0fefdc7"
+    },
+    {
+      "id": "引用与行内代码",
+      "text": "引用与行内代码",
+      "depth": 3,
+      "ancestors": [
+        "二只掌握少量语法就能阅读大多数工程文档"
+      ],
+      "following": "源码： > 设计被接受，不等于功能已经交付。 使用 `git worktree` 可以并行管理本地工作目录。 渲染效果： 设计被接受，不等于功能已经交付。 使用 git worktree 可以并行管理",
+      "contentHash": "5ae9d11a27ae3cb9bd826956dcafd6be154fbd3ee5d89e54dbaaf397551074d9"
+    },
+    {
+      "id": "任务清单",
+      "text": "任务清单",
+      "depth": 3,
+      "ancestors": [
+        "二只掌握少量语法就能阅读大多数工程文档"
+      ],
+      "following": "源码： - [x] 需求已澄清 - [x] 方案已评审 - [ ] 集成测试已通过 渲染效果（在支持任务清单的阅读器中显示为复选框）： 需求已澄清 方案已评审 集成测试已通过",
+      "contentHash": "da1c8a83cd2c9e0a3df5fbec7ca89c5e94b5086f0937dc1bdea9a89306a8cdf8"
+    },
+    {
+      "id": "代码块",
+      "text": "代码块",
+      "depth": 3,
+      "ancestors": [
+        "二只掌握少量语法就能阅读大多数工程文档"
+      ],
+      "following": "源码（下面特意用 text 标记外层，展示三个反引号）： ```json {\"status\":\"ready\",\"version\":\"1.2.0\"} ``` 渲染效果： {\"status\":\"ready",
+      "contentHash": "655332007cadab92d8c081546cd155734f33279d2c43e5db3a8ac5170c9246c1"
+    },
+    {
+      "id": "三在-ai-之前markdown-已经贯穿一次软件变更",
+      "text": "三、在 AI 之前：Markdown 已经贯穿一次软件变更",
+      "depth": 2,
+      "ancestors": [],
+      "following": "只把 Markdown 理解为“写 README 的格式”，会低估它在工程协作中的作用。以“为报表增加异步导出”为例，一次变更可能在不同时间产生多个 Markdown 对象。 它们并非五套独立文档，而",
+      "contentHash": "2ffae927aa09af7bcc3cc3fe4368209635fa6ffc9e80e0e5562e67214fa0febc"
+    },
+    {
+      "id": "从-readme-到-issue先让目标有共同语境",
+      "text": "从 README 到 Issue：先让目标有共同语境",
+      "depth": 3,
+      "ancestors": [
+        "三在-ai-之前markdown-已经贯穿一次软件变更"
+      ],
+      "following": "README.md 帮助后来者理解项目的作用、环境和最基本的工作入口，例如： # 报表服务 提供报表查询与导出能力。 - 开发环境：参见 `docs/development.md` - 验证方法：参见",
+      "contentHash": "8158852a6235c91a523dd76ac6667ad96218d6e880cc889a87682e04b7e7e186"
+    },
+    {
+      "id": "从-rfc-到-adr让方案和决策可以被评审",
+      "text": "从 RFC 到 ADR：让方案和决策可以被评审",
+      "depth": 3,
+      "ancestors": [
+        "三在-ai-之前markdown-已经贯穿一次软件变更"
+      ],
+      "following": "对于简单功能，Issue 澄清后可以直接实现；但如果报表异步导出会影响任务队列、数据库结构和错误处理，就值得先评审设计。 **RFC（Request for Comments，征求意见提案）**帮助讨",
+      "contentHash": "45665ce898b443ae5aba2a9790c553e0a57bdfe4858b7e190e1147c91d13ce0e"
+    },
+    {
+      "id": "从-pr-到版本记录让实现与原始目标相连",
+      "text": "从 PR 到版本记录：让实现与原始目标相连",
+      "depth": 3,
+      "ancestors": [
+        "三在-ai-之前markdown-已经贯穿一次软件变更"
+      ],
+      "following": "实现完成后，PR 的 Markdown 描述应当帮助评审者把代码变更与前面的目标对应起来： ## 关联工作 Closes #128 ## 变更摘要 - 增加异步导出任务 - 增加权限验证与失败状态 #",
+      "contentHash": "3d3040be6af32036b94e7e713c52c9a215967119efbfa30e0fc57aa0584198dd"
+    },
+    {
+      "id": "四进入-ai-时代markdown-成为可持久化的工作上下文",
+      "text": "四、进入 AI 时代：Markdown 成为可持久化的工作上下文",
+      "depth": 2,
+      "ancestors": [],
+      "following": "AI 编程助手需要的不只是当前一句提示，还包括仓库结构、可修改范围、验证方式和团队约定。把这些信息保存在 Markdown 中，具备两个直接收益： 人和 Agent 可以读取同一份约定；约定的变更可以",
+      "contentHash": "da9b9122baf4f5837e3b8a2e7f8e0950396c6da6afc0b4f549831b482faccf2e"
+    },
+    {
+      "id": "五从文档走向源码哪些变化是真正新的",
+      "text": "五、从文档走向源码：哪些变化是真正新的",
+      "depth": 2,
+      "ancestors": [],
+      "following": "过去，Markdown 往往被看作代码旁边的说明材料；在 AI Agent 参与开发时，出现了一种更进一步的实践： 把描述业务意图、边界和验收条件的 Markdown 当作持续维护的工程输入，让实现和",
+      "contentHash": "0aff35c19ad79ee52a8b1686d7e8c243573d904502df2ea789df45cb40c7703c"
+    },
+    {
+      "id": "六边界与结论一套通用表达不是万能规范",
+      "text": "六、边界与结论：一套通用表达，不是万能规范",
+      "depth": 2,
+      "ancestors": [],
+      "following": "Markdown 最适合的是需要人理解、讨论和持续修订的内容：项目入口、需求说明、设计决定、PR 描述、知识沉淀、Agent 指令。对于严格结构、类型验证或程序间通信，JSON（JavaScript ",
+      "contentHash": "0605f09938bd5f01ba55e43938bd2f0b1e86d5b9c64d72f9504d6b70b211edbf"
+    },
+    {
+      "id": "参考规范与真实项目",
+      "text": "参考规范与真实项目",
+      "depth": 2,
+      "ancestors": [],
+      "following": "以下资料优先选择原始规范与官方文档。正文示例均为本文编写的精简模板，不冒充项目原始内容。 Markdown — 原始发布说明 ：设计动机与基本语法。 CommonMark ：基础 Markdown 的",
+      "contentHash": "19e1466209e1e1fda9933737189c54e3127cee871d51967d9d0df0f1007b50dd"
+    }
+  ],
+  "/blog/the-ai-native-sdlc-playbook/": [
+    {
+      "id": "代码已不是瓶颈",
+      "text": "代码已不是瓶颈",
+      "depth": 2,
+      "ancestors": [],
+      "following": "如今，各个团队已经开始使用 AI 来编写代码，速度比一年前快了很多。不过，围绕代码相关的工作流程并没有加快。 很多团队仍沿用过去的审批、评审、交接和管理政策。这些流程跟不上 Claude Code 等",
+      "contentHash": "dcbd1020ac6d026ce0edc57d804daf9746062ef99c26aa79f361b7ee990984d7"
+    },
+    {
+      "id": "什么是-ai-nativeai-原生-sdlc",
+      "text": "什么是 AI-Native(AI 原生) SDLC",
+      "depth": 2,
+      "ancestors": [],
+      "following": "AI-Native SDLC 在保留控制目标的同时改变执行方式。流程从线性接力变为循环，AI 进入每个环节，并自动交接、触发后续工作。它也常被称为“Agentic SDLC”“AI SDLC”或“Ag",
+      "contentHash": "ffaed4a5515cfacb2d2b85cb6b0a817ae564664e42c8afe9cd15c8be896658e8"
+    },
+    {
+      "id": "ai-nativeai-原生-sdlc-六阶段的变化",
+      "text": "AI-Native(AI 原生) SDLC 六阶段的变化",
+      "depth": 3,
+      "ancestors": [
+        "什么是-ai-nativeai-原生-sdlc"
+      ],
+      "following": "下表对比传统 SDLC 与 AI 原生 SDLC。多数团队会处在两者之间。 阶段 传统 AI-Native 计划(Plan) 由委员会收集的需求信息，经过研讨会和审批流程后整理归纳，然后手工撰写成文。",
+      "contentHash": "ca9fa3025cad2213c4515d82df087ca2b669002faeaa46505f9702d8880355ba"
+    },
+    {
+      "id": "实践",
+      "text": "实践",
+      "depth": 2,
+      "ancestors": [],
+      "following": "“场景”是本文的核心，按六个非线性的阶段：计划(Plan)、设计(Design)、构建(Build)、测试(Test)、部署(Deploy)、运维(Maintain)，覆盖完整软件开发生命周期。 每个",
+      "contentHash": "fe4743231934058e2993536cab50933c71bf48b68dbb098f58dda63c11739dc8"
+    },
+    {
+      "id": "01-规划-plan",
+      "text": "01 规划 Plan",
+      "depth": 2,
+      "ancestors": [],
+      "following": "创意不需要再等着人编写。意图一次性捕获，以发起者自己的方式表述，作为一个版本化的工件，供下一阶段操作。 传统方式下，创意要经过层层转述和会议才能形成文档，耗时且信息失真。 AI-Native 方式下，",
+      "contentHash": "683c6b905ce7b6c14b681f2b08972365132e99963d1a367e8a5e449d4825b0e3"
+    },
+    {
+      "id": "将意图转为-intentmd-文件",
+      "text": "将意图转为 intent.md 文件",
+      "depth": 3,
+      "ancestors": [
+        "01-规划-plan"
+      ],
+      "following": "传统方式下，创意要经过层层转述和会议才能形成文档，耗时且信息失真。 AI-Native 方式下，发起者直接与 Claude 交互，产出受版本控制的 intent.md 。后续的设计、构建环节可直接读取",
+      "contentHash": "bb1fc45a6c8c26b2351e22fbc417f2750b8a5e2550e4a27c8735bbd6b1b84510"
+    },
+    {
+      "id": "变化",
+      "text": "变化",
+      "depth": 4,
+      "ancestors": [
+        "01-规划-plan",
+        "将意图转为-intentmd-文件"
+      ],
+      "following": "启动开发的 intent.md 可能有多种来源：人的想法、工单、或者告警暴露的事故(参见: 阶段 06 运维)。 当某个人有了创意，他会和 Claude 一起头脑风暴，生成一份 Markdown 格式",
+      "contentHash": "3b3c61427e738658052f7e1596f0239fa9527d6adaddc2863679c1c2c2dbc142"
+    },
+    {
+      "id": "起步",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "01-规划-plan",
+        "将意图转为-intentmd-文件"
+      ],
+      "following": "先决条件(Prerequisites) 无。 基础设施(Infrastructure) 为非工程师用户提供的 Claude 访问方式（ claude.ai 或 Cowork ）； 一个统一的 inte",
+      "contentHash": "2aa8bdf3715831feef4c6f67ed48c031e947ac5b81dbddb33cb21edfa017e00f"
+    },
+    {
+      "id": "执行",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "01-规划-plan",
+        "将意图转为-intentmd-文件"
+      ],
+      "following": "提出者用自己的话向 Claude 描述问题：现在做不了什么、影响谁、理想状态是什么、哪些不在考虑范围。无需正式格式。 继续讨论，直到想法足够具体。Claude 会追问范围、用户、约束和成功标准。 让 ",
+      "contentHash": "aabab88bbb5bf86ab8a504ebe4e1e78bc357bbf93d2b8df33fece727d4a1e6f3"
+    },
+    {
+      "id": "intentmd-示例",
+      "text": "intent.md 示例",
+      "depth": 4,
+      "ancestors": [
+        "01-规划-plan",
+        "将意图转为-intentmd-文件"
+      ],
+      "following": "# Intent：理赔状态自助服务 作者：J. Ortiz（理赔运营） 状态：草稿 ## 问题 客户致电联络中心询问他们的理赔进展。 客服人员大约三分之一的通话时间用于处理仅查询状态的请求。 ## 提",
+      "contentHash": "722cb843cf28f14bd058037276392f0791518a60935eadede5adf493499e97f6"
+    },
+    {
+      "id": "治理",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "01-规划-plan",
+        "将意图转为-intentmd-文件"
+      ],
+      "following": "证据就是提交的 intent.md ，包含作者、时间戳和完整修订历史，记录在意图仓库的 git 历史中。产品负责人审批，接受或拒绝的决定（即进入阶段 2：设计）以合并或关闭评审的形式留存。",
+      "contentHash": "1f0b3b07bcfeaefdce3c02306ac7d37d13666ea164deb763db0fca8f501e9483"
+    },
+    {
+      "id": "度量",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "01-规划-plan",
+        "将意图转为-intentmd-文件"
+      ],
+      "following": "前置指标(Leading indicator) 从想法产生到形成可执行的 intent.md 文件所需的时间。 从首次会话到提交 intent.md 的时间，可从意图仓库的 Git 历史读取作者和时间",
+      "contentHash": "c3b213aa8ed664c2e036c3065f66b4827be03337a77570c0ddc49dfdb7deef87"
+    },
+    {
+      "id": "02-设计-design",
+      "text": "02 设计 Design",
+      "depth": 2,
+      "ancestors": [],
+      "following": "需求与设计整合为一次会议完成。策略在规格(spec)编写时即被应用，而不是在数周后的审查中才发现。 产品负责人批准后，Claude 基于 intent.md 生成需求与设计规格。规格受团队的 SKIL",
+      "contentHash": "b6d6c06aad4e467d24a6a89d802a61d79f153578ed678519ce81b2ec57d0cca1"
+    },
+    {
+      "id": "需求和设计",
+      "text": "需求和设计",
+      "depth": 3,
+      "ancestors": [
+        "02-设计-design"
+      ],
+      "following": "产品负责人批准后，Claude 基于 intent.md 生成需求与设计规格。规格受团队的 SKILL 约束，包括：品牌、安全、合规、用户体验等。 产品负责人审查规格，但不亲自写。目标是为工程团队产出",
+      "contentHash": "10257be60a6a04d8031d6a05bd406f23f640d792cde710f9c56ea8f5f2f05315"
+    },
+    {
+      "id": "变化-1",
+      "text": "变化",
+      "depth": 4,
+      "ancestors": [
+        "02-设计-design",
+        "需求和设计"
+      ],
+      "following": "产品负责人批准后，Claude 基于 intent.md 生成需求与设计规格。规格受团队的 SKILL 约束，包括：品牌、安全、合规、用户体验等。 产品负责人审查规格，但不亲自写。目标是为工程团队产出",
+      "contentHash": "f9f13ce368ae1598ca1b2668b9802d54c79ffd3574139779b5138c430495427b"
+    },
+    {
+      "id": "起步-1",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "02-设计-design",
+        "需求和设计"
+      ],
+      "following": "先决条件(Prerequisites) 编写一个 intent.md 文件，并将品牌、安全、合规和用户体验策略编写为 SKILL。 基础设施(Infrastructure) 一名拥有 Claude 访",
+      "contentHash": "c700d106dd046911842ad289a719a9269160daf049e56ee922b3e2d25a801519"
+    },
+    {
+      "id": "执行-1",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "02-设计-design",
+        "需求和设计"
+      ],
+      "following": "产品负责人启动会话，加载组织 SKILL，附上 intent.md 。 产品负责人的提示词指向 intent.md ，明确约束，并要求标记关注点。 先手动操作，然后将其固化为组织级别的“/“命令。 之",
+      "contentHash": "2a34f882833d8a6f2a48ebccab98c72b205e6cf7663cd6a74861c1459cd9b419"
+    },
+    {
+      "id": "提示词示例",
+      "text": "提示词示例",
+      "depth": 4,
+      "ancestors": [
+        "02-设计-design",
+        "需求和设计"
+      ],
+      "following": "阅读所附的 intent.md，并生成一份将其集成到我们现有代码库中的需求与设计规范。 应用你可用的技能，使计划符合我们的品牌指南、安全策略和用户体验标准。 将规范完整记录为 spec.md，准备交给",
+      "contentHash": "e63e9de124560168b2a20dc0922721425c4355666ce1f792dbe4961c17772a55"
+    },
+    {
+      "id": "治理-1",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "02-设计-design",
+        "需求和设计"
+      ],
+      "following": "策略前置 ：合规要求不是在事后审查时才发现问题，而是在规范生成的同时自动应用。 可审计 ：规范、提示词、技能版本全部记录在版本控制中，形成完整的审计线索。 责任明确 ：产品负责人最终签批，并将需要关注",
+      "contentHash": "631041836d9fed84928379d7b839b521070b5ba6a81b45aef264e55a37539c09"
+    },
+    {
+      "id": "度量-1",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "02-设计-design",
+        "需求和设计"
+      ],
+      "following": "前置指标(Leading indicator) 从 intent.md 次提交到 spec.md 次提交之间所经过的时间，用于衡量同一变更所需的周期（两个 Git 时间戳）。 将其与旧的“需求加设计”",
+      "contentHash": "8162c2fcd61d5bab2a942f153dcea25ffda29680152a221f9718821020afe124"
+    },
+    {
+      "id": "03-构建-build",
+      "text": "03 构建 Build",
+      "depth": 2,
+      "ancestors": [],
+      "following": "先有计划 ：代码实施基于已批准的 plan.md 。 知识可执行 ：团队经验、架构决策和常见错误沉淀为 CLAUDE.md 与 Skills，供代理编码时读取。 护栏写进代码 ：用 Hooks、自动格",
+      "contentHash": "ce6efc990d0814c759248bfc8e9434f463ed7076c38e3420dd927e0a59eeb6fb"
+    },
+    {
+      "id": "把-claude-code-的计划模式plan作为默认开端",
+      "text": "把 Claude Code 的计划模式(plan)作为默认开端",
+      "depth": 3,
+      "ancestors": [
+        "03-构建-build"
+      ],
+      "following": "以 Claude Code 的计划模式(Plan)作为默认起点，OpenCode、Codex 等编码 Agent 中也有 plan 模式 开发工程师以 Plan 模式启动 Claude Code，把阶",
+      "contentHash": "7f47dcfddff56def418cdf811887866d0b1caeb8179c126d5123e84550f4e22e"
+    },
+    {
+      "id": "变化-2",
+      "text": "变化",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "把-claude-code-的计划模式plan作为默认开端"
+      ],
+      "following": "以 Claude Code 的计划模式(Plan)作为默认起点，OpenCode、Codex 等编码 Agent 中也有 plan 模式 开发工程师以 Plan 模式启动 Claude Code，把阶",
+      "contentHash": "08cbb1180346b0dbef9cf5521243d9c0e8700fc374b654d739126333423ab47a"
+    },
+    {
+      "id": "起步-2",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "把-claude-code-的计划模式plan作为默认开端"
+      ],
+      "following": "先决条件(Prerequisites) 意图工件（ intent.md 或 spec.md ，如果存在的话），以及 CLAUDE.md 文件会有所帮助。 基础设施(Infrastructure) Cl",
+      "contentHash": "063cb4c048220d0f13d38ed191045502d812805e8143eeeb6c16cbb73e80ff4e"
+    },
+    {
+      "id": "执行-2",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "把-claude-code-的计划模式plan作为默认开端"
+      ],
+      "following": "工程师启动一个 Claude Code 会话，使用计划模式(Plan)； 把 intent.md 和 spec.md 给 Claude，要求它输出实施计划：涉及哪些文件、工作顺序、如何测试验证； 质疑",
+      "contentHash": "c26d79baa6f878c18640d8f86d2044b539c6609379998d7abc17979e58f9aa03"
+    },
+    {
+      "id": "planmd-示例",
+      "text": "plan.md 示例",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "把-claude-code-的计划模式plan作为默认开端"
+      ],
+      "following": "# 计划：理赔状态自助服务（来自 intent.md 2026-06-02） ## 变更的文件 portal/src/claims/StatusPanel.tsx（新增）, claims-api/ro",
+      "contentHash": "0b425329e9de72f48c4805db8ff09ecc072381eca01fcf2015418aa26bcfd543"
+    },
+    {
+      "id": "治理-2",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "把-claude-code-的计划模式plan作为默认开端"
+      ],
+      "following": "设计评审发生在生成代码之前，此时调整方向只需改文档。计划模式会限制 Claude 编辑文件，直到工程师批准计划。 计划和修订版本连同批准人一起记录。 常规变更由工程师批准，高风险项会交由技术负责人或架",
+      "contentHash": "407b6aa9c5ce66a88a67c411a6db12f49684e00d35ee2d299b942f69d18ad918"
+    },
+    {
+      "id": "度量-2",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "把-claude-code-的计划模式plan作为默认开端"
+      ],
+      "following": "前置指标(Leading indicator) 首次通过率 ：有多少变更在第一次实施后就被合并，无需返工。 交付周期 ：从计划批准到最终合并拉取请求（PR）的时间，要求 PR 元数据中记录所需信息（如",
+      "contentHash": "600a4158021ae64b1776cf6291f7ee496cf1a347cff98f41bb5a3751f70ec293"
+    },
+    {
+      "id": "claude-code-的自动模式",
+      "text": "Claude Code 的自动模式",
+      "depth": 3,
+      "ancestors": [
+        "03-构建-build"
+      ],
+      "following": "护栏机制（ CLAUDE.md 、技能、钩子、测试套件）成熟后，常规工作无需工程师逐步确认，Claude 可自主完成实施。工程师则从盯着操作转为审查较长自主会话产出的工件；配合 Git worktre",
+      "contentHash": "c28734f89ef58c2b4056453cf6362a824bb65c5051d15ea350875ac8eb5c23e2"
+    },
+    {
+      "id": "claudemd-文件",
+      "text": "CLAUDE.md 文件",
+      "depth": 3,
+      "ancestors": [
+        "03-构建-build"
+      ],
+      "following": "CLAUDE.md 为 Claude 提供新加入的人类成员所需了解的上下文：约定、命令、架构、常见坑点。这些原本存在于人脑和 wiki 的知识，现在变成一个文件，AI 在每次会话开始时读取。整个团队共",
+      "contentHash": "47185b7e6f3ae1e7386371145fec920b5e027488b0f497a9e897eef655920f02"
+    },
+    {
+      "id": "起步-3",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "claudemd-文件"
+      ],
+      "following": "先决条件(Prerequisites) 无。 基础设施(Infrastructure) 一个仓库(Repo)，Claude Code 已安装，一名熟悉代码库的工程师。",
+      "contentHash": "452b98c0bef59845c8668e6536da9c80c90c95454c98cd98d1d16ae0e69edd09"
+    },
+    {
+      "id": "执行-3",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "claudemd-文件"
+      ],
+      "following": "在仓库根目录运行 /init ，Claude 会根据现有内容生成初始 CLAUDE.md ； 将生成的内容精简，压缩到新团队成员第一天使用时所需掌握的程度。保留构建(build)、测试(test)和代",
+      "contentHash": "30c8b0290a0c5651a74ed325bcabf232c16ca9e2b9c5b51ab54221cfc7aebdcb"
+    },
+    {
+      "id": "claudemd-示例",
+      "text": "CLAUDE.md 示例",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "claudemd-文件"
+      ],
+      "following": "# 支付服务 ## 命令 - 构建：`make build` - 测试：`make test`（单元测试），`make itest`（集成测试，需要 Docker 环境） - 代码检查：`make l",
+      "contentHash": "dbbd0d6275cf73c16579efc7400b269f94223708c52c77f13fc56eee38597d3c"
+    },
+    {
+      "id": "治理-3",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "claudemd-文件"
+      ],
+      "following": "CLAUDE.md 受版本控制，因此 AI 执行的指令可审查、可追溯。团队约定通过文件落地，变更记录在 git 历史中，代码所有者通过 PR 审批这些变更。",
+      "contentHash": "af43084f9a37c9b6d58cafabed1cde6a12add849e0fda89a69fc7bd210b4060d"
+    },
+    {
+      "id": "度量-3",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "claudemd-文件"
+      ],
+      "following": "前置指标(Leading indicator) （实时纠错能力）——看 AI 是否“屡教不改” 错误重复率 ：跟踪 CLAUDE.md 的修改频次和 Claude 重复出现同类错误的频率。若同一偏差反",
+      "contentHash": "ca131434d62af04bc6c1f1e1ae8b1d3550bd12b0fc38d03c38bb70c5cd4db7ca"
+    },
+    {
+      "id": "skill-作为组织知识",
+      "text": "SKILL 作为组织知识",
+      "depth": 3,
+      "ancestors": [
+        "03-构建-build"
+      ],
+      "following": "技能(Skills)是把组织知识转化为操作能力的方式。说明清晰、版本受控、广泛适用，政策变化时集中更新。 基本原则： 为那些需要一致执行的制度性知识写 SKILL； 那些本属于 CLAUDE.md 或",
+      "contentHash": "1fef3449efe5519b61d746ff970ad8e2626054de9f7460622e3b1e409d07d34f"
+    },
+    {
+      "id": "起步-4",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "skill-作为组织知识"
+      ],
+      "following": "先决条件(Prerequisites) 不需要。有 CLAUDE.md 会有所帮助，因为它将 Agent 的工作知识保存在仓库(Repo)中，但 SKILL 并不依赖它。 基础设施(Infrastru",
+      "contentHash": "45827eee803180a1210a1b1ce0f07410cc679e84fa2ad5c6ef3bbc3b7048723a"
+    },
+    {
+      "id": "执行-4",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "skill-作为组织知识"
+      ],
+      "following": "选一项目前执行不一致的知识，比如安全标准、API 设计规范、品牌规则。 将其写成一项技能：一个包含 SKILL.md 的文件夹。其前置元数据（frontmatter）声明触发条件，正文说明执行要求。工",
+      "contentHash": "9288149d2313f33afe905502061ed84a2f0018e938e50eaa14965492d89b2ed8"
+    },
+    {
+      "id": "skill-示例claudeskillssecure-api-reviewskillmd",
+      "text": "SKILL 示例(.claude/skills/secure-api-review/SKILL.md)",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "skill-作为组织知识"
+      ],
+      "following": "--- name: secure-api-review description: 应用API安全标准。在创建或修改面向外部的端点、审查API代码或生成OpenAPI规范时使用。 --- # 安全API",
+      "contentHash": "8acc08621ac4d256ef4f40e94ffb769771a61e3e43b6aedf6e5aeb87bb0fb5cc"
+    },
+    {
+      "id": "治理-4",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "skill-作为组织知识"
+      ],
+      "following": "SKILL 是一种建议性控制。它能提高 Claude 遵守政策的概率，但不能强制会话合规。 对于那些必须严格执行的策略，需要在 SKILL 背后增加确定性措施，比如用钩子(Hook)阻止操作，或在 P",
+      "contentHash": "b350417754317015193bb100a0618a93b1de6fa34fb436d20efb94b699a62403"
+    },
+    {
+      "id": "度量-4",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "skill-作为组织知识"
+      ],
+      "following": "前置指标(Leading indicator) 策略变更到技能合并的周期 ：从策略负责人批准策略变更，到更新后的 SKILL 完成合并的耗时，依据 SKILL 文件夹的 PR 记录进行统计。 周期越短",
+      "contentHash": "afb0a2535c9abc17243008476b2bce3d2204ff334951f9a1aa6bff6b47a29963"
+    },
+    {
+      "id": "钩子hook构建时的防护栏",
+      "text": "钩子(Hook)：构建时的防护栏",
+      "depth": 3,
+      "ancestors": [
+        "03-构建-build"
+      ],
+      "following": "SKILL 是建议性的，而钩子是其背后的确定性防线。Claude 在实施阶段的主要动作是文件编辑和 shell 命令，因此构建阶段是钩子最常触发的地方。 构建阶段的钩子可以： 阻止编辑受保护路径（如生",
+      "contentHash": "4a60ab64989dda62d21ef7db9dc7c8abaa38d9d3a6f9c6c8c6c83ddc62a5993a"
+    },
+    {
+      "id": "并行会话和子代理parallel--sessions-and-subagents",
+      "text": "并行会话和子代理(Parallel  Sessions and Subagents)",
+      "depth": 3,
+      "ancestors": [
+        "03-构建-build"
+      ],
+      "following": "一位工程师可以同时推进多条工作流程。 并行会话就是另起一个完整的 Claude Code 实例，在自己的 git worktree 里独立干活。每个会话互不知情，唯一共享的是操控它们的工程师。 Sub",
+      "contentHash": "c296a0e647a0a3f85e91ccec360095bf2979cf4e210df9e5ebf8545b795e68bf"
+    },
+    {
+      "id": "变化-3",
+      "text": "变化",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "并行会话和子代理parallel--sessions-and-subagents"
+      ],
+      "following": "传统 一位工程师每次只处理一项任务，并且花费大量时间进行构建、测试以及审核工作。虽然在等待期间可以切换任务，但这种上下文的切换相当耗费精力，因此很少有人愿意这样做。 单一任务串行 ：一次只专注于一个任",
+      "contentHash": "69a12f43aa0581ad3ba48a1228300e0d3a8757a5bc36ca1a19a8ee5522152ef6"
+    },
+    {
+      "id": "起步-5",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "并行会话和子代理parallel--sessions-and-subagents"
+      ],
+      "following": "先决条件(Prerequisites) CLAUDE.md 文件，因为所有会话都读取。阶段 4（测试）所建立的反馈循环在此同样具有助益——当会话能够自主验证工作成果时，工程师的监督需求即显著降低。 C",
+      "contentHash": "1e65ee41ee7234406e09472c705ede9676ccefde5d3117496fd229cf7278bd80"
+    },
+    {
+      "id": "执行-5",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "并行会话和子代理parallel--sessions-and-subagents"
+      ],
+      "following": "根据计划模式产出的 plan.md ，工程师将工作拆解为改动不同文件的任务。共享文件的任务在一个会话中顺序执行。 每个并行任务都有自己的 worktree，例如一个终端 claude --worktr",
+      "contentHash": "561b3c380f4097c39af70a6b654116ba064b09558a441a103ce0902c88319e01"
+    },
+    {
+      "id": "示例claudeagentsverifiermd",
+      "text": "示例(.claude/agents/verifier.md)",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "并行会话和子代理parallel--sessions-and-subagents"
+      ],
+      "following": "--- name: verifier description: 在会话报告完成之前运行应用并验证变更是否生效 tools: Bash, Read --- 使用 `make run` 启动应用。针对变更",
+      "contentHash": "cfbf0ae0b4476cff88b6105f300b4e15341bee420c52387249dcedc922a1715d"
+    },
+    {
+      "id": "治理-5",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "并行会话和子代理parallel--sessions-and-subagents"
+      ],
+      "following": "更多的会话意味着更多的产出，因此控制措施必须来自仓库中的配置。仓库中的钩子和权限设置适用于所有会话，且每个会话的操作都会被记录并可追溯至运行该会话的工程师。",
+      "contentHash": "882d5f9cd42964e0c14b2b29909892183c5fe9917b52f0eddbec8bea821c3542"
+    },
+    {
+      "id": "度量-5",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "03-构建-build",
+        "并行会话和子代理parallel--sessions-and-subagents"
+      ],
+      "following": "前置指标(Leading indicator) 在保持审查质量的前提下，每位工程师的并发会话数（通过 OpenTelemetry 导出数据统计），以及每日用于指挥调度而非被动等待的时间占比。 并发会话",
+      "contentHash": "c2eae3dbc33ae8961888240c1af992dd3549ade70f944d52bfd892d24453e644"
+    },
+    {
+      "id": "04-测试-test",
+      "text": "04 测试 Test",
+      "depth": 2,
+      "ancestors": [],
+      "following": "每个会话在人工介入之前均自行完成工作验证，且指导 Agent 行为的配置本身，也需像其生成的代码一样接受回归测试。 始终让 Claude 能自行验证工作成果——无论是测试、构建还是截图对比。会话会在工",
+      "contentHash": "9218456943f718d51ea74eace88ea692a7e76d1914a860f75c5fadb347e59ac9"
+    },
+    {
+      "id": "给-claude-code-一个反馈循环feedback-loop",
+      "text": "给 Claude Code 一个反馈循环(feedback loop)",
+      "depth": 3,
+      "ancestors": [
+        "04-测试-test"
+      ],
+      "following": "始终让 Claude 能自行验证工作成果——无论是测试、构建还是截图对比。会话会在工程师看到结果之前自查并修复错误。 反馈循环不同于 阶段 3：构建 中的验证子代理。反馈循环贯穿任务，并会随进展多次运",
+      "contentHash": "dbb854432db9069ac0b223ac160a7d52322cd3fad687b0f0e43199388b4d8779"
+    },
+    {
+      "id": "变化-4",
+      "text": "变化",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "给-claude-code-一个反馈循环feedback-loop"
+      ],
+      "following": "传统 代码运行正常的反馈信号往往姗姗来迟——持续集成（CI）在数分钟后提供反馈，测试人员在数天后给出结论，而生产环境的验证则需数周之久。 当代码由 Agent 生成时，延迟的反馈即意味着人工须逐一核查",
+      "contentHash": "7a368b8131e32dccfe115d50eb59f0fbebedaf5b812bac21aa15e06dc3f8845f"
+    },
+    {
+      "id": "起步-6",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "给-claude-code-一个反馈循环feedback-loop"
+      ],
+      "following": "先决条件(Prerequisites) 无。 基础设施(Infrastructure) 测试套件与构建流程应能够通过各自的一条命令在本地完成执行。对于前端界面相关工作，Claude 能够查看运行结果至",
+      "contentHash": "02255b69cd99f38f7230d64a7309d8f3fb44ac457462702829bbd181e20efd7d"
+    },
+    {
+      "id": "执行-6",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "给-claude-code-一个反馈循环feedback-loop"
+      ],
+      "following": "若当前验证工作需执行一连串命令并依赖特定环境知识，则应将其封装为单一目标命令，例如 make test 或 npm test ，并在验证 失败时以非零状态码退出 。 Claude 在执行 Shell ",
+      "contentHash": "443320788e68088921f6938316fada6b238763328ba4f57929d25cd0b77fdd5a"
+    },
+    {
+      "id": "claudemd-中的验证块示例",
+      "text": "CLAUDE.md 中的验证块示例",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "给-claude-code-一个反馈循环feedback-loop"
+      ],
+      "following": "## 工作验证 - 构建：`make build`（必须以“Build succeeded”作为结束标志） - 测试：`make test`（全部通过；绝不可跳过或删除任何失败的测试） - 代码检查：",
+      "contentHash": "414fb12bfc2c0b9b5e5e9c48ca53cd1461c3a740274f23b64f2b96c28f029696"
+    },
+    {
+      "id": "治理-6",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "给-claude-code-一个反馈循环feedback-loop"
+      ],
+      "following": "什么是强制执行的？ 在任务标记为完成前进行验证，以及在缺陷修复过程中阻止代理编辑测试文件——这两项机制均通过钩子（hooks）实现，并应用于组织要求强制保障的场景中。 证据是什么？ 由 Claude ",
+      "contentHash": "0a2bbe2aecdf2ca16bb5aff019e2cecb2c2c8d232ed56291b22118586a2e5916"
+    },
+    {
+      "id": "度量-6",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "给-claude-code-一个反馈循环feedback-loop"
+      ],
+      "following": "前置指标(Leading indicator) Agent 生成代码的首次 CI 通过率（该指标由 CI 系统原生支持）。 Agent 生成代码的首次 CI 通过率 ：通过率越高，说明 AI 生成代码",
+      "contentHash": "6a86d1314ceac6656e4fa686b1c24478634f0b96f0b63ed380c94028920dc2f2"
+    },
+    {
+      "id": "ci-中持续评估",
+      "text": "CI 中持续评估",
+      "depth": 3,
+      "ancestors": [
+        "04-测试-test"
+      ],
+      "following": "评估（Evals）是 AI 原生时代的阶段门控 QA。它是一套测试集，每当 Agent 配置变化时运行——换了新模型、重写了提示词，评估会告诉你 Agent 是否还能达到同样的标准。 评估套件需要持续",
+      "contentHash": "222ef033370243ba0ffd6007ad17ec25871eaedc82bda168d56508330807cd60"
+    },
+    {
+      "id": "起步-7",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "ci-中持续评估"
+      ],
+      "following": "先决条件(Prerequisites) CLAUDE.md 和反馈循环（阶段 4：测试）。 基础设施(Infrastructure) 具备非交互式运行 Claude Code 能力的持续集成（CI）系",
+      "contentHash": "fa9d414f345064b06eaf71f1733a52a4afb543c58718b1ed9e6f96db9ca29c1c"
+    },
+    {
+      "id": "执行-7",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "ci-中持续评估"
+      ],
+      "following": "平台工程师从近期工作中收集 20~50 个真实任务及其预期结果。 将每个任务写成评估项：即提示词 + 判定通过的条件（测试通过、lint 干净、行为不变、合规）。 该评估套件在 CI 中以非交互方式运",
+      "contentHash": "ee24400d10be4cb0f9321e7b32a86c0597df15e001d0d20a29b3011b2da4272c"
+    },
+    {
+      "id": "ci-持续评估示例githubworkflowsagent-evalsyml",
+      "text": "CI 持续评估示例(.github/workflows/agent-evals.yml)",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "ci-中持续评估"
+      ],
+      "following": "name: Agent evals on: pull_request: paths: ['CLAUDE.md', '.claude/**'] schedule: - cron: '0 2 * * *'",
+      "contentHash": "1396eaf79eaabad8f95ddde67620f0924edfce92ed8c2ff0cf892979c5e962fd"
+    },
+    {
+      "id": "治理-7",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "ci-中持续评估"
+      ],
+      "following": "评估为 QA 提供了能跟上 AI 产出速度的门控。通过率阈值作为合并检查强制生效，运行记录留存以便随时间比较，配置变更由所属团队审批。",
+      "contentHash": "c8045643288229173e77840d5111a2ff601a94fe2dabcf92b071220e46e87de4"
+    },
+    {
+      "id": "度量-7",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "04-测试-test",
+        "ci-中持续评估"
+      ],
+      "following": "前置指标(Leading indicator) 评估套件在每次运行时，报告通过率随时间的演变趋势，以及生产事件从发生到转化为永久评估用例所需的周期。 通过率趋势 ：随时间变化，通过率稳定或提升。 事件",
+      "contentHash": "65c2a9c557f4557f92db66b07f0e485737cb192dc066f477ef81b9becc8855c8"
+    },
+    {
+      "id": "05-部署-deploy",
+      "text": "05 部署 Deploy",
+      "depth": 2,
+      "ancestors": [],
+      "following": "评审是双向的，治理控制会在 Agent 执行任务时生效。Agent 可处理生产门禁之前的工作，越过门禁则交由其他机制。 Claude 既会评审别人的 PR，也会处理自己 PR 上的评审意见。它按组织政",
+      "contentHash": "483bfd17342559dd85685392d8d5fa1ddc359b9e33f73deeaa1ee14a3fc58401"
+    },
+    {
+      "id": "ai-参与-pr-review-循环",
+      "text": "AI 参与 PR review 循环",
+      "depth": 3,
+      "ancestors": [
+        "05-部署-deploy"
+      ],
+      "following": "Claude 既会评审别人的 PR，也会处理自己 PR 上的评审意见。它按组织政策审查传入 PR 并回应评论，工程师则聚焦于变更意图和风险。 在这一双向审查模式中： 机械性检查 （是否符合策略、编码规",
+      "contentHash": "a06a08e88b2d3fb24ae0badbbde4fadcba6ab318f6dbb0e987daf804bdd409e2"
+    },
+    {
+      "id": "变化-5",
+      "text": "变化",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "ai-参与-pr-review-循环"
+      ],
+      "following": "AI 接管机械性工作，人类专注需要判断力的决策。 传统 审查产能由人工产出决定。一份 PR 需要等待审查者通读全部内容，审查质量随审查者当前负载而波动，提交者不断催促，而积压的待审请求却日益增多。 A",
+      "contentHash": "75455be0c9a054595c36facac87093863faadeac265061cab7d0722768d32c28"
+    },
+    {
+      "id": "起步-8",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "ai-参与-pr-review-循环"
+      ],
+      "following": "先决条件(Prerequisites) 来自 阶段3 (03 构建Build) 的已更新 CLAUDE.md 文件；若审查通过，则技能（skills）将强制执行既定的策略，以及已定义好的子代理（sub",
+      "contentHash": "a12e6f9c8907e7d626899de4b589bd21d7297e8092f5c434dbf15a8aa4d7b524"
+    },
+    {
+      "id": "执行-8",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "ai-参与-pr-review-循环"
+      ],
+      "following": "托管式代码审查服务最容易上手：管理员启用并选择仓库即可。若要控制流水线或让 API 调用走自有云协议，可在 CI 中用 claude-code-action 运行评审。 技术负责人在仓库根目录编写评审",
+      "contentHash": "9221b76a001f996b904eb31a60f2959f1bc07e1b3ca3c9815635d8e147d2bfb9"
+    },
+    {
+      "id": "reviewmd-示例",
+      "text": "Review.md 示例",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "ai-参与-pr-review-循环"
+      ],
+      "following": "# Review instructions ## Passes 执行三个维度的审查，并为每项发现标注所属类别： - 缺陷（Bugs）：逻辑错误、边界条件缺失、细微回归 - 安全（Security）：注",
+      "contentHash": "4040d186a9b7d4e73fb82da21c4c3643fc104a631fbfc25d34d38614d3a74775"
+    },
+    {
+      "id": "治理-8",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "ai-参与-pr-review-循环"
+      ],
+      "following": "职责分离得到保留：写代码的 AI 无法批准自己的 PR。 REVIEW.md 中的评审政策应用于所有 PR，发现、修复、评级和审批都记录在 PR 历史中，因此 PR 本身就是审计凭证。 审批由人类通过",
+      "contentHash": "051418a0a33a364b18e77e67bb2d7831499a53d20667c56e1c28b9161222cbcc"
+    },
+    {
+      "id": "度量-8",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "ai-参与-pr-review-循环"
+      ],
+      "following": "前置指标(Leading indicator) 首次审查响应时间（预期将缩短至数分钟级别），以及无需人工直接操作分支即可解决、且相关数据直接存储于 Git 中的审查评论所占比例。 响应速度 ：首次审查",
+      "contentHash": "ebf2072ca382cdb9ab4b150f14265e55c018c34d4455941d5978b10f04aff319"
+    },
+    {
+      "id": "钩子作为审批关卡",
+      "text": "钩子作为审批关卡",
+      "depth": 3,
+      "ancestors": [
+        "05-部署-deploy"
+      ],
+      "following": "在构建阶段( 03 构建Build )，用钩子作为护栏，无需人工参与，自动决定是否进行某些操作。 钩子也可以发起请求，暂停操作直至人类批准，这正是发布门禁需要的机制。 之所以将这个模块放在阶段 5（ ",
+      "contentHash": "9b7042f42f1736c6a78e2a8aa3cd82d439ff075f9d1bb0ec924ded64815f584d"
+    },
+    {
+      "id": "起步-9",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "钩子作为审批关卡"
+      ],
+      "following": "先决条件(Prerequisites) 无。 基础设施(Infrastructure) 一份变更流程所要求的各项审批的书面清单。 明确变更流程需要哪些人工审批节点（如安全、架构、业务负责人审批），并将",
+      "contentHash": "a38ccbcd35eb697e6837e0511e56d3ce327bae5270888b95ba4af4e172eed0ae"
+    },
+    {
+      "id": "执行-9",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "钩子作为审批关卡"
+      ],
+      "following": "各相关团队（如：工程管理层、变更管理、及合规团队）共同拟定一份必须保留的人工审批门禁清单，例如变更管理签批、发布授权，以及对受保护路径的编辑操作。 平台工程师将每一项门禁实现为一个钩子（hook）——",
+      "contentHash": "01bdddce2d7754e4da22ae78328f22d6809c3023c364c12051fbd21a59fa2690"
+    },
+    {
+      "id": "claude-code-门禁钩子配置示例",
+      "text": "Claude Code 门禁钩子配置示例",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "钩子作为审批关卡"
+      ],
+      "following": "Claude Code 钩子示例 .claude/settings.json { \"hooks\": { \"PreToolUse\": [ { \"matcher\": \"Bash\", \"hooks\": [ ",
+      "contentHash": "0a8b6678658cc32280f08bed3547046195bde4c3e64c0f74d02ba49c6eee0436"
+    },
+    {
+      "id": "治理-9",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "钩子作为审批关卡"
+      ],
+      "following": "钩子即审批门禁。 强制执行 ：门禁在任何人的任何操作中均强制执行，不可跳过 可审计性 ：所有允许/阻止决策均被记录，并附带时间戳，形成完整审计线索 审批定义 ：门禁须预先明确何为有效批准（如变更工单状",
+      "contentHash": "7238f4dc18da9f3e65461b88665ddc4f5210cffd57246d92fae8ce433365daec"
+    },
+    {
+      "id": "治理示例",
+      "text": "治理示例",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "钩子作为审批关卡"
+      ],
+      "following": "企业账户管理配置示例 由平台团队通过移动设备管理（MDM, Mobile Device Management）或管理控制台进行部署；普通工程师无权编辑或覆盖其中任何内容，由企业管理员相关角色统一配置。",
+      "contentHash": "e402b94770191b613fbb1fa8792968a83a7234b2dfb2ec2bedafface1cffc885"
+    },
+    {
+      "id": "度量-9",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "钩子作为审批关卡"
+      ],
+      "following": "前置指标(Leading indicator) 各审批门禁的等待耗时。每次钩子的决策（允许或阻止）均附带时间戳写入 OpenTelemetry 导出数据，因此每一处门禁的等待时间皆可观测。 门禁等待耗",
+      "contentHash": "0f5476e87676e1e0b651a02387645fcfe718a47a4f396f1be6360cff48c9d744"
+    },
+    {
+      "id": "cicd-集成与部署",
+      "text": "CI/CD 集成与部署",
+      "depth": 3,
+      "ancestors": [
+        "05-部署-deploy"
+      ],
+      "following": "在 CI/CD 流水线中非交互运行 Claude Code；通过沙箱限制风险、通过 MCP 暴露部署能力，并提前演练回滚路径。 传统 流水线执行确定性的脚本，而任何需要判断力的工作则留待人工处理。例如",
+      "contentHash": "2a9f540c5aa0fa421e1c6b1f25dad66101bc1208f9a98930f36afcdbc82ecf44"
+    },
+    {
+      "id": "变化-6",
+      "text": "变化",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "cicd-集成与部署"
+      ],
+      "following": "传统 流水线执行确定性的脚本，而任何需要判断力的工作则留待人工处理。例如，对不稳定测试进行归类、编写变更日志，或排查构建失败的原因。部署与回滚则是操作手册（runbooks），由人类在压力下按步骤执行",
+      "contentHash": "d85f34653dd68c90d436a4c86d19dd8a1d229c73375e9bbfdc56852f934a4e50"
+    },
+    {
+      "id": "起步-10",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "cicd-集成与部署"
+      ],
+      "following": "先决条件(Prerequisites) Claude 嵌入 PR Review 循环中，钩子作为审批门禁——因为门禁必须在自动化流程加速任何操作之前就已就位。 Claude in the PR rev",
+      "contentHash": "c52717a1ea2f42125616bf4cad006e4ba08f4cd8a46acfef90fa664e89bf5f13"
+    },
+    {
+      "id": "执行-10",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "cicd-集成与部署"
+      ],
+      "following": "平台工程师(platform engineer)从只读判断开始：在流水线任务中用 claude -p 来分类构建失败、总结不稳定测试、草拟变更日志。 在现有门禁后面增加写入步骤，比如 fix lint",
+      "contentHash": "77e8d9a8afc7d61cb6543f5ea95d5f3adee7fc6de4267f802ca214e1b4c70a4c"
+    },
+    {
+      "id": "pipline-示例",
+      "text": "Pipline 示例",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "cicd-集成与部署"
+      ],
+      "following": "- name: Triage failed build if: failure() run: > claude -p \"Read the build log at out/build.log. Ide",
+      "contentHash": "9bb1470c8a477bc50af5be25a040202e40f8ea60de4cc5fb56c0d8722e69add0"
+    },
+    {
+      "id": "治理-10",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "cicd-集成与部署"
+      ],
+      "following": "核心原则是：Agent 可以执行到生产关卡之前，但不能越过它。相关控制包括： 分支保护确保 Agent 的任何写入都以 PR 形式提交，不能直接进入主分支。 在部署过程中，这个“部署钩子”会阻塞发布操",
+      "contentHash": "6d88d9aef465f875baa65df26abc0798de02b7c3071d046257b75d87800b7e42"
+    },
+    {
+      "id": "度量-10",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "05-部署-deploy",
+        "cicd-集成与部署"
+      ],
+      "following": "前置指标(Leading indicator) 自动化故障处理占比：流水线运行中发生的故障，由 AI 自动诊断、分类并处理的比例（无需通过告警系统唤醒来介入）。 比例越高，说明代理在部署流水线中的自主",
+      "contentHash": "14944fec78619e063cbb777847abd6262d68726194204c2a2ce9b792724a0ed9"
+    },
+    {
+      "id": "06-维护-maintain",
+      "text": "06 维护 Maintain",
+      "depth": 2,
+      "ancestors": [],
+      "following": "循环至此闭合。一个触发器在调用路径中无需人工介入的情况下唤醒 Claude，而其所发现的问题将以 intent.md 的形式重新进入流水线。 前面我们说明了如何在 SDLC 各阶段引入 Claude，",
+      "contentHash": "23c60a9006f6772fcada531a63ec6abc03f6c1e0f7c36f979966e3a7481dcb39"
+    },
+    {
+      "id": "运维与闭环maintenance-and-closing-the-loop",
+      "text": "运维与闭环(Maintenance and closing the loop)",
+      "depth": 3,
+      "ancestors": [
+        "06-维护-maintain"
+      ],
+      "following": "前面我们说明了如何在 SDLC 各阶段引入 Claude，但每个阶段仍需人工初始启动。 而这一阶段则重点是让 Claude 自主运行，形成闭环。 例如，一个持续运行的监控 Agent 在缺陷工单生成后",
+      "contentHash": "471e41cca28d4a9f070e189f47a4143975c64dd33cd840896d5a8730e7b22056"
+    },
+    {
+      "id": "变化-7",
+      "text": "变化",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "运维与闭环maintenance-and-closing-the-loop"
+      ],
+      "following": "传统 维护是一个被动响应的。所有工单或事件均须等待人员介入处理并重新启动流程。凌晨 3 点触发的告警可能被忽略，工单可能在积压队列中滞留直至有人认领，而若新的紧急问题抢先出现，事后复盘所确定的改进措施",
+      "contentHash": "6f228e2c1f86b23aa10659b32f8eb0e1f5aeb9543f2bdcb4f03be48420577894"
+    },
+    {
+      "id": "实现闭环closing-the-loop",
+      "text": "实现闭环(Closing the loop)",
+      "depth": 3,
+      "ancestors": [
+        "06-维护-maintain"
+      ],
+      "following": "一个确定性脚本监控生产，当控制阈值被突破时调用 Claude。这种监控违规的方式是自主循环的一个典型示例，而阶段末尾的 Claude Tag （在 Slask 中使用@方式使用 Claude ，与飞书",
+      "contentHash": "2e29bbe2df02348ecf3d48e1c2e315d6868bfd83a002a0c99ee45934635c02f0"
+    },
+    {
+      "id": "起步-11",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "实现闭环closing-the-loop"
+      ],
+      "following": "先决条件(Prerequisites) intent.md 为闭环提供了结构化的输出，用以重新启动流程。Claude 加速了 PR 审查，钩子作为行动边界，而 CI/CD 的回滚路径（由最高自主级别的",
+      "contentHash": "a3d0b0b0d062920ce036c1789de4766abd12bf8e93f5ecdea6cc155ffccc006b"
+    },
+    {
+      "id": "执行-11",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "实现闭环closing-the-loop"
+      ],
+      "following": "服务负责人或平台工程师选定一个具有稳定滚动基线（stable rolling baseline）的指标，例如 CI 测试失败率、部署后 5xx 错误率，或 PR 周期时间。 随后编写检测脚本——通常采",
+      "contentHash": "d33de651d9be2e60cbb482e3a4e670f1216fd151619146dad8352d6e72cfd5ea"
+    },
+    {
+      "id": "示例-bandsyaml-监控-ci-测试失败率",
+      "text": "示例 (bands.yaml 监控 CI 测试失败率)",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "实现闭环closing-the-loop"
+      ],
+      "following": "metric: ci_test_failure_rate baseline: rolling_30d rules: western_electric tiers: 1sigma: { action: ",
+      "contentHash": "002753cbe6b13a0ab995349b2f7ff936dc67c16320667bd0ab344beb9a60ce63"
+    },
+    {
+      "id": "治理-11",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "实现闭环closing-the-loop"
+      ],
+      "following": "响应层级的边界由版本控制的配置文件强制执行，并辅以权限配置与托管设置，拒绝生产环境的直接访问。 每次调用、诊断发现及分类决策均附带时间戳记录在案。 服务负责人对发现进行分类与审批，由此产生的变更经由常",
+      "contentHash": "aa6c98f3728471335881c6c9911a68b44625306382ce4225cc295e704c155125"
+    },
+    {
+      "id": "度量-11",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "实现闭环closing-the-loop"
+      ],
+      "following": "前置指标(Leading indicator) 从控制区间被突破到 intent.md 进入分类队列所需的时间——作为对比基准的是旧模式下从事件发生到事后复盘行动启动的时间。检测脚本的日志中记录了突破",
+      "contentHash": "6a8d40fe1ff9351bc8572d7842691051916f317411857f3a97740c8d2592dd2c"
+    },
+    {
+      "id": "示例",
+      "text": "示例",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "实现闭环closing-the-loop"
+      ],
+      "following": "当 CI 测试失败率超过 3σ，AI Agent 隔离不稳定测试或开一个回退 PR，由 Review 门禁决定。 当部署窗口内后部署 5xx 率超过 3σ，AI Agent 触发现有的回滚流水线。 当",
+      "contentHash": "7e46b4eeacf3ae66c881cc338eed42b92c02d2b41aaca85c013b7c18389a4778"
+    },
+    {
+      "id": "定期扫描代码",
+      "text": "定期扫描代码",
+      "depth": 3,
+      "ancestors": [
+        "06-维护-maintain"
+      ],
+      "following": "安全扫描是在特定模型对代码库的一次快照分析，但会很快过时： 代码每周都在变， 新一代模型会发现旧模型漏掉的漏洞。 AI 原生的方案是按计划定期运行扫描，无需人工触发，并将其发现像普通代码变更一样走相同",
+      "contentHash": "2e5436ab18ebab2a203ea4a9f995a15af87a7847b724a1785472d4a15af4b489"
+    },
+    {
+      "id": "变化-8",
+      "text": "变化",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "定期扫描代码"
+      ],
+      "following": "传统 安全扫描常由事件触发：发布或审计前扫一次，报告送入追踪系统，积压问题由人工逐一处理，直到下一次触发。在这段期间，新代码的安全性主要依赖 PR 审查。 AI-Native 扫描按既定计划对每一个已",
+      "contentHash": "a2b822097d88e18a49c03445d1b8ef7763793d3cd2b93ceec29acf7b5068d505"
+    },
+    {
+      "id": "起步-12",
+      "text": "起步",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "定期扫描代码"
+      ],
+      "following": "先决条件(Prerequisites) 安全扫描发现经由 PR 审查门禁与钩子（作为审批门禁，见 05 部署Deploy ）处理，使各项发现与其他变更一样通过审查流程。 对于规模过大、无法容纳于单次 ",
+      "contentHash": "a8e4739483e0b8ec0abb0f88a31f3bafacabd5f7e27aed9d4ded67a54257baf2"
+    },
+    {
+      "id": "执行-12",
+      "text": "执行",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "定期扫描代码"
+      ],
+      "following": "安全负责人连接仓库，并按仓库、服务或团队将其组织成项目，确保发现归属从一开始就清晰。 对最关键仓库进行首次全量扫描，包括之前被其他工具或旧模型扫描过的。把首次扫描作为基线。第一次扫描很可能在原本认为干",
+      "contentHash": "f09ce406feaa6b69f1a05fe1523a57ac980923d398129b5dfb1aa656a208b1d9"
+    },
+    {
+      "id": "治理-12",
+      "text": "治理",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "定期扫描代码"
+      ],
+      "following": "扫描在组织的管理控制下运行：连接哪些仓库、谁持有扫描席位、预算上限都集中设置。 每个发现都有验证结果和置信度评分，每次忽略都有理由，因此扫描历史就是一份审计记录，记录了发现、修复和有意接受的内容。 修",
+      "contentHash": "5842bd57ffa1e49e28d625539b4bb55d3c6207f7a7609e3fe190e548ab4b1f2c"
+    },
+    {
+      "id": "度量-12",
+      "text": "度量",
+      "depth": 4,
+      "ancestors": [
+        "06-维护-maintain",
+        "定期扫描代码"
+      ],
+      "following": "前置指标(Leading indicator) 已连接的仓库按计划扫描占比，以及从发现被报告到其补丁进入 PR 审查门禁的耗时——数据来源于扫描历史与 PR 元数据。 后置指标(Lagging ind",
+      "contentHash": "b8cbdfce0a10614f145632f6ce025b84d5f08b0707c661f0579097485804a977"
+    },
+    {
+      "id": "claude-tag-用-claude-值班",
+      "text": "Claude Tag 用 Claude 值班",
+      "depth": 3,
+      "ancestors": [
+        "06-维护-maintain"
+      ],
+      "following": "事件可以通过 Slack、Teams 等办公即时通信工具触发，比如晚上 10 点在事件频道里的一条紧急修复消息，现在可以立即被响应。 Claude Tag （目前 Slack 公开测试版）让 Clau",
+      "contentHash": "a876c7aff14cf98f067f846b6def0875d9ebe0c0c940d5740f120828ee6b8e1b"
+    },
+    {
+      "id": "总结",
+      "text": "总结",
+      "depth": 2,
+      "ancestors": [],
+      "following": "模型和配套工具日益强大，不仅能改变编码方式，还能重塑整个软件开发生命周期(SDLC)。 这种转变始终将人的判断置于核心，并兼顾大型企业的治理与合规需求。 本指南整理了应用 AI 团队在客户实践中反复使",
+      "contentHash": "7cfb3617cf8500917cde826b49637ab770ced4d93d2e0346b2c3a8d76cd80cb3"
+    },
+    {
+      "id": "参考资源",
+      "text": "参考资源",
+      "depth": 2,
+      "ancestors": [],
+      "following": "以下文档是平台团队搭建这些控制措施所需的材料，大致按落地顺序列出。 Set up Claude Code for your organization — the admin decision map;",
+      "contentHash": "51db64ce19996e34ccb10b147ee10461a0a1781ef539ae0c243f9e71a03e2ecd"
+    }
+  ]
+}

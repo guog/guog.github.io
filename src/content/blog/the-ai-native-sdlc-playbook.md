@@ -1,6 +1,14 @@
 ---
 title: 'AI-Native（AI 原生）SDLC 实践指南'
-description: '介绍 Anthropic 在规划、设计、构建、测试、部署和维护阶段的 AI 原生软件开发实践。'
+description: '这篇 Anthropic 实践指南译文面向软件研发团队，介绍如何在规划、设计、构建、测试、部署和维护六个阶段使用 AI。核心做法是把意图、工程标准、测试证据与人工审批纳入可追踪的交付流程，而不只加快编码。文中的案例和建议基于原作实践，具体工具与治理方式仍须结合团队环境验证。'
+contentKind: translation
+source:
+  title: 'The AI-native SDLC playbook'
+  url: 'https://claude.com/resources/articles/the-ai-native-sdlc-playbook'
+  publishedDate: '2026-08-21'
+  author:
+    name: 'Louis Claxton'
+    type: Person
 pubDate: '2026-09-04'
 updatedDate: '2026-09-15'
 category: '翻译'

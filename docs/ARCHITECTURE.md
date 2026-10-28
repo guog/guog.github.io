@@ -70,3 +70,19 @@ Giscus 参数保持不变：仓库 `guog/guog.github.io`，仓库 ID `R_kgDOVIqx
 生产检查覆盖本地链接、图片、锚点、favicon 声明及文件、manifest、canonical、RSS、Sitemap 和中文搜索。浏览器检查覆盖布局、菜单、搜索弹窗、标签、目录、代码与主题。历史迁移基线和审计脚本保持原样；新 favicon 已授权替换，不要求与历史图标哈希一致。
 
 Expressive Code 和 Typography 的 `postcss-selector-parser` 精确覆盖为 `7.1.6`，修复 [GHSA-rj75-hqrm-r3gf](https://github.com/advisories/GHSA-rj75-hqrm-r3gf)。该解析器用于构建。升级依赖后应重新核对覆盖是否仍必要，不使用强制降级解决告警。
+
+## 全页面 Markdown 与 llms.txt
+
+`src/integrations/markdown.mjs` 在官方 `astro:build:done` 钩子中枚举实际静态 HTML 产物，由 unified / rehype / remark 负责标准转换。路由映射共用 `src/utils/markdown.ts`：目录使用 `index.md`，具名文件追加 `.md`。因此首页、归档、标签、搜索及 404 全部覆盖，不依赖文章白名单。分类和年份当前仍是归档锚点；未来新增独立分类页或分页后随实际产物自动覆盖。非 HTML 资源不重复导出。
+
+BaseHead 同时声明 `rel=alternate type=text/markdown` 与 `rel=describedby`；RSS 的 alternate 保持独立。根 llms.txt 使用社区 v2 结构，提供导航和至多 20 篇文章入口，归档仍列出全部文章；404、草稿不进入精选入口。导出在 Pagefind postbuild 之前完成，Markdown 不生成重复 Pagefind 文档。产物碰撞或无静态文本的自定义元素会使构建失败。
+
+Expressive Code 默认裁剪源代码首尾空行和行尾空格。`src/integrations/preserve-code.mjs` 使用公开 API 恢复原始代码行，并将 Tab 原样保留；Markdown 与 MDX Code 组件共用配置。Markdown 编译器附加的单个 HAST 末尾换行由适配器移除，源码本身的空行保留。导出只读取每个 `.ec-line` 中的 `.code`，不读取视觉行号，围栏交给 remark-stringify。
+
+文章页头按标题、署名来源、可见摘要、Agent 阅读入口、目录、正文的顺序展示。长文的下级目录可展开。提示词在初始 HTML 的 details / textarea 中，复制只是渐进增强；不会自动向 AI 厂商发送内容。主站其余英文界面和紧凑布局保持原约定。
+
+文章 JSON-LD 从 `src/utils/reading.ts` 的同一记录生成 BlogPosting，原创作者、原作者、译者及 translationOfWork 分开处理；未知身份省略。`<` 经安全序列化转义，避免标题中的脚本结束标记突破 JSON-LD 元素。
+
+`src/utils/headings.mjs` 对照迁移前基线保存的 140 个文章章节 ID 和内容摘要，拒绝重复、丢失或错指。标题改名时可在新标题紧邻位置保留旧 ID 别名，不能通过重录快照掩盖链接断裂。章节下的 Link / Copy link 作为渐进增强，复制失败时聚焦真实章节链接，不改目录或评论映射。
+
+正文 SVG 通过标准可访问名称与描述转为静态文字；未提供可靠描述时停止导出，只有明确装饰图标可排除。章节身份保护同时比较层级、祖先链与完整章节文字指纹，不依赖前 100 字；旧 ID 的正常标题必须保持一致，合法改名通过邻接的空别名锚点显式表达。

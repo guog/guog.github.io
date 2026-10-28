@@ -28,8 +28,35 @@ const { data } = post
 >
   {data.title}
 </h1>
+<p
+  class='mt-3'
+  data-attribution
+>
+  {data.contentKind === 'translation' ? (
+    <>
+      Translated by {data.translator?.name ?? 'not specified'}
+      {data.source && (
+        <>
+          {' '}
+          · Original article:{' '}
+          <a
+            class='cactus-link'
+            href={data.source.url}
+          >
+            {data.source.title}
+          </a>
+          {data.source.author && <> by {data.source.author.name}</>} · Published:{' '}
+          <FormattedDate date={data.source.publishedDate} />
+        </>
+      )}
+    </>
+  ) : (
+    <>Written by {data.author?.name ?? 'guog'}</>
+  )}
+</p>
 <div class='flex flex-wrap items-center gap-x-3 gap-y-2'>
   <p class='font-semibold'>
+    {data.contentKind === 'translation' ? 'Translation published: ' : 'Published: '}
     <FormattedDate date={data.pubDate} /> / {getReadingMinutes(post.body)} min read
   </p>
   {data.updatedDate && (
@@ -40,16 +67,17 @@ const { data } = post
 </div>
 <span
   class='sr-only'
+  data-markdown-exclude
   data-pagefind-filter='category'
 >
   {data.category}
 </span>
-<span
-  class='sr-only'
+<p
+  class='mt-4 text-muted'
   data-pagefind-meta='description'
 >
   {data.description}
-</span>
+</p>
 {data.tags.length > 0 && (
   <div class='mt-2'>
     <svg
