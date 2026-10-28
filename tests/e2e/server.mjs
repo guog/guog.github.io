@@ -1,6 +1,20 @@
+import { articleFiles, parseArticle } from '../../scripts/check-content.mjs'
+import { readingPrompt } from '../../src/utils/reading.ts'
+import { createHash } from 'node:crypto'
+import { filesWithin } from '../../src/integrations/markdown.mjs'
 /** Build fixtures in isolation; never write test posts or test output into the real site. */
 import { spawn, spawnSync } from 'node:child_process'
-import { access, cp, mkdir, mkdtemp, readdir, rm, symlink, writeFile } from 'node:fs/promises'
+import {
+  access,
+  cp,
+  mkdir,
+  mkdtemp,
+  readdir,
+  readFile,
+  rm,
+  symlink,
+  writeFile,
+} from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -77,6 +91,70 @@ try {
   await checkFixtureArtifacts(path.join(temporary, 'dist'))
   console.log(
     `Fixture build verified: ${checked.pages} pages; all local links, feeds and draft exclusions checked.`,
+  )
+  const snapshotOutput = path.join(root, 'test-results/agent-reading-inputs')
+  let snapshotDist = path.join(root, 'dist')
+  try {
+    await access(snapshotDist)
+  } catch {
+    snapshotDist = path.join(temporary, 'dist')
+  }
+  const snapshotFiles = {}
+  for (const filename of await filesWithin(snapshotDist)) {
+    if (!filename.endsWith('.md') && path.basename(filename) !== 'llms.txt') continue
+    const relative = path.relative(snapshotDist, filename)
+    const target = path.join(snapshotOutput, relative)
+    await mkdir(path.dirname(target), { recursive: true })
+    await cp(filename, target)
+    snapshotFiles[relative] = createHash('sha256')
+      .update(await readFile(filename))
+      .digest('hex')
+  }
+  for (const filename of await articleFiles(path.join(root, 'src/content/blog'))) {
+    const { data } = parseArticle(await readFile(filename, 'utf8'), filename)
+    if (data.draft) continue
+    const id =
+      data.slug ??
+      path
+        .relative(path.join(root, 'src/content/blog'), filename)
+        .replace(/\.mdx?$/, '')
+        .split(path.sep)
+        .join('/')
+    const record = {
+      ...data,
+      contentKind: data.contentKind ?? 'original',
+      pubDate: new Date(data.pubDate),
+      ...(data.updatedDate ? { updatedDate: new Date(data.updatedDate) } : {}),
+      ...(data.source
+        ? { source: { ...data.source, publishedDate: new Date(data.source.publishedDate) } }
+        : {}),
+    }
+    const relative = `prompts/${id}.txt`
+    const target = path.join(snapshotOutput, relative)
+    await mkdir(path.dirname(target), { recursive: true })
+    const prompt = readingPrompt(id, record)
+    await writeFile(target, prompt)
+    snapshotFiles[relative] = createHash('sha256').update(prompt).digest('hex')
+  }
+  const partial =
+    (await readFile(path.join(snapshotDist, 'blog/the-ai-native-sdlc-playbook/index.md'), 'utf8'))
+      .split('\n')
+      .slice(0, 5)
+      .join('\n') + '\n\n[材料在此截断；正文未提供]\n'
+  await writeFile(path.join(snapshotOutput, 'partial-sdlc.md'), partial)
+  snapshotFiles['partial-sdlc.md'] = createHash('sha256').update(partial).digest('hex')
+  await writeFile(
+    path.join(snapshotOutput, 'manifest.json'),
+    JSON.stringify(
+      {
+        source:
+          snapshotDist === path.join(root, 'dist') ? 'production-build' : 'isolated-fixture-build',
+        workflowSHA: process.env.GITHUB_SHA ?? null,
+        files: snapshotFiles,
+      },
+      null,
+      2,
+    ),
   )
   if (process.argv.includes('--build-only')) await cleanup(0)
   preview = spawn(
