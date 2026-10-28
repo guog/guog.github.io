@@ -56,3 +56,13 @@ npm 依赖保留各自许可证，以锁定版本对应包中的许可文件为�
 本次 favicon 由用户通过 [RealFaviconGenerator](https://realfavicongenerator.net/) 生成，并授权安装。来源目录为 `https://realfavicongenerator.net/files/a38aee4e-bdbd-4956-8282-fa2143757230/`。
 
 `public/` 根目录保留下载的 SVG、96 px PNG、ICO、180 px Apple Touch Icon、192/512 px manifest 图标和 `site.webmanifest`。安装不改变原始图像或 manifest 内容。此来源说明不重新授予底图或品牌标识的许可。
+
+## Markdown 构建工具链
+
+全页面 Markdown 导出使用 [unified](https://github.com/unifiedjs/unified)、[rehype-parse](https://github.com/rehypejs/rehype/tree/main/packages/rehype-parse)、[rehype-remark](https://github.com/rehypejs/rehype-remark)、[remark-gfm](https://github.com/remarkjs/remark-gfm) 和 [remark-stringify](https://github.com/remarkjs/remark/tree/main/packages/remark-stringify)，均采用 MIT。版本以 `package-lock.json` 为准；这些库仅在构建与验证时使用，不加载远程脚本。
+
+上述软件保留 Titus Wormer 的版权归属：rehype-parse 为 `Copyright (c) Titus Wormer`，rehype-remark、remark-gfm 为 `Copyright (c) Titus Wormer`，remark-stringify 为 `Copyright (c) 2014 Titus Wormer`，unified 为 `Copyright (c) 2015 Titus Wormer`。适用本文件已完整列出的 MIT 条款；准确原始归属和许可文件随 npm 包保留。
+
+2026 年 10 月 28 日核对新增锁定依赖：14 个包采用 MIT；另有 `hast-util-from-html` 使用的 `entities` 6.0.1 采用 BSD-2-Clause。其来源和原始声明见 [entities LICENSE](https://github.com/fb55/entities/blob/v6.0.1/LICENSE)。BSD 条款要求分发时保留版权、条件与免责说明；安装包内保留原始 LICENSE，不将其改标为 MIT。本项目没有复制这些依赖的实现源码，也不重新授权博客文章。
+
+Expressive Code 的空白保真适配通过现有 0.44.2 版本的公开 `customCreateBlock`、`customCreateRenderer` 和代码行 API 完成，直接声明相同版本的 `expressive-code`、`rehype-expressive-code` 构建依赖，不修改上游源码；其 MIT 声明仍随 npm 包保留。

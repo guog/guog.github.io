@@ -1,9 +1,16 @@
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
+import {
+  createMarkdownCodeBlock,
+  createPreservingRenderer,
+} from './src/integrations/preserve-code.mjs'
 import { defineEcConfig } from 'astro-expressive-code'
 
 // Adapted from Cactus 8.3.0. This is the single config used by Markdown, MDX and <Code>.
 export default defineEcConfig({
   plugins: [pluginLineNumbers()],
+  tabWidth: 0,
+  customCreateBlock: createMarkdownCodeBlock,
+  customCreateRenderer: createPreservingRenderer,
   defaultLocale: 'en-US',
   themes: ['dracula', 'github-light'],
   themeCssSelector: (theme) => `[data-theme="${theme.type}"]`,

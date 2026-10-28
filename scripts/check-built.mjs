@@ -6,6 +6,7 @@ import { access, readdir, readFile, stat } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { parse } from 'parse5'
+import { checkAIBuilt } from './check-ai-built.mjs'
 import { articleFiles, parseArticle, walk } from './check-content.mjs'
 
 const SITE = 'https://guog.github.io'
@@ -221,6 +222,8 @@ export async function checkBuilt({ root = process.cwd(), dist = path.join(root, 
       )
     })
   }
+
+  await check('All-page Markdown, llms.txt and source fidelity', () => checkAIBuilt({ root, dist }))
 
   await check('Favicon asset formats and manifest', async () => {
     const dimensions = async (filename, size) => {

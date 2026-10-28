@@ -1,5 +1,6 @@
 ---
 import { type CollectionEntry, render } from 'astro:content'
+import ReadWithAgent from '../components/blog/ReadWithAgent.astro'
 import Masthead from '../components/blog/Masthead.astro'
 import TOC from '../components/blog/TOC.astro'
 import Giscus from '../components/Giscus.astro'
@@ -11,7 +12,14 @@ const { post } = Astro.props
 const { headings } = await render(post)
 ---
 
-<Base {...post.data}>
+<Base
+  {...post.data}
+  author={
+    post.data.contentKind === 'translation'
+      ? (post.data.source?.author?.name ?? null)
+      : post.data.author?.name
+  }
+>
   <article
     class='grow break-words'
     data-pagefind-body
@@ -21,12 +29,16 @@ const { headings } = await render(post)
       class='mb-12'
     >
       <Masthead post={post} />
+      <ReadWithAgent post={post} />
     </div>
     <div class='flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between'>
       {headings.some((heading) => heading.depth >= 2 && heading.depth <= 4) && (
         <TOC headings={headings} />
       )}
-      <div class='prose prose-sm prose-headings:font-semibold prose-headings:text-accent-2 min-w-0'>
+      <div
+        data-article-body
+        class='prose prose-sm prose-headings:font-semibold prose-headings:text-accent-2 min-w-0'
+      >
         <slot />
       </div>
     </div>

@@ -25,6 +25,10 @@ const FIELDS = new Set([
   'slug',
   'coverImage',
   'ogImage',
+  'contentKind',
+  'author',
+  'translator',
+  'source',
 ])
 
 export function walk(node, visitor) {
@@ -96,6 +100,47 @@ export function validateMetadata(data) {
     } catch (error) {
       problems.push(`slug 无效：${error.message}`)
     }
+  }
+  const kind = data.contentKind ?? 'original'
+  if (!['original', 'translation'].includes(kind))
+    problems.push('contentKind 必须是 original 或 translation')
+  const httpURL = (value) => {
+    try {
+      return ['http:', 'https:'].includes(new URL(value).protocol)
+    } catch {
+      return false
+    }
+  }
+  const person = (value, field) => {
+    if (
+      !value ||
+      typeof value !== 'object' ||
+      Array.isArray(value) ||
+      typeof value.name !== 'string' ||
+      !value.name.trim() ||
+      (value.type !== undefined && !['Person', 'Organization'].includes(value.type)) ||
+      (value.url !== undefined && !httpURL(value.url))
+    )
+      problems.push(`${field} 必须包含真实姓名及有效公开 URL`)
+  }
+  if (data.author !== undefined) person(data.author, 'author')
+  if (data.translator !== undefined) person(data.translator, 'translator')
+  if (kind === 'translation' && !data.source) problems.push('译文必须提供 source')
+  if (kind === 'original' && (data.source || data.translator))
+    problems.push('原创不能声明译文来源或译者')
+  if (data.source !== undefined) {
+    const source = data.source
+    if (
+      !source ||
+      typeof source !== 'object' ||
+      Array.isArray(source) ||
+      typeof source.title !== 'string' ||
+      !source.title.trim() ||
+      !httpURL(source.url) ||
+      !validDate(source.publishedDate)
+    )
+      problems.push('source 必须包含标题、HTTP/HTTPS URL 和有效发布日期')
+    if (source?.author !== undefined) person(source.author, 'source.author')
   }
   return problems
 }

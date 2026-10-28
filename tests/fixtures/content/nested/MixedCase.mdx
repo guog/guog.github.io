@@ -62,3 +62,22 @@ const unusuallyLongLine = "这是用于验证横向滚动的中文代码示例�
 ## 总结
 
 仙人掌回归测试包含可检查的代码、图片、标题和中文搜索内容。
+
+## 原样空白
+
+<Code code={'42 starts here  \n\tif (a < b && c > 1) {\n\n\n  console.log("```", "&");\n}\n\n'} lang="typescript" title="whitespace.ts" />
+
+脚注测试[^proof]。
+
+[^proof]: 这条脚注必须保留。
+
+```typescript title="source-whitespace.ts"
+42 starts here
+	if (a < b && c > 1) {
+
+
+  console.log("```", "&");
+}
+
+
+```

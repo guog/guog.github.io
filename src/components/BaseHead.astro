@@ -1,4 +1,5 @@
 ---
+import { getMarkdownPath } from '../utils/markdown'
 import { siteConfig } from '../site.config'
 import '../styles/global.css'
 
@@ -9,6 +10,7 @@ interface Props {
   updatedDate?: Date
   ogImage?: string
   noindex?: boolean
+  author?: string | null
 }
 const {
   title,
@@ -17,6 +19,7 @@ const {
   updatedDate,
   ogImage,
   noindex,
+  author = siteConfig.author,
 } = Astro.props
 const pageTitle = title ? `${title} · ${siteConfig.title}` : siteConfig.title
 const canonicalURL = new URL(
@@ -36,9 +39,20 @@ const imageURL = ogImage ? new URL(ogImage, siteConfig.url).href : undefined
   name='description'
   content={description}
 />
-<meta
-  name='author'
-  content={siteConfig.author}
+{author && (
+  <meta
+    name='author'
+    content={author}
+  />
+)}
+<link
+  rel='alternate'
+  type='text/markdown'
+  href={new URL(getMarkdownPath(canonicalURL.pathname), siteConfig.url)}
+/>
+<link
+  rel='describedby'
+  href={new URL('/llms.txt', siteConfig.url)}
 />
 <meta
   name='generator'
