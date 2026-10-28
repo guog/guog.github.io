@@ -44,11 +44,16 @@ export async function filesWithin(directory) {
 export function codeBlocks(tree) {
   return findAll(tree, (node) => node.tagName === 'pre').map((pre) => {
     const lines = findAll(pre, (node) => hasClass(node, 'ec-line'))
-    if (!lines.length)
+    if (!lines.length) {
+      const code = findAll(pre, (node) => node.tagName === 'code')[0]
+      const languageClass = (code?.properties?.className ?? []).find((value) =>
+        value.startsWith('language-'),
+      )
       return {
-        value: textContent(pre).replace(/\n$/, ''),
-        lang: String(pre.properties?.dataLanguage ?? ''),
+        value: textContent(pre),
+        lang: String(pre.properties?.dataLanguage ?? languageClass?.slice(9) ?? ''),
       }
+    }
     const values = lines.map((line) => {
       const code = findAll(line, (node) => hasClass(node, 'code'))[0]
       if (!code) throw new Error('Expressive Code line has no code content')

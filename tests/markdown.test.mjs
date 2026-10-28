@@ -141,3 +141,15 @@ test('a client-only custom component without a static fallback fails instead of 
     /static text fallback/,
   )
 })
+
+test('plain pre/code from a rendered component preserves its terminal newline and language', async () => {
+  const { markdown } = await convertPage(
+    page(
+      '<h1>Component</h1><pre><code class="language-javascript">const answer = 42;\n</code></pre>',
+    ),
+    'https://guog.github.io/blog/component/',
+  )
+  const code = findAll(parseMD(markdown), (node) => node.type === 'code')[0]
+  assert.equal(code.value, 'const answer = 42;\n')
+  assert.equal(code.lang, 'javascript')
+})

@@ -36,3 +36,46 @@ Markdown 地址：${new URL(getMarkdownPath(html.pathname), siteConfig.url).href
 区分作者、原作或引用来源的观点，以及你自己的分析；译文区分原作者和译者。未核实的信息不要猜测。
 解释关键结论时附对应章节链接。只有确认锚点存在才给片段地址，否则给文章地址和章节名；不要编造引用、内容或效果数据。`
 }
+
+export function articleStructuredData(id: string, data: ReadingData) {
+  const person = (value?: Person) =>
+    value
+      ? {
+          '@type': value.type ?? 'Person',
+          name: value.name,
+          ...(value.url ? { url: value.url } : {}),
+        }
+      : undefined
+  const author =
+    data.contentKind === 'translation'
+      ? data.source?.author
+      : (data.author ?? { name: siteConfig.author })
+  const url = new URL(getPostUrl(id), siteConfig.url).href
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: data.title,
+    description: data.description,
+    inLanguage: siteConfig.lang,
+    url,
+    mainEntityOfPage: url,
+    datePublished: data.pubDate.toISOString(),
+    ...(data.updatedDate ? { dateModified: data.updatedDate.toISOString() } : {}),
+    ...(author ? { author: person(author) } : {}),
+    ...(data.contentKind === 'translation' && data.translator
+      ? { translator: person(data.translator) }
+      : {}),
+    ...(data.source
+      ? {
+          translationOfWork: {
+            '@type': 'CreativeWork',
+            name: data.source.title,
+            url: data.source.url,
+            datePublished: data.source.publishedDate.toISOString(),
+            ...(data.source.author ? { author: person(data.source.author) } : {}),
+          },
+        }
+      : {}),
+  }
+}
+export const safeJSON = (value: unknown) => JSON.stringify(value).replaceAll('<', '\\u003c')

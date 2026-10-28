@@ -30,3 +30,9 @@ CI 使用锁定的 Playwright 版本对应浏览器。若本地已有受信任�
 历史 `check:migration` 针对首次迁移前的内容和旧 favicon。本次授权替换 favicon，不修改该基线，也不将该历史审计当作本次回归通过条件。3 篇现有文章和 17 张配图另按本次实施前的清单与哈希验证。
 
 About 页面已退役。生产检查须验证 `/about/` 不再生成且 Sitemap 无该地址；历史基线中的页面记录保留，避免改写旧验收证据。
+
+## AI 阅读与章节引用
+
+`tests/markdown.test.mjs` 使用人工指定的代码金样本核对空白、Tab、实体与围栏；`check-ai-built.mjs` 另将每篇源代码与生成 Markdown 比较。`tests/e2e/ai-reading.spec.ts` 对实际 Sitemap 页面和 404 检查 HTTP/MIME、发现关系、对话入口与回退，并验证提示词不进入 Pagefind。
+
+`tests/citations.test.mjs` 与 `tests/e2e/citations.spec.ts` 检查 JSON-LD、安全转义和章节复制。`legacy-headings.json` 来自 d5a9084 的独立构建，保存原文章 140 个章节的 ID 和内容摘要；正文合法编辑可能触发摘要差异，必须人工核对旧链接仍指向原章节后，再解释并更新对应记录，不能一键重录全部基线。隔离构建中新增再删除一个分页页面，验证 Markdown 随实际路由生成和清理。

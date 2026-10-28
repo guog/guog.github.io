@@ -11,8 +11,11 @@ import {
   findAll,
   codeBlocks,
   pagePath,
+  textContent,
 } from '../src/integrations/markdown.mjs'
 import { getMarkdownPath } from '../src/utils/markdown.ts'
+import { assertLegacyHeadings } from '../src/utils/headings.mjs'
+import { articleStructuredData } from '../src/utils/reading.ts'
 import { getPostUrl } from '../src/utils/blog.ts'
 import { articleFiles, parseArticle } from './check-content.mjs'
 const SITE = 'https://guog.github.io'
@@ -119,6 +122,50 @@ export async function checkAIBuilt({ root = process.cwd(), dist = path.join(root
       assert.ok(!pages.some((page) => page.route === route), `Draft export leaked: ${route}`)
       continue
     }
+    const htmlTree = parseHTML(
+      await readFile(path.join(dist, decodeURIComponent(route), 'index.html'), 'utf8'),
+    )
+    const structured = findAll(
+      htmlTree,
+      (node) => node.tagName === 'script' && node.properties?.type === 'application/ld+json',
+    )
+    assert.equal(structured.length, 1, `${route}: one BlogPosting`)
+    const record = {
+      ...data,
+      contentKind: data.contentKind ?? 'original',
+      pubDate: new Date(data.pubDate),
+      ...(data.updatedDate ? { updatedDate: new Date(data.updatedDate) } : {}),
+      ...(data.source
+        ? { source: { ...data.source, publishedDate: new Date(data.source.publishedDate) } }
+        : {}),
+    }
+    assert.deepEqual(
+      JSON.parse(textContent(structured[0])),
+      articleStructuredData(id, record),
+      `${route}: structured metadata differs from the source record`,
+    )
+    const attribution = textContent(
+      findAll(htmlTree, (node) => node.properties?.dataAttribution !== undefined)[0],
+    )
+    const json = JSON.parse(textContent(structured[0]))
+    if (json.author)
+      assert.ok(
+        attribution.includes(json.author.name),
+        `${route}: author differs from visible text`,
+      )
+    if (json.translator)
+      assert.ok(
+        attribution.includes(json.translator.name),
+        `${route}: translator differs from visible text`,
+      )
+    const legacy = JSON.parse(
+      await readFile(new URL('../tests/fixtures/legacy-headings.json', import.meta.url), 'utf8'),
+    )
+    if (legacy[route])
+      assertLegacyHeadings(
+        findAll(htmlTree, (node) => node.properties?.dataArticleBody !== undefined)[0],
+        legacy[route],
+      )
     const markdown = await readFile(
       path.join(dist, decodeURIComponent(getMarkdownPath(route))),
       'utf8',
