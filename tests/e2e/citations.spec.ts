@@ -101,8 +101,9 @@ for (const failure of ['rejected', 'unavailable']) {
   })
 }
 
-test('section icons stay discoverable on touch screens', async ({ browser }) => {
+test('section icons stay discoverable on touch screens', async ({ browser, baseURL }) => {
   const context = await browser.newContext({
+    baseURL,
     hasTouch: true,
     isMobile: true,
     viewport: { width: 375, height: 900 },
@@ -139,3 +140,57 @@ test('heading links preserve code, emphasis, authored links and duplicate headin
     )
   }
 })
+
+for (const firstResult of ['success', 'failure']) {
+  test(`section copy requests recover after the first write ${firstResult}`, async ({ page }) => {
+    await page.addInitScript(() => {
+      ;(window as any).clipboardWrites = []
+      ;(window as any).clipboardValue = ''
+      Object.defineProperty(navigator, 'clipboard', {
+        value: {
+          writeText: (url: string) =>
+            new Promise<void>((resolve, reject) => {
+              ;(window as any).clipboardWrites.push({ url, resolve, reject })
+            }),
+        },
+      })
+    })
+    await page.goto('/blog/markdown-101/')
+    const headings = page.locator('[data-article-body] h2[id]')
+    const first = headings.nth(0).getByRole('button')
+    const second = headings.nth(1).getByRole('button')
+    await first.focus()
+    await page.keyboard.press('Enter')
+    await expect(first).toHaveAttribute('aria-busy', 'true')
+    await expect(second).toHaveAttribute('aria-disabled', 'true')
+    await second.focus()
+    await page.keyboard.press('Enter')
+    // Busy controls must not start an overlapping native clipboard write.
+    expect(await page.evaluate(() => (window as any).clipboardWrites.length)).toBe(1)
+    await page.evaluate((outcome) => {
+      const write = (window as any).clipboardWrites[0]
+      if (outcome === 'failure') write.reject(new Error('denied'))
+      else {
+        ;(window as any).clipboardValue = write.url
+        write.resolve()
+      }
+    }, firstResult)
+    await expect(second).not.toHaveAttribute('aria-disabled')
+    await second.focus()
+    await page.keyboard.press('Enter')
+    await expect.poll(() => page.evaluate(() => (window as any).clipboardWrites.length)).toBe(2)
+    await expect(page.locator('[data-section-status]')).toBeEmpty()
+    await page.evaluate(() => {
+      const write = (window as any).clipboardWrites[1]
+      ;(window as any).clipboardValue = write.url
+      write.resolve()
+    })
+    const id = await headings.nth(1).getAttribute('id')
+    await expect
+      .poll(() => page.evaluate(() => (window as any).clipboardValue))
+      .toBe(`https://guog.github.io/blog/markdown-101/#${encodeURIComponent(id!)}`)
+    await expect(page.locator('[data-section-status]')).toHaveText('Copied')
+    await expect(second).toHaveAttribute('data-copied', 'true')
+    await expect(second).not.toHaveAttribute('aria-busy')
+  })
+}

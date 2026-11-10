@@ -138,8 +138,12 @@ for (const failure of ['rejected', 'unavailable'])
     await expect(page.getByRole('textbox', { name: '阅读提示词' })).toBeFocused()
   })
 
-test('no-JS reading, escaped title and site translator stay usable', async ({ browser, page }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false })
+test('no-JS reading, escaped title and site translator stay usable', async ({
+  browser,
+  page,
+  baseURL,
+}) => {
+  const context = await browser.newContext({ baseURL, javaScriptEnabled: false })
   const noJS = await context.newPage()
   await noJS.goto(unsafe)
   await noJS.getByText('用 Agent 阅读', { exact: true }).click()
@@ -164,9 +168,12 @@ test('no-JS reading, escaped title and site translator stay usable', async ({ br
 
 test('Agent instructions do not pollute the Pagefind article index', async ({ page }) => {
   await page.goto('/search/')
-  await page
-    .getByRole('textbox', { name: 'Search posts', exact: true })
-    .fill('"将提示词粘贴到你的 Agent"')
+  const search = page.getByRole('textbox', { name: 'Search posts', exact: true })
+  await search.fill('工程')
+  await expect(
+    page.locator('.pagefind-ui__result-link[href*="/blog/modern-se/"]').first(),
+  ).toBeVisible()
+  await search.fill('"将提示词粘贴到你的 Agent"')
   await expect(page.locator('.pagefind-ui__message')).toContainText('No results')
   await expect(page.locator('.pagefind-ui__result')).toHaveCount(0)
 })
