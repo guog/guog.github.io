@@ -1,32 +1,112 @@
+<template
+  id='section-copy-icons'
+  data-markdown-exclude
+>
+  <svg
+    aria-hidden='true'
+    focusable='false'
+    viewBox='0 0 24 24'
+    fill='none'
+    stroke='currentColor'
+    stroke-width='1.75'
+  >
+    <g class='copy-symbol'>
+      <path d='M3 19a2 2 0 0 1-1-2V2a2 2 0 0 1 1-1h13a2 2 0 0 1 2 1' />
+      <rect
+        x='6'
+        y='5'
+        width='16'
+        height='18'
+        rx='1.5'
+        ry='1.5'
+      />
+    </g>
+    <path
+      class='copied-symbol'
+      d='m5 12 4 4L19 6'
+      stroke-linecap='round'
+      stroke-linejoin='round'
+    />
+  </svg>
+</template>
+<span
+  class='sr-only'
+  data-section-status
+  role='status'
+  aria-live='polite'
+  data-markdown-exclude
+></span>
 <script>
   const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href
+  const icons = document.querySelector<HTMLTemplateElement>('#section-copy-icons')!
+  const status = document.querySelector<HTMLElement>('[data-section-status]')!
   for (const heading of document.querySelectorAll<HTMLElement>(
     '[data-article-body] :is(h2,h3,h4)[id]',
   )) {
-    const controls = document.createElement('div')
-    controls.className =
-      'section-links not-prose -mt-3 mb-4 flex items-center gap-3 text-xs text-muted'
-    const link = document.createElement('a')
-    link.href = `${canonical}#${encodeURIComponent(heading.id)}`
-    link.textContent = 'Link'
-    link.setAttribute('aria-label', `Link to ${heading.textContent}`)
+    const title = heading.textContent!.trim()
+    const fragment = `#${encodeURIComponent(heading.id)}`
+    // Preserve authored links and inline formatting without nesting anchors.
+    const linkContents = (container: HTMLElement) => {
+      let link: HTMLAnchorElement | undefined
+      for (const node of Array.from(container.childNodes)) {
+        if (node instanceof HTMLElement && (node.matches('a') || node.querySelector('a'))) {
+          link = undefined
+          if (!node.matches('a')) linkContents(node)
+          continue
+        }
+        if (!link) {
+          link = document.createElement('a')
+          link.className = 'section-anchor'
+          link.href = fragment
+          container.insertBefore(link, node)
+        }
+        link.append(node)
+      }
+    }
+    linkContents(heading)
+    // Keep the copy button's accessible name separate from the heading's name.
+    heading.setAttribute('aria-label', title)
     const button = document.createElement('button')
     button.type = 'button'
-    button.textContent = 'Copy link'
-    button.setAttribute('aria-label', `Copy link to ${heading.textContent}`)
-    const status = document.createElement('span')
-    status.setAttribute('role', 'status')
+    button.className = 'section-copy not-prose'
+    button.setAttribute('aria-label', `Copy link to ${title}`)
+    button.title = 'Copy link'
+    button.append(icons.content.cloneNode(true))
+    let reset: ReturnType<typeof setTimeout> | undefined
+    let copying = false
     button.addEventListener('click', async () => {
+      if (copying) return
+      copying = true
       status.textContent = ''
+      status.className = 'sr-only'
+      button.setAttribute('aria-busy', 'true')
+      clearTimeout(reset)
+      delete button.dataset.copied
+      button.title = 'Copy link'
       try {
-        await navigator.clipboard.writeText(link.href)
+        await navigator.clipboard.writeText(`${canonical}${fragment}`)
+        button.dataset.copied = 'true'
+        button.title = 'Copied'
         status.textContent = 'Copied'
+        reset = setTimeout(() => {
+          delete button.dataset.copied
+          button.title = 'Copy link'
+        }, 2000)
       } catch {
-        status.textContent = 'Copy failed. Use the Link above.'
-        link.focus()
+        status.textContent = 'Copy failed. Use the heading link.'
+        status.className = 'not-prose text-xs text-muted'
+        heading.after(status)
+        const link = heading.querySelector<HTMLAnchorElement>('.section-anchor')
+        if (link) link.focus()
+        else {
+          heading.tabIndex = -1
+          heading.focus()
+        }
+      } finally {
+        copying = false
+        button.removeAttribute('aria-busy')
       }
     })
-    controls.append(link, button, status)
-    heading.after(controls)
+    heading.append(button)
   }
 </script>

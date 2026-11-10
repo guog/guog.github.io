@@ -17,10 +17,18 @@ export interface ReadingData {
   translator?: Person
   source?: { title: string; url: string; publishedDate: Date; author?: Person }
 }
+export function articlePeople(data: ReadingData) {
+  return data.contentKind === 'translation'
+    ? {
+        author: data.source?.author,
+        translator: data.translator ?? { name: siteConfig.author },
+      }
+    : { author: data.author ?? { name: siteConfig.author }, translator: undefined }
+}
 export function attribution(data: ReadingData): string {
-  if (data.contentKind === 'translation')
-    return `译文；原作者：${data.source?.author?.name ?? '未注明'}；译者：${data.translator?.name ?? '未注明'}`
-  return `原创；作者：${data.author?.name ?? siteConfig.author}`
+  const { author, translator } = articlePeople(data)
+  if (translator) return `译文；${author ? `原作者：${author.name}；` : ''}译者：${translator.name}`
+  return `原创；作者：${author!.name}`
 }
 export function readingPrompt(id: string, data: ReadingData): string {
   const html = new URL(getPostUrl(id), siteConfig.url)
@@ -46,10 +54,7 @@ export function articleStructuredData(id: string, data: ReadingData) {
           ...(value.url ? { url: value.url } : {}),
         }
       : undefined
-  const author =
-    data.contentKind === 'translation'
-      ? data.source?.author
-      : (data.author ?? { name: siteConfig.author })
+  const { author, translator } = articlePeople(data)
   const url = new URL(getPostUrl(id), siteConfig.url).href
   return {
     '@context': 'https://schema.org',
@@ -62,9 +67,7 @@ export function articleStructuredData(id: string, data: ReadingData) {
     datePublished: data.pubDate.toISOString(),
     ...(data.updatedDate ? { dateModified: data.updatedDate.toISOString() } : {}),
     ...(author ? { author: person(author) } : {}),
-    ...(data.contentKind === 'translation' && data.translator
-      ? { translator: person(data.translator) }
-      : {}),
+    ...(translator ? { translator: person(translator) } : {}),
     ...(data.source
       ? {
           translationOfWork: {
