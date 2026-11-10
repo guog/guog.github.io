@@ -88,7 +88,7 @@ test('enumerates all real pages, rejects resource collisions, and omits 404 from
   }
 })
 
-test('prompt quotes current page and verified attribution without inventing an unknown translator', () => {
+test('prompt quotes the current page and defaults the translator to the site author', () => {
   const data = {
     title: '中文 </textarea>',
     description: '测试',
@@ -102,7 +102,7 @@ test('prompt quotes current page and verified attribution without inventing an u
     },
   }
   const prompt = readingPrompt('nested/post', data)
-  assert.match(prompt, /原作者：Verified Name；译者：未注明/)
+  assert.match(prompt, /原作者：Verified Name；译者：guog/)
   assert.match(prompt, /https:\/\/guog\.github\.io\/blog\/nested\/post\/index\.md/)
   assert.match(prompt, /只能|只读到部分内容/)
 })

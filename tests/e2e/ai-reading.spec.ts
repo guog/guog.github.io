@@ -106,12 +106,15 @@ test('prompt copy waits for completion and contains the current canonical and Ma
     })
   })
   await page.goto(article)
-  const button = page.getByRole('button', { name: '复制阅读提示词', exact: true })
+  await expect(page.locator('.agent-reading details')).not.toHaveAttribute('open')
+  await expect(page.locator('.copy-status')).toBeHidden()
+  await expect(page.getByRole('textbox', { name: '阅读提示词' })).toBeHidden()
+  const button = page.getByRole('button', { name: '复制提示词', exact: true })
   await button.click()
   await expect(page.locator('.copy-status')).toBeEmpty()
   await expect(button).toBeDisabled()
   await page.evaluate(() => (window as any).resolveCopy())
-  await expect(page.locator('.copy-status')).toHaveText('已复制，粘贴到你的 Agent 即可。')
+  await expect(page.locator('.copy-status')).toHaveText('已复制')
   const copied = await page.evaluate(() => (window as any).copiedPrompt)
   expect(copied).toContain(`文章地址：https://guog.github.io${article}`)
   expect(copied).toContain(`Markdown 地址：https://guog.github.io${article}index.md`)
@@ -129,20 +132,21 @@ for (const failure of ['rejected', 'unavailable'])
       })
     }, failure)
     await page.goto(article)
-    await page.getByRole('button', { name: '复制阅读提示词', exact: true }).click()
-    await expect(page.locator('.copy-status')).toHaveText('自动复制失败，请手动复制下方提示词。')
+    await page.getByRole('button', { name: '复制提示词', exact: true }).click()
+    await expect(page.locator('.copy-status')).toHaveText('复制失败，请手动复制提示词。')
     await expect(page.getByRole('textbox', { name: '阅读提示词' })).toBeVisible()
     await expect(page.getByRole('textbox', { name: '阅读提示词' })).toBeFocused()
   })
 
-test('no-JS reading, escaped title and explicit unknown translator stay usable', async ({
+test('no-JS reading, escaped title and site translator stay usable', async ({
   browser,
   page,
+  baseURL,
 }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false })
+  const context = await browser.newContext({ baseURL, javaScriptEnabled: false })
   const noJS = await context.newPage()
   await noJS.goto(unsafe)
-  await noJS.getByText('查看提示词', { exact: true }).click()
+  await noJS.getByText('用 Agent 阅读', { exact: true }).click()
   const textarea = noJS.getByRole('textbox', { name: '阅读提示词' })
   await expect(textarea).toBeVisible()
   await expect(textarea).toHaveValue(
@@ -153,7 +157,8 @@ test('no-JS reading, escaped title and explicit unknown translator stay usable',
   await expect(noJS.locator('h1')).toHaveCount(1)
   await context.close()
   await page.goto('/blog/the-ai-native-sdlc-playbook/')
-  await expect(page.locator('[data-attribution]')).toContainText('Translated by not specified')
+  await expect(page.locator('[data-attribution]')).toBeHidden()
+  await expect(page.locator('[data-attribution]')).toContainText('译者：guog')
   await expect(page.locator('[data-attribution]')).toContainText('Louis Claxton')
   await expect(page.locator('[data-pagefind-meta="description"]')).toBeVisible()
   expect(await page.locator('meta[name="author"]').getAttribute('content')).toBe('Louis Claxton')
@@ -163,7 +168,12 @@ test('no-JS reading, escaped title and explicit unknown translator stay usable',
 
 test('Agent instructions do not pollute the Pagefind article index', async ({ page }) => {
   await page.goto('/search/')
-  await page.getByRole('textbox', { name: 'Search posts', exact: true }).fill('"不必逐行读完"')
+  const search = page.getByRole('textbox', { name: 'Search posts', exact: true })
+  await search.fill('工程')
+  await expect(
+    page.locator('.pagefind-ui__result-link[href*="/blog/modern-se/"]').first(),
+  ).toBeVisible()
+  await search.fill('"将提示词粘贴到你的 Agent"')
   await expect(page.locator('.pagefind-ui__message')).toContainText('No results')
   await expect(page.locator('.pagefind-ui__result')).toHaveCount(0)
 })

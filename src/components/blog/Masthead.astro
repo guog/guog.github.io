@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import { getReadingMinutes, getTagUrl } from '../../utils/blog'
 import FormattedDate from '../FormattedDate.astro'
+import { attribution } from '../../utils/reading'
 interface Props {
   post: CollectionEntry<'blog'>
 }
@@ -29,42 +30,46 @@ const { data } = post
   {data.title}
 </h1>
 <p
-  class='mt-3'
+  hidden
   data-attribution
+  data-pagefind-ignore
 >
-  {data.contentKind === 'translation' ? (
-    <>
-      Translated by {data.translator?.name ?? 'not specified'}
+  {attribution(data)}
+</p>
+{data.source || data.updatedDate ? (
+  <details class='article-info mt-3 text-muted'>
+    <summary class='w-fit list-none'>
+      <FormattedDate date={data.pubDate} /> / {getReadingMinutes(post.body)} min read
+      <span aria-hidden='true'> · </span>
+      <span class='cactus-link'>Article info</span>
+    </summary>
+    <div class='mt-2 space-y-1'>
       {data.source && (
-        <>
-          {' '}
-          · Original article:{' '}
+        <p>
+          Original article:{' '}
           <a
             class='cactus-link'
             href={data.source.url}
           >
             {data.source.title}
           </a>
-          {data.source.author && <> by {data.source.author.name}</>} · Published:{' '}
+          {data.source.author && <> by {data.source.author.name}</>}
+          {' · '}
           <FormattedDate date={data.source.publishedDate} />
-        </>
+        </p>
       )}
-    </>
-  ) : (
-    <>Written by {data.author?.name ?? 'guog'}</>
-  )}
-</p>
-<div class='flex flex-wrap items-center gap-x-3 gap-y-2'>
-  <p class='font-semibold'>
-    {data.contentKind === 'translation' ? 'Translation published: ' : 'Published: '}
+      {data.updatedDate && (
+        <p>
+          Updated: <FormattedDate date={data.updatedDate} />
+        </p>
+      )}
+    </div>
+  </details>
+) : (
+  <p class='mt-3 text-muted'>
     <FormattedDate date={data.pubDate} /> / {getReadingMinutes(post.body)} min read
   </p>
-  {data.updatedDate && (
-    <span class='bg-quote/5 text-quote rounded-lg px-2 py-1'>
-      Updated: <FormattedDate date={data.updatedDate} />
-    </span>
-  )}
-</div>
+)}
 <span
   class='sr-only'
   data-markdown-exclude

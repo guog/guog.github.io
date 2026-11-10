@@ -12,7 +12,7 @@ const original = {
   contentKind: 'original',
 }
 
-test('BlogPosting records verified roles and dates without fabricating an update or translator', () => {
+test('BlogPosting separates source authors from the default site translator and preserves dates', () => {
   const json = articleStructuredData('nested/post', original)
   assert.equal(json.author.name, 'guog')
   assert.equal(json.url, 'https://guog.github.io/blog/nested/post/')
@@ -32,7 +32,7 @@ test('BlogPosting records verified roles and dates without fabricating an update
     },
   })
   assert.equal(translated.author.name, 'Verified Author')
-  assert.equal(translated.translator, undefined)
+  assert.equal(translated.translator.name, 'guog')
   assert.equal(translated.translationOfWork.datePublished, '2026-08-21T00:00:00.000Z')
   assert.equal(translated.datePublished, '2026-09-04T00:00:00.000Z')
   assert.equal(translated.dateModified, '2026-09-15T00:00:00.000Z')

@@ -197,6 +197,51 @@
   .prose :where(h2, h3, h4):hover::before {
     color: var(--color-accent);
   }
+  .section-copy {
+    position: relative;
+    display: inline-flex;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-inline-start: 0.25rem;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    color: var(--color-muted);
+  }
+  .section-copy::before {
+    content: '';
+    position: absolute;
+    inset: calc((1.75rem - 44px) / 2);
+  }
+  .section-copy[aria-disabled='true'] {
+    cursor: wait;
+  }
+  .section-copy:hover {
+    color: var(--color-accent);
+  }
+  .section-copy svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  .section-copy .copied-symbol,
+  .section-copy[data-copied] .copy-symbol {
+    display: none;
+  }
+  .section-copy[data-copied] .copied-symbol {
+    display: initial;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .section-copy {
+      opacity: 0;
+    }
+    .prose :where(h2, h3, h4):is(:hover, :focus-within) .section-copy,
+    .section-copy[data-copied] {
+      opacity: 1;
+    }
+  }
+  .article-info > summary::-webkit-details-marker {
+    display: none;
+  }
   .prose :where(blockquote) {
     border-inline-start-width: 0;
   }
@@ -295,5 +340,19 @@
     .prose :where(h2, h3, h4)::before {
       content: none;
     }
+  }
+}
+
+/* Keep heading links above Typography utilities without changing inline content. */
+@layer utilities {
+  .prose .section-anchor {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .prose .section-anchor:is(:hover, :focus-visible) {
+    text-decoration: underline;
+    text-decoration-color: var(--color-link);
+    text-underline-offset: 0.2em;
   }
 }

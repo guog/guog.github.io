@@ -15,7 +15,7 @@ import {
 } from '../src/integrations/markdown.mjs'
 import { getMarkdownPath } from '../src/utils/markdown.ts'
 import { assertLegacyHeadings } from '../src/utils/headings.mjs'
-import { articleStructuredData } from '../src/utils/reading.ts'
+import { articleStructuredData, attribution as articleAttribution } from '../src/utils/reading.ts'
 import { getPostUrl } from '../src/utils/blog.ts'
 import { articleFiles, parseArticle } from './check-content.mjs'
 const SITE = 'https://guog.github.io'
@@ -151,12 +151,12 @@ export async function checkAIBuilt({ root = process.cwd(), dist = path.join(root
     if (json.author)
       assert.ok(
         attribution.includes(json.author.name),
-        `${route}: author differs from visible text`,
+        `${route}: author differs from the attribution record`,
       )
     if (json.translator)
       assert.ok(
         attribution.includes(json.translator.name),
-        `${route}: translator differs from visible text`,
+        `${route}: translator differs from the attribution record`,
       )
     const legacy = JSON.parse(
       await readFile(new URL('../tests/fixtures/legacy-headings.json', import.meta.url), 'utf8'),
@@ -207,7 +207,7 @@ export async function checkAIBuilt({ root = process.cwd(), dist = path.join(root
         `${route}: source lost`,
       )
       if (data.source.author) assert.ok(markdown.includes(data.source.author.name))
-      if (!data.translator) assert.ok(markdown.includes('Translated by not specified'))
+      assert.ok(markdown.includes(articleAttribution(record)), `${route}: attribution lost`)
     }
   }
   return pages
