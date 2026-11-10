@@ -1,5 +1,9 @@
 import { expect, type Page, test } from '@playwright/test'
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
+import { articleFiles, parseArticle } from '../../scripts/check-content.mjs'
 import { siteConfig } from '../../src/site.config'
+import { getPostUrl } from '../../src/utils/blog'
 
 const fixtureURL = '/blog/__regression__/nested/MixedCase/'
 const chineseURL = '/blog/__regression__/%E4%B8%AD%E6%96%87%E8%B7%AF%E5%BE%84/'
@@ -247,7 +251,24 @@ test('Chinese TOC anchors navigate to real headings; categories and tags work', 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Posts about CI/CD')
   await expect(page.locator('main a[href="/blog/modern-se/"]')).toBeVisible()
   await page.goto('/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/')
-  await expect(page.locator('main a[href^="/blog/"]')).toHaveCount(3)
+  const contentRoot = path.resolve('src/content/blog')
+  const expectedURLs: string[] = []
+  for (const filename of await articleFiles(contentRoot)) {
+    const { data } = parseArticle(await readFile(filename, 'utf8'), filename)
+    if (data.draft || !data.tags?.includes('软件工程')) continue
+    const id =
+      data.slug ??
+      path
+        .relative(contentRoot, filename)
+        .replace(/\.mdx?$/, '')
+        .split(path.sep)
+        .join('/')
+    expectedURLs.push(getPostUrl(id))
+  }
+  const postURLs = await page
+    .locator('main a[href^="/blog/"]')
+    .evaluateAll((links) => links.map((link) => link.getAttribute('href')))
+  expect(postURLs.sort()).toEqual(expectedURLs.sort())
 })
 
 test('theme follows system, persists manual choice across navigation and refresh, and responds to provider preference changes', async ({
